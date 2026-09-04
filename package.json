@@ -1,0 +1,9 @@
+{
+    "name": "-juego-de--wollok--g3",
+    "version": "1.0.0",
+    "resourceFolder": "assets",
+  "wollokVersion": "4.2.3",
+    "author": "agvor",
+    "license": "ISC"
+  }
+  
