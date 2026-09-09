@@ -1,0 +1,31 @@
+import wollok.game.*
+
+import caballero.*
+import dragon.*
+
+program juego {
+  game.width(15)
+  game.height(10)
+  game.title("Juego")
+  game.boardGround("Castillo.gif")
+  game.cellSize(50)
+
+  game.addVisual(caballero)
+  game.addVisual(dragon)
+  game.say(caballero, "necesito hacerme mas fuerte!!!")
+  game.say(dragon, "Grrrr")
+  game.start()
+ 
+  keyboard.right().onPressDo({ 
+    caballero.position(caballero.position().right(1)) 
+  })
+  keyboard.left().onPressDo({ 
+    caballero.position(caballero.position().left(1)) 
+  })
+  keyboard.up().onPressDo({ 
+    caballero.position(caballero.position().up(1)) 
+  })
+  keyboard.down().onPressDo({ 
+    caballero.position(caballero.position().down(1)) 
+  })
+}
