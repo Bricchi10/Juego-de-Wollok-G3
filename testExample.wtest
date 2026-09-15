@@ -1,4 +1,4 @@
-import example.pepita
+import principal.wpgm
 
 describe "group of tests for pepita" {
 
