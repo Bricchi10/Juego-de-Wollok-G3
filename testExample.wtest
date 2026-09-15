@@ -1,4 +1,4 @@
-import Zombie.*
+import Zombie.zombie_Simple.*
 
 describe "group of tests for pepita" {
 
