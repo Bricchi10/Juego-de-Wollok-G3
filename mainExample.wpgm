@@ -1,9 +1,8 @@
 import wollok.game.*
 import terminator.*
 import robot.*
-import example.pepita
 
-program PepitaGame {
+/*program PepitaGame {
 	game.title("Pepita")
 	
     game.width(14)
@@ -15,3 +14,4 @@ program PepitaGame {
 	game.start()
 }
 
+*/
