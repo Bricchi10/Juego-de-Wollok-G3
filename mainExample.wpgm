@@ -1,6 +1,8 @@
 import wollok.game.*
 import terminator.*
 import robot.*
+import direcciones.*
+
 import example.pepita
 
 program PepitaGame {
@@ -8,10 +10,16 @@ program PepitaGame {
 	
     game.width(14)
     game.height(6)
-	// add assets in asset folder, for example, for the background
+	// VISUALES
    game.addVisual(terminator)
    game.addVisual(robot)
    game.boardGround("Fondo.jpg")
-	game.start()
+    //TECLAS
+    keyboard.s().onPressDo({ robot.mover(izquierda)})
+	keyboard.d().onPressDo({ robot.mover(derecha)})
+    keyboard.w().onPressDo({ robot.mover(arriba)})
+	keyboard.a().onPressDo({ robot.mover(abajo)})
+	//INICIA EL JUEGO
+    game.start()
 }
 
