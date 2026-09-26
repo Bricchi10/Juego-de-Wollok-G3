@@ -1,0 +1,8 @@
+//import que sea necesario para el test
+describe "Pruebas de Peliculas vs Robots" {
+
+  test "Bala baja la vida de robot al chocar con este " {
+    assert.equals()
+  }
+
+}
