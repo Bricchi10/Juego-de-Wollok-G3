@@ -15,10 +15,10 @@ program PeliculasVsRobots {
 
     //Eventos cada cierto tiempo
     const robotComun = new RobotNormal()
-    const tick = game.tick(5000, { game.addVisual(robotComun) }, false) //deberian crearse mas
-    const movimiento = game.tick(6000, { robotComun.mueveIzquierda() }, false) 
-    tick.start()
-    movimiento.start()
+    const aparecenRobots = game.tick(5000, { game.addVisual(new RobotNormal()) }, false) //deberia crear mas
+    const movimientoDeRobots = game.tick(6000, { robotComun.mueveIzquierda() }, false) 
+    aparecenRobots.start()
+    movimientoDeRobots.start()
 
     game.boardGround("Fondo.jpg")
 	game.start()

@@ -10,14 +10,14 @@ object robot{
 }
 
 class RobotNormal{
-    var property position = game.at( 10 ,2)
+    var property position = game.at( 10, 2) //esto luego deberia cambiar para aparecer en celdas distintas
 
     method image(){
-    return "robot.png"
+        return "robot.png"
     }
 
     method mueveIzquierda(){
-    const nuevaPosicion = izquierda.siguiente( self.position())
-    position = nuevaPosicion
+        const nuevaPosicion = izquierda.siguiente( self.position())
+        position = nuevaPosicion
     } 
 }
