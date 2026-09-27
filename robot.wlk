@@ -1,3 +1,4 @@
+import direcciones.*
 object robot{
     method position(){
         return game.at(1,3)
@@ -6,4 +7,17 @@ object robot{
         return "robot.png"
     }
 
+}
+
+class RobotNormal{
+    var property position = game.at( 10 ,2)
+
+    method image(){
+    return "robot.png"
+    }
+
+    method mueveIzquierda(){
+    const nuevaPosicion = izquierda.siguiente( self.position())
+    position = nuevaPosicion
+    } 
 }
