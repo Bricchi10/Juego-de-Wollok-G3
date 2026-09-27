@@ -1,6 +1,7 @@
 import wollok.game.*
 import terminator.*
 import robot.*
+import direcciones.*
 
 program PeliculasVsRobots {
 	game.title("Peliculas vs Robots")
@@ -12,6 +13,12 @@ program PeliculasVsRobots {
     game.addVisual(terminator)
     game.addVisual(robot)
 
+    //Eventos cada cierto tiempo
+    const robotComun = new RobotNormal()
+    const aparecenRobots = game.tick(5000, { game.addVisual(new RobotNormal()) }, false) //deberia crear mas
+    const movimientoDeRobots = game.tick(6000, { robotComun.mueveIzquierda() }, false) 
+    aparecenRobots.start()
+    movimientoDeRobots.start()
 
     game.boardGround("Fondo.jpg")
 	game.start()
