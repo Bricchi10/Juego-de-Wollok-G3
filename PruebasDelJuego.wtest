@@ -1,0 +1,14 @@
+//import que sea necesario para el test
+import robot.*
+import terminator.*
+import bala.*
+describe "Pruebas de Peliculas vs Robots" {
+
+  test "Bala baja la vida de robot al chocar con este " {
+      robot.position(game.at(1,1))
+      terminator.position(game.at(1,1))
+      terminator.disparar()
+      assert.equals(90,robot.vida())
+  }
+
+}

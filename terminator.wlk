@@ -1,3 +1,4 @@
+import bala.*
 object terminator{
     var property position=game.at(1,1)
 
@@ -23,7 +24,9 @@ method irIzq() {
    // position = position.left(1)
   }
   method disparar(){
-    
+    const bala=new Bala(position=self.position())
+    game.addVisual(bala)
+    bala.moverse()
   }
 
 
