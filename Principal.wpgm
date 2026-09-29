@@ -1,31 +1,17 @@
 import wollok.game.*
-//import Zombie.zombie_Simple.*
-import direcciones.*
+
 import terminator.*
 import robot.*
 
-program Juego {
-  game.width(14)
-  game.height(7)
-  game.cellSize(50)
-  game.title("Plantas vs Zombies")
+program juego {
+  game.width(15)
+  game.height(10)
+  game.title("Juego")
   game.boardGround("Fondo.jpg")
-  //game.addVisualCharacter(zombie_Simple)
+  game.cellSize(50)
+
   game.addVisual(terminator)
-   game.addVisual(robot)
-
-  
-   keyboard.left().onPressDo({ robot.irIzq()})
-	 keyboard.right().onPressDo({ robot.irDer() })
-	 keyboard.up().onPressDo({ terminator.subir()})
-	 keyboard.down().onPressDo({ terminator.bajar()})
-   keyboard.d().onPressDo({ terminator.disparar()})
-
-  /* keyboard.left().onPressDo({ zombie_Simple.irIzq()})
-	 keyboard.right().onPressDo({ zombie_Simple.irDer() })
-	 keyboard.up().onPressDo({ zombie_Simple.subir()})
-	 keyboard.down().onPressDo({ zombie_Simple.bajar()})
-
-  zombie_Simple.position(game.at(1, 2))*/ 
+  game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
+  game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
   game.start()
 }

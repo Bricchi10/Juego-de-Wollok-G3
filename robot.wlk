@@ -1,51 +1,27 @@
-import direcciones.*
-object robot{
-    var property position=game.at(10,5)
-    var fuerza=10
-    var vida=100
-
-    method vida(){
-      return vida
-    }
-    method image(){
-        return "robot.png"
-    }
-    method mover(direccion) {
-		const nuevaPosition = direccion.siguiente(position)
-    position = nuevaPosition
-	}
-  method teHirieron(){
-    vida=vida-10
-  }
-
-method subir() {
-   
-  }
-method bajar() {
-   
-  }
-method irDer() {
-    position = position.right(1)
-  }
-method irIzq() {
-    position = position.left(1)
-  }
-
-method atacar(){
-
-}
-
-}
-
-class RobotNormal{
-    var property position = game.at( 10, 2) //esto luego deberia cambiar para aparecer en celdas distintas
-
-    method image(){
-        return "robot.png"
-    }
-
-    method mueveIzquierda(){
-        const nuevaPosicion = izquierda.siguiente( self.position())
-        position = nuevaPosicion
+import wollok.game.* 
+class Robot { 
+    var property position = game.at(9, 0) 
+    method image() = "robot.png" 
+    method avanzar() { 
+        if (position.x() > 1) { 
+            position = position.left(1) } 
+        else { game.say(self, "Perdiste!") 
+        } 
+    } 
+} 
+object spawnerRobots { 
+    const robotsActivos = [] 
+    method generarRobot() { 
+        const filaAleatoria = (1 .. 5).anyOne() 
+        const columnaEntrada = 9 
+        const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
+        const nuevoRobot = new Robot(position = posicionInicial) robotsActivos.add(nuevoRobot) 
+        game.addVisual(nuevoRobot) 
+    } 
+    method moverRobots() { 
+        robotsActivos.forEach({ robot => robot.avanzar() }) 
+    } 
+    method eliminarRobot(robot) { 
+        robotsActivos.remove(robot) game.removeVisual(robot) 
     } 
 }
