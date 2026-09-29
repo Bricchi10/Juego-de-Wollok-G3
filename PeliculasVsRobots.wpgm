@@ -5,22 +5,20 @@ import direcciones.*
 
 program PeliculasVsRobots {
 	game.title("Peliculas vs Robots")
-	
-    game.width(14)
-    game.height(6)
-
-    //Elementos visuales 
-    game.addVisual(terminator)
-    game.addVisual(robot)
-
-    //Eventos cada cierto tiempo
-    const robotComun = new RobotNormal()
-    const aparecenRobots = game.tick(5000, { game.addVisual(new RobotNormal()) }, false) //deberia crear mas
-    const movimientoDeRobots = game.tick(6000, { robotComun.mueveIzquierda() }, false) 
-    aparecenRobots.start()
-    movimientoDeRobots.start()
-
+	game.width(14)
+    game.height(7)
+    game.cellSize(50)
     game.boardGround("Fondo.jpg")
+
+    game.addVisual(terminator)
+  
+	keyboard.up().onPressDo({ terminator.subir()})
+	keyboard.down().onPressDo({ terminator.bajar()})
+    keyboard.d().onPressDo({ terminator.disparar()})
+
+    game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
+    game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
+
 	game.start()
 }
 
