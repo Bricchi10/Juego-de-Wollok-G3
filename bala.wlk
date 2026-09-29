@@ -7,7 +7,7 @@ class Bala {
     }
 
     method moverse() {
-        game.onTick(130,"movimiento de bala", {self.mover()})
+        game.onTick(130,"movimientoDeBala", {self.mover()})
     }
 
     method mover(){
