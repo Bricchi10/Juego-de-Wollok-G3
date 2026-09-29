@@ -16,6 +16,9 @@ program PeliculasVsRobots {
 	keyboard.down().onPressDo({ terminator.bajar()})
     keyboard.d().onPressDo({ terminator.disparar()})
 
+
+    //game.onCollideDo
+
     game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
     game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
 

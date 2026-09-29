@@ -11,12 +11,7 @@ class Bala {
     }
 
     method mover(){
-        if(position!=robot.position()){
         position = position.right(1)
-        }else{
-            robot.teHirieron()
-            game.removeVisual(self)
-        }
     }
 
 }
