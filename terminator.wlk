@@ -10,6 +10,9 @@ object terminator{
 		const nuevaPosition = direccion.siguiente(position)
         position = nuevaPosition
 	}
+  method teHirieron(){
+    
+  }
 
 method subir() {
     position = position.up(1)
