@@ -2,6 +2,7 @@ import wollok.game.*
 import terminator.*
 import robot.*
 import direcciones.*
+import paredes.*
 
 program PeliculasVsRobots {
 	game.title("Peliculas vs Robots")
@@ -13,6 +14,13 @@ program PeliculasVsRobots {
     //Personaje
     game.addVisual(terminator)
     
+    //Objetos invisibles
+    game.addVisual(paredInvisibleDeArriba)
+    game.addVisual(paredInvisibleDeAbajo)
+
+    game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
+    game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
+
     //Teclas
 	keyboard.up().onPressDo({ terminator.subir()})
 	keyboard.down().onPressDo({ terminator.bajar()})
