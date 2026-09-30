@@ -10,15 +10,15 @@ program PeliculasVsRobots {
     game.cellSize(50)
     game.boardGround("Fondo.jpg")
 
+    //Personaje
     game.addVisual(terminator)
-  
+    
+    //Teclas
 	keyboard.up().onPressDo({ terminator.subir()})
 	keyboard.down().onPressDo({ terminator.bajar()})
     keyboard.d().onPressDo({ terminator.disparar()})
 
-
-    //game.onCollideDo
-
+    //Eventos en relacion al tiempo
     game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
     game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
 
