@@ -11,7 +11,8 @@ class Bala {
         
         game.onCollideDo(self, {personaje =>
             if( personaje.esEnemigo() ){
-                game.removeVisual(personaje)
+                //game.removeVisual(personaje)
+                personaje.teHirieron()
                 game.removeVisual(self)
             } 
         })
