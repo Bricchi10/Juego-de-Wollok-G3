@@ -10,9 +10,9 @@ program PeliculasVsRobots {
     game.height(7)
     game.cellSize(50)
     game.boardGround("Fondo.jpg")
-
+    const personajePrincipal= new Terminator()
     //Personaje
-    game.addVisual(terminator)
+    game.addVisual(personajePrincipal)
     
     //Objetos invisibles
     game.addVisual(paredInvisibleDeArriba)
@@ -22,9 +22,9 @@ program PeliculasVsRobots {
     game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
 
     //Teclas
-	keyboard.up().onPressDo({ terminator.subir()})
-	keyboard.down().onPressDo({ terminator.bajar()})
-    keyboard.d().onPressDo({ terminator.disparar()})
+	keyboard.up().onPressDo({personajePrincipal.subir()})
+	keyboard.down().onPressDo({personajePrincipal.bajar()})
+    keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
