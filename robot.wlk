@@ -1,6 +1,7 @@
 import wollok.game.* 
 class Robot { 
     var property position = game.at(9, 0) 
+    var vida=100
     method image() = "robot.png" 
     method avanzar() { 
         if (position.x() > 1) { 
@@ -10,6 +11,13 @@ class Robot {
     } 
 
     method esEnemigo() = true
+
+    method teHirieron(){
+        vida=vida-50
+        if(vida==0){
+          game.removeVisual(self)
+        }
+    }
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
