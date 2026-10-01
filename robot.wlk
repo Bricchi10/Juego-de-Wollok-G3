@@ -1,13 +1,16 @@
+import direcciones.*
+import terminator.*
 import wollok.game.* 
 class Robot { 
     var property position = game.at(9, 0) 
-    method image() = "robot.png" 
-    method avanzar() { 
-        if (position.x() > 1) { 
-            position = position.left(1) } 
-        else { game.say(self, "Perdiste!") 
+    method image() = "robotBasico.png" 
+    method avanzar() {
+        position = izquierda.siguiente(position)
+        if (position.x() == 1) {
+            game.say(self, "Perdiste!")
+            game.schedule(1000, { game.stop() })
         } 
-    } 
+    }
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
@@ -16,7 +19,7 @@ object spawnerRobots {
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
         const nuevoRobot = new Robot(position = posicionInicial) robotsActivos.add(nuevoRobot) 
-        game.addVisual(nuevoRobot) 
+        game.addVisual(nuevoRobot)
     } 
     method moverRobots() { 
         robotsActivos.forEach({ robot => robot.avanzar() }) 
