@@ -9,9 +9,12 @@ class Bala {
     method moverse() {
         game.onTick(130,"movimientoDeBala", {self.mover()})
         
-        game.onCollideDo(self, {robot =>  //tambien reconoce a terminator como robot por estar en la misma celda
-            game.removeVisual(robot)
-            game.removeVisual(self) })
+        game.onCollideDo(self, {personaje =>
+            if( personaje.esEnemigo() ){
+                game.removeVisual(personaje)
+                game.removeVisual(self)
+            } 
+        })
         //falta dejar de referenciar al robot y a la bala(de alguna manera), para que "mueran" definitivamente
     }
 
