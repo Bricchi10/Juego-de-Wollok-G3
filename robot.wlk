@@ -8,6 +8,8 @@ class Robot {
         else { game.say(self, "Perdiste!") 
         } 
     } 
+
+    method esEnemigo() = true
 } 
 object spawnerRobots { 
     const robotsActivos = [] 

@@ -32,5 +32,5 @@ method irIzq() {
     bala.moverse()
   }
 
-
+  method esEnemigo() = false
 }
