@@ -5,13 +5,19 @@ class Robot {
     var property position = game.at(9, 0) 
     method image() = "robotBasico.png" 
     method avanzar() {
-        if (game.hasVisual(self)) {
+        if (game.hasVisual(self) && self.noHayObstaculos() && game.colliders(self).isEmpty()) {
             position = izquierda.siguiente(position)
         }
+        self.verificarJuegoPerdido()
+    }
+    method noHayObstaculos() {
+        return game.getObjectsIn(game.at(position.x() -1, position.y())).isEmpty()
+    }
+    method verificarJuegoPerdido() {
         if (position.x() == 1) {
             game.say(self, "Perdiste!")
             game.schedule(1000, { game.stop() })
-        } 
+        }
     }
 } 
 object spawnerRobots { 
@@ -26,5 +32,5 @@ object spawnerRobots {
     }
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot) game.removeVisual(robot) 
-    } 
+    }
 }
