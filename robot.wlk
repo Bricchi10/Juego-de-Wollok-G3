@@ -17,7 +17,8 @@ object spawnerRobots {
         const filaAleatoria = (1 .. 5).anyOne() 
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
-        const nuevoRobot = new Robot(position = posicionInicial) robotsActivos.add(nuevoRobot) 
+        const nuevoRobot = new Robot(position = posicionInicial) 
+        robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
     } 
     method moverRobots() { 

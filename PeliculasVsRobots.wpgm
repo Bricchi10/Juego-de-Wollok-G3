@@ -13,13 +13,19 @@ program PeliculasVsRobots {
 
     //Personaje
     game.addVisual(terminator)
+    game.addVisual(barraVida)
+    game.addVisual(etiquetaVida)
     
     //Objetos invisibles
     game.addVisual(paredInvisibleDeArriba)
     game.addVisual(paredInvisibleDeAbajo)
 
     game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
-    game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
+    game.onCollideDo(terminator, { elemento => if (elemento.esEnemigo()){ 
+        terminator.recibirDaño(20) 
+        spawnerRobots.eliminarRobot(elemento) 
+        } 
+    })
 
     //Teclas
 	keyboard.up().onPressDo({ terminator.subir()})
