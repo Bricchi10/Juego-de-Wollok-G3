@@ -22,4 +22,5 @@ class Bala {
         position = position.right(1)
     }
 
+    method esEnemigo() = false
 }
