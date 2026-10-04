@@ -21,7 +21,8 @@ program PeliculasVsRobots {
     game.addVisual(paredInvisibleDeAbajo)
 
     game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
-    game.onCollideDo(terminator, { elemento => if (elemento.esEnemigo()){ 
+    game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
+    game.onCollideDo(terminator, { elemento => if (elemento.esEnemigo() ){ 
         terminator.recibirDaño(20) 
         spawnerRobots.eliminarRobot(elemento) 
         } 

@@ -1,8 +1,12 @@
 import wollok.game.* 
 import terminator.*
-class Robot { 
+class Enemigo{ 
     var property position = game.at(9, 0) 
-    method image() = "robot.png" 
+
+    method esEnemigo() = true
+
+    method image()
+
     method avanzar() { 
         if (position.x() > 1) { 
             position = position.left(1) } 
@@ -10,8 +14,9 @@ class Robot {
                juego.terminar() 
         } 
     } 
-
-    method esEnemigo() = true
+}
+class Robot inherits Enemigo { 
+    override method image() = "robot.png" 
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
