@@ -1,6 +1,6 @@
 import wollok.game.* 
-
-class Enemigo{
+import terminator.*
+class Enemigo{ 
     var property position = game.at(9, 0) 
 
     method esEnemigo() = true
@@ -10,7 +10,8 @@ class Enemigo{
     method avanzar() { 
         if (position.x() > 1) { 
             position = position.left(1) } 
-        else { game.say(self, "Perdiste!") 
+        else { game.say(self, "Perdiste!")
+               juego.terminar() 
         } 
     } 
 }
@@ -31,6 +32,8 @@ object spawnerRobots {
         robotsActivos.forEach({ robot => robot.avanzar() }) 
     } 
     method eliminarRobot(robot) { 
-        robotsActivos.remove(robot) game.removeVisual(robot) 
+        robotsActivos.remove(robot) 
+        game.removeVisual(robot) 
+        game.sound("muerteRobot.mp3").play()
     } 
 }

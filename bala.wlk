@@ -1,6 +1,7 @@
 import robot.*
 class Bala {
     var property position
+    method esEnemigo()= false
     
     method image(){
         return "proyectilDisparo.png"
@@ -13,6 +14,7 @@ class Bala {
             if( personaje.esEnemigo() ){
                 game.removeVisual(personaje)
                 game.removeVisual(self)
+                game.sound("muerteRobot.mp3").play()
             } 
         })
         //falta dejar de referenciar al robot y a la bala(de alguna manera), para que "mueran" definitivamente

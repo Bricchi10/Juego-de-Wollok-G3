@@ -14,9 +14,9 @@ object terminator{
 
 method recibirDaño(cantidad) {
   vida = (vida - cantidad).max(0)
-
+  game.sound("steveDolor.mp3").play()
   if (vida == 0) {
-    game.say(self, "Auch!")
+    juego.terminar()
   }
 }
   
@@ -38,6 +38,7 @@ method irIzq() {
   }
   method disparar(){
     const bala=new Bala(position=self.position().right(1))
+    game.sound("desert-eagle-cs.mp3").play()
     game.addVisual(bala)
     bala.moverse()
   }
@@ -64,4 +65,20 @@ object etiquetaVida {
   method text()= "Vida:" + terminator.vida()
   method textColor() = "FFFFFFFF"
   method esEnemigo() = false
+}
+object juego { 
+  var finalizado = false 
+  
+  method position() = game.at(3, 2)
+  method image(){
+    return "game_over_re4_transparente.png"
+  }
+  method terminar() { 
+    if (not finalizado) { 
+      finalizado = true 
+      game.clear()
+      game.addVisual(self)
+      game.sound("game-over.mp3").play()
+    }
+  }
 }
