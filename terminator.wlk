@@ -48,6 +48,9 @@ method irIzq() {
 class Terminator inherits Personaje{
   override method image(){
     return "terminator.png"
+  }
+}
+
 object barraVida {
   method position()= game.at(2,0)
   method image(){

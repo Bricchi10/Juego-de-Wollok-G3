@@ -7,7 +7,6 @@ class Enemigo{
 
     method esEnemigo() = true
 
-    method image()
 
     method avanzar() { 
         if (position.x() > 1) { 
@@ -17,7 +16,6 @@ class Enemigo{
         } 
     } 
 
-    method esEnemigo() = true
 
     method teHirieron(){
         vida=vida-50
