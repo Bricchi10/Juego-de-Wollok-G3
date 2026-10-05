@@ -11,9 +11,10 @@ class Enemigo{
 
     method avanzar() { 
         if (position.x() > 1) { 
-            position = position.left(1) } 
-        else { game.say(self, "Perdiste!")
-               juego.terminar() 
+            position = position.left(1)
+        } else {
+             game.say(self, "Perdiste!")
+             juego.terminar() 
         } 
     } 
 

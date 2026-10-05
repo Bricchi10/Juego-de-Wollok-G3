@@ -48,8 +48,12 @@ method irIzq() {
 class Terminator inherits Personaje{
   override method image(){
     return "terminator.png"
+  }
+}
+
 object barraVida {
   method position()= game.at(2,0)
+
   method image(){
     const vidaActual = terminator.vida()
     return if (vidaActual == 100) "5Corazones.png"
@@ -59,6 +63,7 @@ object barraVida {
            else if (vidaActual >= 20) "1Corazon.png"
            else "CorazonVacio.png"
   }
+
   method esEnemigo() = false
 }
 object etiquetaVida {

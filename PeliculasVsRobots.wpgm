@@ -13,9 +13,9 @@ program PeliculasVsRobots {
     const personajePrincipal= new Terminator()
     //Personaje
     game.addVisual(personajePrincipal)
-    game.addVisual(terminator)
-    game.addVisual(barraVida)
-    game.addVisual(etiquetaVida)
+    //game.addVisual(terminator)
+    //game.addVisual(barraVida)
+   // game.addVisual(etiquetaVida)
     
     //Objetos invisibles
     game.addVisual(paredInvisibleDeArriba)
@@ -23,8 +23,8 @@ program PeliculasVsRobots {
 
     game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
     game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
-    game.onCollideDo(terminator, { elemento => if (elemento.esEnemigo() ){ 
-        terminator.recibirDaño(20) 
+    game.onCollideDo(personajePrincipal, { elemento => if (elemento.esEnemigo() ){ 
+        personajePrincipal.recibirDaño(20) 
         spawnerRobots.eliminarRobot(elemento) 
         } 
     })
