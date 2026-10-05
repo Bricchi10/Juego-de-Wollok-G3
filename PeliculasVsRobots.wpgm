@@ -12,10 +12,12 @@ program PeliculasVsRobots {
     game.boardGround("Fondo.jpg")
     const personajePrincipal= new Terminator()
     //Personaje
+
     game.addVisual(personajePrincipal)
-   // game.addVisual(terminator)
-   // game.addVisual(barraVida)
-   // game.addVisual(etiquetaVida)
+    barraVida.personaje(personajePrincipal)//nuevo
+    game.addVisual(barraVida)
+    etiquetaVida.personaje(personajePrincipal)//nuevo
+    game.addVisual(etiquetaVida)
     
     //Objetos invisibles
     game.addVisual(paredInvisibleDeArriba)

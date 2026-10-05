@@ -52,9 +52,15 @@ class Terminator inherits Personaje{
 }
 
 object barraVida {
+  var personaje=null
+
   method position()= game.at(2,0)
+  method personaje(personaje_){
+    personaje=personaje_
+  }
+
   method image(){
-    const vidaActual = terminator.vida()
+    const vidaActual = personaje.vida()
     return if (vidaActual == 100) "5Corazones.png"
            else if (vidaActual >= 80) "4Corazones.png"
            else if (vidaActual >= 60 ) "3Corazones.png"
@@ -64,10 +70,14 @@ object barraVida {
   }
   method esEnemigo() = false
 }
-object etiquetaVida {
-  method position()= game.at(0,0)
 
-  method text()= "Vida:" + terminator.vida()
+object etiquetaVida {
+  var personaje=null
+  method personaje(personaje_){
+    personaje=personaje_
+  }
+  method position()= game.at(0,0)
+  method text()= "Vida:" + personaje.vida()
   method textColor() = "FFFFFFFF"
   method esEnemigo() = false
 }
