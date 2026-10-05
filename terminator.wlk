@@ -1,4 +1,5 @@
 import bala.*
+import etapaDelJuego.*
 class Personaje{
     var property position=game.at(1,1)
     var property vida = 100
@@ -15,7 +16,7 @@ method recibirDaño(cantidad) {
   vida = (vida - cantidad).max(0)
   game.sound("steveDolor.mp3").play()
   if (vida == 0) {
-    juego.terminar()
+    etapaDelJuego.terminar()
   }
 }
   
@@ -80,20 +81,4 @@ object etiquetaVida {
   method text()= "Vida:" + personaje.vida()
   method textColor() = "FFFFFFFF"
   method esEnemigo() = false
-}
-object juego { 
-  var finalizado = false 
-  
-  method position() = game.at(3, 2)
-  method image(){
-    return "game_over_re4_transparente.png"
-  }
-  method terminar() { 
-    if (not finalizado) { 
-      finalizado = true 
-      game.clear()
-      game.addVisual(self)
-      game.sound("game-over.mp3").play()
-    }
-  }
 }

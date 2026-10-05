@@ -8,7 +8,16 @@ class Bala {
     }
 
     method moverse() {
-        game.onTick(130,"movimientoDeBala", {self.mover()})
+    const tickActual = "movimientoDeBala_" + self.identity().toString()
+
+        game.onTick(130, tickActual,{
+            if (position.x() <= game.width() - 1) { 
+                self.mover() 
+            } 
+            else {  
+                game.removeTickEvent(tickActual) 
+                game.removeVisual(self) }
+        })
         
         game.onCollideDo(self, {personaje =>
             if( personaje.esEnemigo() ){

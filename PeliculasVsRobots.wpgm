@@ -3,6 +3,7 @@ import terminator.*
 import robot.*
 import direcciones.*
 import paredes.*
+import etapaDelJuego.*
 
 program PeliculasVsRobots {
 	game.title("Peliculas vs Robots")
