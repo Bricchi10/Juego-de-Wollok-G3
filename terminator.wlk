@@ -1,10 +1,9 @@
 import bala.*
-object terminator{
+class Personaje{
     var property position=game.at(1,1)
     var property vida = 100
 
     method image(){
-        return "terminator.png"
     }
 
     method mover(direccion) {
@@ -46,6 +45,9 @@ method irIzq() {
   method esEnemigo() = false
 }
 
+class Terminator inherits Personaje{
+  override method image(){
+    return "terminator.png"
 object barraVida {
   method position()= game.at(2,0)
   method image(){

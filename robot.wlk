@@ -2,6 +2,8 @@ import wollok.game.*
 import terminator.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
+    var vida=100
+    method image() = "robot.png" 
 
     method esEnemigo() = true
 
@@ -14,6 +16,15 @@ class Enemigo{
                juego.terminar() 
         } 
     } 
+
+    method esEnemigo() = true
+
+    method teHirieron(){
+        vida=vida-50
+        if(vida==0){
+          game.removeVisual(self)
+        }
+    }
 }
 class Robot inherits Enemigo { 
     override method image() = "robot.png" 
