@@ -2,6 +2,8 @@ import wollok.game.*
 import terminator.*
 import robot.*
 import direcciones.*
+import paredes.*
+import etapaDelJuego.*
 
 program PeliculasVsRobots {
 	game.title("Peliculas vs Robots")
@@ -9,14 +11,31 @@ program PeliculasVsRobots {
     game.height(7)
     game.cellSize(50)
     game.boardGround("Fondo.jpg")
-
+    const personajePrincipal= new Terminator()
     //Personaje
-    game.addVisual(terminator)
+
+    game.addVisual(personajePrincipal)
+    barraVida.personaje(personajePrincipal)//nuevo
+    game.addVisual(barraVida)
+    etiquetaVida.personaje(personajePrincipal)//nuevo
+    game.addVisual(etiquetaVida)
     
+    //Objetos invisibles
+    game.addVisual(paredInvisibleDeArriba)
+    game.addVisual(paredInvisibleDeAbajo)
+
+    game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
+    game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
+    game.onCollideDo(personajePrincipal, { elemento => if (elemento.esEnemigo() ){ 
+        personajePrincipal.recibirDaño(20) 
+        spawnerRobots.eliminarRobot(elemento) 
+        } 
+    })
+
     //Teclas
-	keyboard.up().onPressDo({ terminator.subir()})
-	keyboard.down().onPressDo({ terminator.bajar()})
-    keyboard.d().onPressDo({ terminator.disparar()})
+	keyboard.up().onPressDo({personajePrincipal.subir()})
+	keyboard.down().onPressDo({personajePrincipal.bajar()})
+    keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })

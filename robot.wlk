@@ -1,24 +1,35 @@
 import direcciones.*
 import terminator.*
 import wollok.game.* 
-class Robot { 
+import terminator.*
+import etapaDelJuego.*
+class Enemigo{ 
     var property position = game.at(9, 0) 
+    var vida=100
     method image() = "robotBasico.png" 
-    method avanzar() {
-        if (game.hasVisual(self) && self.noHayObstaculos() && game.colliders(self).isEmpty()) {
-            position = izquierda.siguiente(position)
+
+    method esEnemigo() = true
+
+
+
+    method avanzar() { 
+        if (position.x() > 1) { 
+            position = position.left(1) } 
+        else { game.say(self, "Perdiste!")
+               etapaDelJuego.terminar() 
+        } 
+    } 
+
+
+    method teHirieron(){
+        vida=vida-50
+        if(vida<=0){
+          spawnerRobots.eliminarRobot(self)
         }
-        self.verificarJuegoPerdido()
     }
-    method noHayObstaculos() {
-        return game.getObjectsIn(game.at(position.x() -1, position.y())).isEmpty()
-    }
-    method verificarJuegoPerdido() {
-        if (position.x() == 1) {
-            game.say(self, "Perdiste!")
-            game.schedule(1000, { game.stop() })
-        }
-    }
+}
+class Robot inherits Enemigo(vida =50) { 
+    override method image() = "robotBasico.png" 
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
@@ -26,11 +37,18 @@ object spawnerRobots {
         const filaAleatoria = (1 .. 5).anyOne() 
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
-        const nuevoRobot = new Robot(position = posicionInicial) robotsActivos.add(nuevoRobot) 
-        game.addVisual(nuevoRobot)
-        game.onTick(1500, "moverRobot", { => nuevoRobot.avanzar() })
-    }
+        const nuevoRobot = new Robot(position = posicionInicial) 
+        robotsActivos.add(nuevoRobot) 
+        game.addVisual(nuevoRobot) 
+    } 
+    method moverRobots() { 
+        robotsActivos.forEach({ robot => robot.avanzar() }) 
+    } 
     method eliminarRobot(robot) { 
-        robotsActivos.remove(robot) game.removeVisual(robot) 
-    }
+        if(robotsActivos.contains(robot)){
+        robotsActivos.remove(robot) 
+        game.removeVisual(robot) 
+        game.sound("muerteRobot.mp3").play()
+        }
+    } 
 }
