@@ -1,3 +1,4 @@
+import direcciones.*
 import robot.*
 class Bala {
     var property position
@@ -31,7 +32,10 @@ class Bala {
     }
 
     method mover(){
-        position = position.right(1)
+        position = derecha.siguiente(position)
+        if (position.x() == game.width() -1) {
+            game.removeVisual(self)
+        }
     }
 
 }

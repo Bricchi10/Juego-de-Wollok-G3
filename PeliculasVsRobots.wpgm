@@ -39,8 +39,10 @@ program PeliculasVsRobots {
 
     //Eventos en relacion al tiempo
     game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
-    game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
+    //game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
 
 	game.start()
+
+    game.schedule(180000, { => game.say(terminator, "¡Gane!") game.schedule(1000, { game.stop() }) }) // gana la partida pasados 3 minutos
 }
 

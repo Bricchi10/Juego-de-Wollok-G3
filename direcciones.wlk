@@ -8,7 +8,7 @@ object tablero {
     }
 
     method dentro(position) {
-        return position.x().between(0, game.width() -1) and position.y().between(0, game.height() -1 )
+        return position.x().between(0, game.width() -1) and position.y().between(1, game.height() -2 )
     }
 }
 

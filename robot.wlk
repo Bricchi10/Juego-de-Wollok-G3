@@ -1,10 +1,12 @@
+import direcciones.*
+import terminator.*
 import wollok.game.* 
 import terminator.*
 import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var vida=100
-    method image() = "robot.png" 
+    method image() = "robotBasico.png" 
 
     method esEnemigo() = true
 
@@ -27,7 +29,7 @@ class Enemigo{
     }
 }
 class Robot inherits Enemigo(vida =50) { 
-    override method image() = "robot.png" 
+    override method image() = "robotBasico.png" 
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
