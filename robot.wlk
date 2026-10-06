@@ -10,14 +10,13 @@ class Enemigo{
     method esEnemigo() = true
 
     method avanzar() {
-        if (game.hasVisual(self) && game.colliders(self).isEmpty()) {
-            position = izquierda.siguiente(position)
-        }
+        position = izquierda.siguiente(position)
+
         self.verificarJuegoPerdido()
     }
 
     method verificarJuegoPerdido() {
-        if (position.x() == 1 && game.hasVisual(self) && game.colliders(self).isEmpty()) {
+        if (position.x() == 1  && game.colliders(self).isEmpty()) {
             etapaDelJuego.terminar()
         }
     }
@@ -41,8 +40,10 @@ object spawnerRobots {
         const nuevoRobot = new Robot(position = posicionInicial) 
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
-        game.onTick(1500, "moverRobot", { => nuevoRobot.avanzar() })
     }
+    method moverRobots() { 
+        robotsActivos.forEach({ robot => robot.avanzar() }) 
+    } 
     method eliminarRobot(robot) { 
         if(robotsActivos.contains(robot)){
         robotsActivos.remove(robot) 
