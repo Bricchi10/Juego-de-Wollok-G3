@@ -48,5 +48,8 @@ object spawnerRobots {
         game.removeVisual(robot) 
         game.sound("muerteRobot.mp3").play()
         }
+    }
+    method limpiarRobots(){
+        robotsActivos.clear()
     } 
 }
