@@ -1,23 +1,25 @@
-import wollok.game.* 
+import direcciones.*
 import terminator.*
+import wollok.game.*
 import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var vida=100
-    method image() = "robot.png" 
+    method image() = "robotBasico.png" 
 
     method esEnemigo() = true
 
+    method avanzar() {
+        position = izquierda.siguiente(position)
 
+        self.verificarJuegoPerdido()
+    }
 
-    method avanzar() { 
-        if (position.x() > 1) { 
-            position = position.left(1) } 
-        else { game.say(self, "Perdiste!")
-               etapaDelJuego.terminar() 
-        } 
-    } 
-
+    method verificarJuegoPerdido() {
+        if (position.x() == 1  && game.colliders(self).isEmpty()) {
+            etapaDelJuego.terminar()
+        }
+    }
 
     method teHirieron(){
         vida=vida-50
@@ -26,8 +28,8 @@ class Enemigo{
         }
     }
 }
-class Robot inherits Enemigo(vida =50) { 
-    override method image() = "robot.png" 
+class Robot inherits Enemigo(vida = 50) { 
+    override method image() = "robotBasico.png" 
 } 
 object spawnerRobots { 
     const robotsActivos = [] 
@@ -38,7 +40,7 @@ object spawnerRobots {
         const nuevoRobot = new Robot(position = posicionInicial) 
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
-    } 
+    }
     method moverRobots() { 
         robotsActivos.forEach({ robot => robot.avanzar() }) 
     } 

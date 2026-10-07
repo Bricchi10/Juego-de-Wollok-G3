@@ -1,4 +1,5 @@
 import bala.*
+import direcciones.*
 import etapaDelJuego.*
 class Personaje{
     var property position=game.at(1,1)
@@ -25,10 +26,10 @@ method recibirDaño(cantidad) {
   }
 
 method subir() {
-    position = position.up(1)
+    position = arriba.siguiente(position)
   }
 method bajar() {
-    position = position.down(1)
+    position = abajo.siguiente(position)
   }
 method irDer() {
    // position = position.right(1)
@@ -48,7 +49,7 @@ method irIzq() {
 
 class Terminator inherits Personaje{
   override method image(){
-    return "terminator.png"
+    return "terminatorDispara.png"
   }
 }
 
