@@ -1,30 +1,42 @@
-import direcciones.*
 import robot.*
+import wollok.game.*
+
 class Bala {
     var property position
-    method esEnemigo()= false
-    
-    method image(){
-        return "proyectilDisparo.png"
-    }
+    var miTick = null 
+
+    method esEnemigo() = false
+
+    method image() = "proyectilDisparo.png"
 
     method moverse() {
+        // game.tick devuelve un objeto Tick que responde a .start() y .stop()
+        miTick = game.tick(130, {
+            if (position.x() < game.width() - 1) {
+                self.mover()
+            } else {
+                self.destruir() // Si sale de la pantalla, se destruye
+            }
+        }, true)
 
-         game.onTick(130,"movimientoDeBala", {self.mover()})
-        
-        game.onCollideDo(self, {personaje =>
-            if( personaje.esEnemigo() ){
-                //game.removeVisual(personaje)
+        miTick.start()
+        game.onCollideDo(self, { personaje =>
+            if (personaje.esEnemigo()) {
                 personaje.teHirieron()
-                game.removeVisual(self)
                 game.sound("muerteRobot.mp3").play()
-            } 
+                self.destruir() // Si impacta a un enemigo, se destruye
+            }
         })
-        //falta dejar de referenciar al robot y a la bala(de alguna manera), para que "mueran" definitivamente
     }
 
-    method mover(){
+    method mover() {
         position = position.right(1)
     }
 
+    method destruir() {
+        if (miTick != null) {
+            miTick.stop() // Detiene directamente este temporizador
+        }
+        game.removeVisual(self)
+    }
 }
