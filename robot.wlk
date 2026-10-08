@@ -6,24 +6,25 @@ class Enemigo{
     var property position = game.at(9, 0) 
     var vida=100
     method image() = "robotBasico.png" 
+    const moverRobot = game.tick(1500, { position = izquierda.siguiente(position) self.verificarJuegoPerdido() }, false)
 
     method esEnemigo() = true
 
     method avanzar() {
-        position = izquierda.siguiente(position)
-
-        self.verificarJuegoPerdido()
+        moverRobot.start()
     }
 
     method verificarJuegoPerdido() {
         if (position.x() == 1  && game.colliders(self).isEmpty()) {
             etapaDelJuego.terminar()
+            moverRobot.stop()
         }
     }
 
     method teHirieron(){
         vida=vida-50
         if(vida<=0){
+          moverRobot.stop()
           spawnerRobots.eliminarRobot(self)
         }
     }
@@ -40,10 +41,12 @@ object spawnerRobots {
         const nuevoRobot = new Robot(position = posicionInicial) 
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
+        nuevoRobot.avanzar()
     }
+    /*
     method moverRobots() { 
         robotsActivos.forEach({ robot => robot.avanzar() }) 
-    } 
+    } */
     method eliminarRobot(robot) { 
         if(robotsActivos.contains(robot)){
         robotsActivos.remove(robot) 
