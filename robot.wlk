@@ -35,6 +35,10 @@ class Enemigo{
 class Robot inherits Enemigo(vida = 50) { 
     override method image() = "robotBasico.png" 
 } 
+
+class RobotFuerte inherits Enemigo(vida = 100){
+    override method image() = "robotFuerte.png"
+} 
 object spawnerRobots { 
     const robotsActivos = [] 
     method generarRobot(robot) { 
