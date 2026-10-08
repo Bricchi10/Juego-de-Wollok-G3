@@ -2,13 +2,16 @@ import wollok.game.*
 import etapaDelJuego.*
 
 program PeliculasVsRobots {
-game.title("Peliculas vs Robots")
+    game.title("Peliculas vs Robots")
+
 	game.width(14)
     game.height(7)
     game.cellSize(50)
-    game.boardGround("Fondo.jpg")
-etapaDelJuego.iniciarPartida()
 
-game.start()
+    game.boardGround("Fondo.jpg")
+    
+    etapaDelJuego.iniciarPartida()
+
+    game.start()
 }
 

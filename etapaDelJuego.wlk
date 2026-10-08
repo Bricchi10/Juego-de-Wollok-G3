@@ -2,15 +2,14 @@ import wollok.game.*
 import robot.*
 import terminator.*
 import bala.*
-import paredes.*
 object etapaDelJuego { 
   var finalizado = false 
   const personajePrincipal= new Terminator() //Personaje
   const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot() }, false)
-  //const muevenRobots = game.tick(1500, { spawnerRobots.moverRobots() }, false)
-  const ganarJuego = game.tick(180000,  {  => game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
+  const ganarJuego = game.tick(180000,  { game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
   
   method position() = game.at(3, 2)
+
   method image(){
     return "game_over_re4_transparente.png"
   }

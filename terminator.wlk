@@ -13,30 +13,25 @@ class Personaje{
     position = nuevaPosition
   }
 
-method recibirDaño(cantidad) {
+  method recibirDaño(cantidad) {
   vida = (vida - cantidad).max(0)
   game.sound("steveDolor.mp3").play()
   if (vida == 0) {
     etapaDelJuego.terminar()
   }
-}
+  }
   
   method teHirieron(){
     
   }
 
-method subir() {
+  method subir() {
     position = arriba.siguiente(position)
   }
-method bajar() {
+  method bajar() {
     position = abajo.siguiente(position)
   }
-method irDer() {
-   // position = position.right(1)
-  }
-method irIzq() {
-   // position = position.left(1)
-  }
+  
   method disparar(){
     const bala=new Bala(position=self.position().right(1))
     game.sound("desert-eagle-cs.mp3").play()
