@@ -4,6 +4,7 @@ import etapaDelJuego.*
 class Personaje{
   var property position=game.at(1,1)
   var property vida = 100
+  var puedoDisparar = true 
 
   method image(){
   }
@@ -33,10 +34,15 @@ class Personaje{
   }
   
   method disparar(){
+    if(puedoDisparar){
+      puedoDisparar = false
     const bala=new Bala(position=self.position().right(1))
     game.sound("desert-eagle-cs.mp3").play()
     game.addVisual(bala)
     bala.moverse()
+
+    game.schedule(300, { puedoDisparar = true }) // cooldown de las balas 
+    }
   }
 
   method esEnemigo() = false

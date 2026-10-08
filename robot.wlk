@@ -6,7 +6,10 @@ class Enemigo{
     var property position = game.at(9, 0) 
     var vida = 100
     method image() = "robotBasico.png" 
-    const moverRobot = game.tick(1500, { position = izquierda.siguiente(position) self.verificarJuegoPerdido() }, false)
+    const moverRobot = game.tick(1500, { 
+        position = izquierda.siguiente(position) 
+        self.verificarJuegoPerdido() }, 
+        false)
 
     method esEnemigo() = true
 
@@ -15,7 +18,7 @@ class Enemigo{
     }
 
     method verificarJuegoPerdido() {
-        if (position.x() == 1  && game.colliders(self).isEmpty()) {
+        if (position.x() == 1) {
             etapaDelJuego.terminar()
             moverRobot.stop()
         }
