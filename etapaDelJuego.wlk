@@ -5,6 +5,10 @@ import bala.*
 import paredes.*
 object etapaDelJuego { 
   var finalizado = false 
+  const personajePrincipal= new Terminator() //Personaje
+  const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot() }, false)
+  //const muevenRobots = game.tick(1500, { spawnerRobots.moverRobots() }, false)
+  const ganarJuego = game.tick(180000,  {  => game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
   
   method position() = game.at(3, 2)
   method image(){
@@ -15,8 +19,9 @@ object etapaDelJuego {
     if (not finalizado) { 
       finalizado = true 
       game.clear()
-      game.removeTickEvent("aparecenRobots") 
-      game.removeTickEvent("muevenRobots")
+      aparecenRobots.stop()
+      //muevenRobots.stop()
+      ganarJuego.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
       game.sound("game-over.mp3").play()
@@ -30,21 +35,13 @@ object etapaDelJuego {
     self.iniciarPartida() 
 }
 method iniciarPartida(){
-    const personajePrincipal= new Terminator()
-    //Personaje
-
     game.addVisual(personajePrincipal)
     barraVida.personaje(personajePrincipal)//nuevo
     game.addVisual(barraVida)
     etiquetaVida.personaje(personajePrincipal)//nuevo
     game.addVisual(etiquetaVida)
+    personajePrincipal.reiniciarVida()
     
-    //Objetos invisibles
-    game.addVisual(paredInvisibleDeArriba)
-    game.addVisual(paredInvisibleDeAbajo)
-
-    game.onCollideDo(paredInvisibleDeArriba, {personaje => personaje.bajar() } )
-    game.onCollideDo(paredInvisibleDeAbajo, {personaje => personaje.subir() } )
     game.onCollideDo(personajePrincipal, { elemento => if (elemento.esEnemigo() ){ 
         personajePrincipal.recibirDaño(20) 
         spawnerRobots.eliminarRobot(elemento) 
@@ -57,8 +54,9 @@ method iniciarPartida(){
     keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
-    game.onTick(4000, "aparecenRobots", { spawnerRobots.generarRobot() })
-    game.onTick(1500, "muevenRobots", { spawnerRobots.moverRobots() })
+    aparecenRobots.start()
+    //muevenRobots.start()
+    ganarJuego.start()
 
 }
 }

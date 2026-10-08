@@ -2,16 +2,16 @@ import bala.*
 import direcciones.*
 import etapaDelJuego.*
 class Personaje{
-    var property position=game.at(1,1)
-    var property vida = 100
+  var property position=game.at(1,1)
+  var property vida = 100
 
-    method image(){
-    }
+  method image(){
+  }
 
-    method mover(direccion) {
-		const nuevaPosition = direccion.siguiente(position)
-        position = nuevaPosition
-	}
+  method mover(direccion) {
+    const nuevaPosition = direccion.siguiente(position)
+    position = nuevaPosition
+  }
 
 method recibirDaño(cantidad) {
   vida = (vida - cantidad).max(0)
@@ -45,6 +45,10 @@ method irIzq() {
   }
 
   method esEnemigo() = false
+
+  method reiniciarVida(){
+    vida = 100
+  }
 }
 
 class Terminator inherits Personaje{
