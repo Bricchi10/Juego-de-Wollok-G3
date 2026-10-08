@@ -19,7 +19,6 @@ object etapaDelJuego {
       finalizado = true 
       game.clear()
       aparecenRobots.stop()
-      //muevenRobots.stop()
       ganarJuego.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
@@ -28,16 +27,18 @@ object etapaDelJuego {
       keyboard.r().onPressDo({ self.reiniciar() }) 
     }
   }
+
   method reiniciar() { 
     finalizado = false
     game.clear()
     self.iniciarPartida() 
-}
-method iniciarPartida(){
+  }
+
+  method iniciarPartida(){
     game.addVisual(personajePrincipal)
-    barraVida.personaje(personajePrincipal)//nuevo
+    barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
-    etiquetaVida.personaje(personajePrincipal)//nuevo
+    etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
     personajePrincipal.reiniciarVida()
     
@@ -48,16 +49,14 @@ method iniciarPartida(){
     })
 
     //Teclas
-	keyboard.up().onPressDo({personajePrincipal.subir()})
-	keyboard.down().onPressDo({personajePrincipal.bajar()})
+	  keyboard.up().onPressDo({personajePrincipal.subir()})
+	  keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
-    //muevenRobots.start()
     ganarJuego.start()
-
-}
+  }
 }
 object cartelReiniciar { 
     method position() = game.at(5, 2) 
