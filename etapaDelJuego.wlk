@@ -5,7 +5,10 @@ import bala.*
 object etapaDelJuego { 
   var finalizado = false 
   const personajePrincipal= new Terminator() //Personaje
-  const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot() }, false)
+  const filaAleatoria = (1 .. 5).anyOne() 
+  const columnaEntrada = 9 
+  const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
+  const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot(new Robot(position = posicionInicial )) }, false)
   const ganarJuego = game.tick(180000,  { game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
   
   method position() = game.at(3, 2)
