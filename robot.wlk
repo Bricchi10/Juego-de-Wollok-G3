@@ -35,13 +35,14 @@ class Enemigo{
 class Robot inherits Enemigo(vida = 50) { 
     override method image() = "robotBasico.png" 
 } 
+
+class RobotFuerte inherits Enemigo(vida = 100){
+    override method image() = "robotFuerte.png"
+} 
 object spawnerRobots { 
     const robotsActivos = [] 
-    method generarRobot() { 
-        const filaAleatoria = (1 .. 5).anyOne() 
-        const columnaEntrada = 9 
-        const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
-        const nuevoRobot = new Robot(position = posicionInicial) 
+    method generarRobot(robot) { 
+        const nuevoRobot = robot 
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()
