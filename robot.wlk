@@ -7,7 +7,7 @@ class Enemigo{
     var vida=100
     method image() = "robotBasico.png" 
     const moverRobot = game.tick(1500, { 
-        position = izquierda.siguiente(position) 
+        self.mover()
         }, 
         false)
 
@@ -26,17 +26,25 @@ class Enemigo{
         moverRobot.stop()
         spawnerRobots.eliminarRobot(self)
     }
+
+    method mover() {
+        position = izquierda.siguiente(position) 
+    }
 }
 class Robot inherits Enemigo(vida = 50) { 
-    override method image() = "robotBasico.png" 
+    override method image() = "Assets\robots\robotBasico.png" 
+} 
+class RobotFuerte inherits Enemigo(vida = 100){
+    override method image() = "Assets\robots\robotFuerteCamina.png"
 } 
 object spawnerRobots { 
-    const robotsActivos = [] 
+    const robotsActivos = []
     method generarRobot() { 
         const filaAleatoria = (1 .. 5).anyOne() 
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
-        const nuevoRobot = new Robot(position = posicionInicial) 
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
+        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()

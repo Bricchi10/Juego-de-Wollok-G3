@@ -21,8 +21,7 @@ object etapaDelJuego {
   }
 
   method generarRobots() {
-    spawnerRobots.generarRobot(new Robot(position = game.at(9, (1 .. 5).anyOne())))
-    spawnerRobots.generarRobot(new RobotFuerte(position = game.at(9, (1 .. 5).anyOne())  ))
+    spawnerRobots.generarRobot()
   }
   
   method position() = game.at(3, 2)
@@ -59,8 +58,7 @@ method iniciarPartida(){
     personajePrincipal.reiniciarVida()
     
     game.onCollideDo(personajePrincipal, { enemigo =>
-      personajePrincipal.teHirieron()
-      enemigo.mori()
+      self.personajePrincipalRecibeDañoDe(enemigo)
     })
 
     activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
@@ -68,7 +66,7 @@ method iniciarPartida(){
     //Teclas
 	keyboard.up().onPressDo({personajePrincipal.subir()})
 	keyboard.down().onPressDo({personajePrincipal.bajar()})
-    keyboard.d().onPressDo({personajePrincipal.disparar()})
+  keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
@@ -81,6 +79,16 @@ method iniciarPartida(){
       self.terminar()
       robot.mori()
     })
+  }
+
+  method personajePrincipalRecibeDañoDe(enemigo) {
+    personajePrincipal.teHirieron()
+    enemigo.mori()
+  }
+
+  method llegaALaCasa(enemigo) {
+    self.terminar()
+    enemigo.mori()
   }
 }
 object cartelReiniciar { 

@@ -1,5 +1,6 @@
 import robot.*
 import wollok.game.*
+import direcciones.*
 
 class Bala {
     var property position
@@ -12,11 +13,9 @@ class Bala {
     method image() = "proyectilDisparo.png"
 
     method moverse() {
-        miTick.start()
-        game.onCollideDo(self, { personaje =>
-            personaje.teHirieron()
-            game.sound("muerteRobot.mp3").play()
-            self.mori() // Si impacta a un enemigo, se destruye
+        movimiento.start()
+        game.onCollideDo(self, { elemento =>
+            self.herirA(elemento)
         })
     }
 
@@ -32,4 +31,11 @@ class Bala {
         movimiento.stop() // Detiene directamente este temporizador
         game.removeVisual(self)
     }
+
+    method herirA(elemento) {
+        elemento.teHirieron()
+        game.sound("muerteRobot.mp3").play()
+        self.mori() // Si impacta a un enemigo, se destruye
+    }
+
 }

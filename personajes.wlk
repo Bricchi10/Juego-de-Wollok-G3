@@ -18,7 +18,7 @@ class Personaje{
     vida = (vida - 20).max(0)
     game.sound("steveDolor.mp3").play()
     if (vida == 0) {
-      etapaDelJuego.terminar()
+      self.mori()
     }
   }
 
@@ -43,6 +43,10 @@ class Personaje{
 
   method reiniciarVida(){
     vida = 100
+  }
+
+  method mori(){
+    etapaDelJuego.terminar()
   }
 }
 
