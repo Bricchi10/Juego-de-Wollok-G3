@@ -1,6 +1,6 @@
 //import que sea necesario para el test
 import robot.*
-import terminator.*
+import personajes.*
 import bala.*
 
 /*describe "Pruebas de Peliculas vs Robots" {

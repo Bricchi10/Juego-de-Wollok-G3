@@ -1,32 +1,30 @@
 import direcciones.*
-import terminator.*
+import personajes.*
 import wollok.game.*
 import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var vida=100
     method image() = "robotBasico.png" 
-    const moverRobot = game.tick(1500, { position = izquierda.siguiente(position) self.verificarJuegoPerdido() }, false)
-
-    method esEnemigo() = true
+    const moverRobot = game.tick(1500, { 
+        position = izquierda.siguiente(position) 
+        }, 
+        false)
 
     method avanzar() {
         moverRobot.start()
     }
 
-    method verificarJuegoPerdido() {
-        if (position.x() == 1  && game.colliders(self).isEmpty()) {
-            etapaDelJuego.terminar()
-            moverRobot.stop()
-        }
-    }
-
     method teHirieron(){
         vida=vida-50
         if(vida<=0){
-          moverRobot.stop()
-          spawnerRobots.eliminarRobot(self)
+          self.mori()
         }
+    }
+
+    method mori(){
+        moverRobot.stop()
+        spawnerRobots.eliminarRobot(self)
     }
 }
 class Robot inherits Enemigo(vida = 50) { 

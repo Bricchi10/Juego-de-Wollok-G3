@@ -1,14 +1,29 @@
 import wollok.game.*
 import robot.*
-import terminator.*
+import personajes.*
 import bala.*
-import paredes.*
+import activador.*
+
 object etapaDelJuego { 
   var finalizado = false 
-  const personajePrincipal= new Terminator() //Personaje
-  const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot() }, false)
-  //const muevenRobots = game.tick(1500, { spawnerRobots.moverRobots() }, false)
-  const ganarJuego = game.tick(180000,  {  => game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
+  const personajePrincipal = new Terminator() //Personaje
+  const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
+  const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
+  const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
+  
+  method activadorEnY(posicionY) {
+    return new Activador(position = game.at(0,posicionY))
+  }
+
+  method ganarPartida() {
+    game.say(personajePrincipal, "¡Gane!")
+    game.schedule(1000, { game.stop() })
+  }
+
+  method generarRobots() {
+    spawnerRobots.generarRobot(new Robot(position = game.at(9, (1 .. 5).anyOne())))
+    spawnerRobots.generarRobot(new RobotFuerte(position = game.at(9, (1 .. 5).anyOne())  ))
+  }
   
   method position() = game.at(3, 2)
   method image(){
@@ -40,13 +55,15 @@ method iniciarPartida(){
     game.addVisual(barraVida)
     etiquetaVida.personaje(personajePrincipal)//nuevo
     game.addVisual(etiquetaVida)
+    activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
     
-    game.onCollideDo(personajePrincipal, { elemento => if (elemento.esEnemigo() ){ 
-        personajePrincipal.recibirDaño(20) 
-        spawnerRobots.eliminarRobot(elemento) 
-        } 
+    game.onCollideDo(personajePrincipal, { enemigo =>
+      personajePrincipal.teHirieron()
+      enemigo.mori()
     })
+
+    activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
 
     //Teclas
 	keyboard.up().onPressDo({personajePrincipal.subir()})
@@ -57,8 +74,14 @@ method iniciarPartida(){
     aparecenRobots.start()
     //muevenRobots.start()
     ganarJuego.start()
+  }
 
-}
+  method perderAlRobotColisionarCon(activador) {
+    game.onCollideDo(activador, { robot =>
+      self.terminar()
+      robot.mori()
+    })
+  }
 }
 object cartelReiniciar { 
     method position() = game.at(5, 2) 
