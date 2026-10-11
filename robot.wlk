@@ -4,7 +4,7 @@ import wollok.game.*
 import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
-    var vida=100
+    var vida = 100
     method image() = "robotBasico.png" 
     const moverRobot = game.tick(1500, { 
         self.mover()
@@ -49,10 +49,7 @@ object spawnerRobots {
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()
     }
-    /*
-    method moverRobots() { 
-        robotsActivos.forEach({ robot => robot.avanzar() }) 
-    } */
+   
     method eliminarRobot(robot) { 
         if(robotsActivos.contains(robot)){
         robotsActivos.remove(robot) 

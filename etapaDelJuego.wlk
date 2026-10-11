@@ -25,6 +25,7 @@ object etapaDelJuego {
   }
   
   method position() = game.at(3, 2)
+
   method image(){
     return "game_over_re4_transparente.png"
   }
@@ -34,7 +35,6 @@ object etapaDelJuego {
       finalizado = true 
       game.clear()
       aparecenRobots.stop()
-      //muevenRobots.stop()
       ganarJuego.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
@@ -43,16 +43,18 @@ object etapaDelJuego {
       keyboard.r().onPressDo({ self.reiniciar() }) 
     }
   }
+
   method reiniciar() { 
     finalizado = false
     game.clear()
     self.iniciarPartida() 
-}
-method iniciarPartida(){
+  }
+
+  method iniciarPartida(){
     game.addVisual(personajePrincipal)
-    barraVida.personaje(personajePrincipal)//nuevo
+    barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
-    etiquetaVida.personaje(personajePrincipal)//nuevo
+    etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
@@ -70,7 +72,6 @@ method iniciarPartida(){
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
-    //muevenRobots.start()
     ganarJuego.start()
   }
 
