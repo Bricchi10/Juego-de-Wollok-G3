@@ -14,16 +14,12 @@ class Personaje{
     position = nuevaPosition
   }
 
-  method recibirDaño(cantidad) {
-  vida = (vida - cantidad).max(0)
-  game.sound("steveDolor.mp3").play()
-  if (vida == 0) {
-    etapaDelJuego.terminar()
-  }
-  }
-  
   method teHirieron(){
-    
+    vida = (vida - 20).max(0)
+    game.sound("steveDolor.mp3").play()
+    if (vida == 0) {
+      self.mori()
+    }
   }
 
   method subir() {
@@ -45,10 +41,12 @@ class Personaje{
     }
   }
 
-  method esEnemigo() = false
-
   method reiniciarVida(){
     vida = 100
+  }
+
+  method mori(){
+    etapaDelJuego.terminar()
   }
 }
 
@@ -75,7 +73,6 @@ object barraVida {
            else if (vidaActual >= 20) "1Corazon.png"
            else "CorazonVacio.png"
   }
-  method esEnemigo() = false
 }
 
 object etiquetaVida {
@@ -86,5 +83,4 @@ object etiquetaVida {
   method position()= game.at(0,0)
   method text()= "Vida:" + personaje.vida()
   method textColor() = "FFFFFFFF"
-  method esEnemigo() = false
 }

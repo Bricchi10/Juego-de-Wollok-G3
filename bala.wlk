@@ -1,14 +1,11 @@
 import robot.*
 import wollok.game.*
 import direcciones.*
+
 class Bala {
     var property position
     const movimiento = game.tick(130, { // game.tick devuelve un objeto Tick que responde a .start() y .stop()
-            if (tablero.dentro(self.position())) {
-                self.mover()
-            } else {
-                self.destruir() // Si sale de la pantalla, se destruye
-            }
+            self.mover()
         }, false) 
 
     method esEnemigo() = false
@@ -17,21 +14,28 @@ class Bala {
 
     method moverse() {
         movimiento.start()
-        game.onCollideDo(self, { personaje =>
-            if (personaje.esEnemigo()) {
-                personaje.teHirieron()
-                game.sound("muerteRobot.mp3").play()
-                self.destruir() // Si impacta a un enemigo, se destruye
-            }
+        game.onCollideDo(self, { elemento =>
+            self.herirA(elemento)
         })
     }
 
     method mover() {
-        position = position.right(1)
+        if (tablero.dentro(self.position())) {
+            position = position.right(1)
+        } else {
+            self.mori() // Si sale de la pantalla, se destruye
+        }
     }
 
-    method destruir() {
+    method mori() {
         movimiento.stop() // Detiene directamente este temporizador
         game.removeVisual(self)
     }
+
+    method herirA(elemento) {
+        elemento.teHirieron()
+        game.sound("muerteRobot.mp3").play()
+        self.mori() // Si impacta a un enemigo, se destruye
+    }
+
 }

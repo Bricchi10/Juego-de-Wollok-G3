@@ -1,5 +1,5 @@
 import direcciones.*
-import terminator.*
+import personajes.*
 import wollok.game.*
 import etapaDelJuego.*
 class Enemigo{ 
@@ -7,42 +7,44 @@ class Enemigo{
     var vida = 100
     method image() = "robotBasico.png" 
     const moverRobot = game.tick(1500, { 
-        position = izquierda.siguiente(position) 
-        self.verificarJuegoPerdido() }, 
+        self.mover()
+        }, 
         false)
-
-    method esEnemigo() = true
 
     method avanzar() {
         moverRobot.start()
     }
 
-    method verificarJuegoPerdido() {
-        if (position.x() == 1) {
-            etapaDelJuego.terminar()
-            moverRobot.stop()
-        }
-    }
-
     method teHirieron(){
         vida=vida-50
         if(vida<=0){
-          moverRobot.stop()
-          spawnerRobots.eliminarRobot(self)
+          self.mori()
         }
+    }
+
+    method mori(){
+        moverRobot.stop()
+        spawnerRobots.eliminarRobot(self)
+    }
+
+    method mover() {
+        position = izquierda.siguiente(position) 
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
     override method image() = "robotBasico.png" 
 } 
-
 class RobotFuerte inherits Enemigo(vida = 100){
-    override method image() = "robotFuerte.png"
+    override method image() = "robotFuerteCamina.png"
 } 
 object spawnerRobots { 
-    const robotsActivos = [] 
-    method generarRobot(robot) { 
-        const nuevoRobot = robot 
+    const robotsActivos = []
+    method generarRobot() { 
+        const filaAleatoria = (1 .. 5).anyOne() 
+        const columnaEntrada = 9 
+        const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
+        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()

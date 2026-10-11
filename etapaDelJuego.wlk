@@ -1,12 +1,28 @@
 import wollok.game.*
 import robot.*
-import terminator.*
+import personajes.*
 import bala.*
+import activador.*
+
 object etapaDelJuego { 
   var finalizado = false 
-  const personajePrincipal= new Terminator() //Personaje
-  const aparecenRobots = game.tick(4000, { spawnerRobots.generarRobot(new Robot(position = game.at(9, (1 .. 5).anyOne())  )) spawnerRobots.generarRobot(new RobotFuerte(position = game.at(9, (1 .. 5).anyOne())  ))}, false)
-  const ganarJuego = game.tick(180000,  { game.say(personajePrincipal, "¡Gane!") game.schedule(1000, { game.stop() }) }, false)
+  const personajePrincipal = new Terminator() //Personaje
+  const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
+  const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
+  const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
+  
+  method activadorEnY(posicionY) {
+    return new Activador(position = game.at(0,posicionY))
+  }
+
+  method ganarPartida() {
+    game.say(personajePrincipal, "¡Gane!")
+    game.schedule(1000, { game.stop() })
+  }
+
+  method generarRobots() {
+    spawnerRobots.generarRobot()
+  }
   
   method position() = game.at(3, 2)
 
@@ -40,22 +56,40 @@ object etapaDelJuego {
     game.addVisual(barraVida)
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
+    activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
     
-    game.onCollideDo(personajePrincipal, { elemento => if (elemento.esEnemigo() ){ 
-        personajePrincipal.recibirDaño(20) 
-        spawnerRobots.eliminarRobot(elemento) 
-        } 
+    game.onCollideDo(personajePrincipal, { enemigo =>
+      self.personajePrincipalRecibeDañoDe(enemigo)
     })
 
+    activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
+
     //Teclas
-	  keyboard.up().onPressDo({personajePrincipal.subir()})
-	  keyboard.down().onPressDo({personajePrincipal.bajar()})
-    keyboard.d().onPressDo({personajePrincipal.disparar()})
+	keyboard.up().onPressDo({personajePrincipal.subir()})
+	keyboard.down().onPressDo({personajePrincipal.bajar()})
+  keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
     ganarJuego.start()
+  }
+
+  method perderAlRobotColisionarCon(activador) {
+    game.onCollideDo(activador, { robot =>
+      self.terminar()
+      robot.mori()
+    })
+  }
+
+  method personajePrincipalRecibeDañoDe(enemigo) {
+    personajePrincipal.teHirieron()
+    enemigo.mori()
+  }
+
+  method llegaALaCasa(enemigo) {
+    self.terminar()
+    enemigo.mori()
   }
 }
 object cartelReiniciar { 
