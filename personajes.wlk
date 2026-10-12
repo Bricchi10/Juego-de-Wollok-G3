@@ -5,6 +5,7 @@ class Personaje{
   var property position=game.at(1,1)
   var property vida = 100
   var puedoDisparar = true 
+  var balas=4 //nuevo
 
   method image(){
   }
@@ -30,13 +31,13 @@ class Personaje{
   }
   
   method disparar(){
-    if(puedoDisparar){
+    if(puedoDisparar and balas>0){
       puedoDisparar = false
     const bala=new Bala(position=self.position().right(1))
     game.sound("desert-eagle-cs.mp3").play()
     game.addVisual(bala)
     bala.moverse()
-
+    balas=balas-1
     game.schedule(300, { puedoDisparar = true }) // cooldown de las balas 
     }
   }
@@ -47,6 +48,18 @@ class Personaje{
 
   method mori(){
     etapaDelJuego.terminar()
+  }
+   method agarrarCarga(){ //nuevo
+    game.colliders(self).forEach({ objeto => 
+            objeto.intentarRecargarA(self) 
+        })
+  }
+
+  method recargar(){
+    balas=balas+3
+  }
+  method reiniciarBalas(){
+    balas= 4
   }
 }
 

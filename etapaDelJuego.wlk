@@ -8,6 +8,7 @@ object etapaDelJuego {
   var finalizado = false 
   const personajePrincipal = new Terminator() //Personaje
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
+  const apareceMunicion = game.tick(4000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
   
@@ -23,6 +24,9 @@ object etapaDelJuego {
   method generarRobots() {
     spawnerRobots.generarRobot()
   }
+   method generarMunicionDePersonaje() { //nuevo
+    spawnerMunicion.generarMunicion()
+  }
   
   method position() = game.at(3, 2)
 
@@ -35,6 +39,7 @@ object etapaDelJuego {
       finalizado = true 
       game.clear()
       aparecenRobots.stop()
+      apareceMunicion.stop()//nuevo
       ganarJuego.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
@@ -58,9 +63,10 @@ object etapaDelJuego {
     game.addVisual(etiquetaVida)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
+    personajePrincipal.reiniciarBalas()//nuevo
     
-    game.onCollideDo(personajePrincipal, { enemigo =>
-      self.personajePrincipalRecibeDañoDe(enemigo)
+    game.onCollideDo(personajePrincipal, { elemento =>
+      elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
 
     activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
@@ -69,9 +75,11 @@ object etapaDelJuego {
 	keyboard.up().onPressDo({personajePrincipal.subir()})
 	keyboard.down().onPressDo({personajePrincipal.bajar()})
   keyboard.d().onPressDo({personajePrincipal.disparar()})
+  keyboard.a().onPressDo({personajePrincipal.agarrarCarga()}) //nuevo
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
+    apareceMunicion.start()//nuevo
     ganarJuego.start()
   }
 
@@ -82,7 +90,7 @@ object etapaDelJuego {
     })
   }
 
-  method personajePrincipalRecibeDañoDe(enemigo) {
+  method personajePrincipalRecibeDañoDe(enemigo) { //sin uso, se puede borrar
     personajePrincipal.teHirieron()
     enemigo.mori()
   }

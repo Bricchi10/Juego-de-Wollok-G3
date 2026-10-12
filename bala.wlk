@@ -37,5 +37,25 @@ class Bala {
         game.sound("muerteRobot.mp3").play()
         self.mori() // Si impacta a un enemigo, se destruye
     }
+    method chocarConPersonaje(personaje) {}// nuevo
+}
 
+object spawnerMunicion { 
+    method generarMunicion() { 
+        const filaEntrada = (1 .. 5).anyOne()  
+        const posicionInicial = game.at(1, filaEntrada) 
+        const nuevaMunicion = new Carga(position=posicionInicial)
+        game.addVisual(nuevaMunicion) 
+    }
+}
+
+class Carga {
+    var property position
+    method image() = "proyectilDisparo.png" 
+    
+    method intentarRecargarA(personaje) {
+        personaje.recargar()
+        game.removeVisual(self)
+    }
+    method chocarConPersonaje(personaje) {}//nuevo
 }

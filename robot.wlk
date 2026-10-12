@@ -30,6 +30,11 @@ class Enemigo{
     method mover() {
         position = izquierda.siguiente(position) 
     }
+
+    method chocarConPersonaje(personaje) {
+        personaje.teHirieron()
+        self.mori()
+    }
 }
 class Robot inherits Enemigo(vida = 50) { 
     override method image() = "robotBasico.png" 
