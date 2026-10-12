@@ -1,15 +1,21 @@
-//import que sea necesario para el test
 import robot.*
 import personajes.*
 import bala.*
+import direcciones.*
 
-/*describe "Pruebas de Peliculas vs Robots" {
+describe "Pruebas de Peliculas vs Robots" {
+  //const bala = new Bala(position = game.at(5,5))
+  const robotNormal = new Robot(position = game.at(5,5) ) 
+  const robotFuerte = new RobotFuerte(position = game.at(5,5))
+  //test "Bala baja la vida de robot al chocar con este " {}
 
-  test "Bala baja la vida de robot al chocar con este " {
-     robot.position(game.at(1,1))
-      terminator.position(game.at(1,1))
-      terminator.disparar()
-      assert.equals(90,robot.vida()) //por ahora no baja
+  test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
+    robotNormal.teHirieron()
+    assert.equals(0,robotNormal.vida())
+  }
+  test "Al ser herido el robot fuerte pierde 50 de vida(tiene 100)"{
+    robotFuerte.teHirieron()
+    assert.equals(50,robotFuerte.vida())
   }
 
-}*/
+}
