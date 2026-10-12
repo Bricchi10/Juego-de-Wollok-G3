@@ -4,7 +4,7 @@ import wollok.game.*
 import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
-    var vida = 100
+    var property vida = 100
     method image() = "robotBasico.png" 
     const moverRobot = game.tick(1500, { 
         self.mover()
