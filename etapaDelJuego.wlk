@@ -11,6 +11,8 @@ object etapaDelJuego {
   const apareceMunicion = game.tick(12000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
+  const musicaDeFondo = game.sound("musicaNivel.mp3")
+  const sonidoDeGameOver = game.sound("game-over.mp3")
   
   method activadorEnY(posicionY) {
     return new Activador(position = game.at(0,posicionY))
@@ -23,6 +25,10 @@ object etapaDelJuego {
 
   method generarRobots() {
     spawnerRobots.generarRobot()
+  }
+
+  method generarMunicionDePersonaje() { //nuevo
+    spawnerMunicion.generarMunicion()
   }
   
   method position() = game.at(3, 2)
@@ -40,7 +46,8 @@ object etapaDelJuego {
       apareceMunicion.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
-      game.sound("game-over.mp3").play()
+      musicaDeFondo.stop()
+      sonidoDeGameOver.play()
       game.addVisual(cartelReiniciar)
       keyboard.r().onPressDo({ self.reiniciar() }) 
     }
@@ -49,6 +56,7 @@ object etapaDelJuego {
   method reiniciar() { 
     finalizado = false
     game.clear()
+    sonidoDeGameOver.stop()
     self.iniciarPartida() 
   }
 
@@ -62,17 +70,20 @@ object etapaDelJuego {
     game.addVisual(etiquetaMunicion)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
-    
-    game.onCollideDo(personajePrincipal, { enemigo =>
-      self.personajePrincipalRecibeDañoDe(enemigo)
+    personajePrincipal.reiniciarBalas()
+    musicaDeFondo.volume(0.5)
+    musicaDeFondo.play()
+
+    game.onCollideDo(personajePrincipal, { elemento =>
+      elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
 
     activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
 
     //Teclas
-	keyboard.up().onPressDo({personajePrincipal.subir()})
-	keyboard.down().onPressDo({personajePrincipal.bajar()})
-  keyboard.d().onPressDo({personajePrincipal.disparar()})
+    keyboard.up().onPressDo({personajePrincipal.subir()})
+    keyboard.down().onPressDo({personajePrincipal.bajar()})
+    keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
@@ -85,11 +96,6 @@ object etapaDelJuego {
       self.terminar()
       robot.mori()
     })
-  }
-
-  method personajePrincipalRecibeDañoDe(enemigo) {
-    personajePrincipal.teHirieron()
-    enemigo.mori()
   }
 
   method llegaALaCasa(enemigo) {

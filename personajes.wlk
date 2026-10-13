@@ -31,14 +31,16 @@ class Personaje{
   }
   
   method disparar(){
-    if(puedoDisparar){
+    if(puedoDisparar and balas>0) {
       puedoDisparar = false
-    const bala=new Bala(position=self.position().right(1))
-    game.sound("desert-eagle-cs.mp3").play()
-    game.addVisual(bala)
-    bala.moverse()
-
-    game.schedule(300, { puedoDisparar = true }) // cooldown de las balas 
+      const bala=new Bala(position=self.position().right(1))
+      game.sound("desert-eagle-cs.mp3").play()
+      game.addVisual(bala)
+      bala.moverse()
+      balas -= 1
+      game.schedule(300, { puedoDisparar = true }) // cooldown de las balas 
+    } else {
+      game.sound("pinpull.mp3").play()
     }
   }
 

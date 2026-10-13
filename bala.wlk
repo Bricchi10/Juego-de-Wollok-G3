@@ -51,11 +51,11 @@ object spawnerMunicion {
 
 class Carga {
     var property position
-    method image() = "proyectilDisparo.png" 
+    method image() = "municionPickup.png" 
     
     method chocarConPersonaje(personaje) {
         personaje.recargar()
         game.removeVisual(self)
-        game.sound("muerteRobot.mp3").play()
+        game.sound("clipin1.mp3").play()
     }//nuevo
 }
