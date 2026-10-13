@@ -68,7 +68,16 @@ class Terminator inherits Personaje{
     return "terminatorDispara.png"
   }
 }
-
+class Spiderman inherits Personaje{
+  override method image(){
+    return "spidermanIdle.png"
+  }
+}
+class Wolverine inherits Personaje{
+  override method image(){
+    return "wolverineIdle.png"
+  }
+}
 object barraVida {
   var personaje=null
 

@@ -6,11 +6,46 @@ import activador.*
 
 object etapaDelJuego { 
   var finalizado = false 
-  const personajePrincipal = new Terminator() //Personaje
+  var property personajePrincipal = new Terminator() //Personaje
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(4000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
+  
+  method menuInicio(){
+      game.clear()
+      self.selTerminator()
+      game.addVisual(fondo)
+      const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
+      musicaFondoInicio.shouldLoop(true)
+      game.schedule(500, { musicaFondoInicio.play()} )
+
+      keyboard.space().onPressDo({self.iniciarPartida()})
+      keyboard.i().onPressDo({self.menuIstrucciones()})
+      keyboard.num1().onPressDo({self.selTerminator()})
+      keyboard.num2().onPressDo({self.selSpiderman()})
+      keyboard.num3().onPressDo({self.selWolverine()})
+  }
+  method selTerminator()  {
+ personajePrincipal = new Terminator()
+ fondo.image("menu_personajes_1_terminator.png")
+}
+
+method selSpiderman(){
+   personajePrincipal = new Spiderman()
+fondo.image("menu_personajes_2_spiderman.png")
+}
+
+method selWolverine(){
+   personajePrincipal = new Wolverine()
+fondo.image("menu_personajes_3_wolverine.png")
+}
+
+
+  method menuIstrucciones(){
+    game.boardGround()
+    keyboard.b().onPressDo({self.menuInicio()})
+  }
   
   method activadorEnY(posicionY) {
     return new Activador(position = game.at(0,posicionY))
@@ -38,6 +73,7 @@ object etapaDelJuego {
     if (not finalizado) { 
       finalizado = true 
       game.clear()
+      fondo.image("Fondo.jpg")
       aparecenRobots.stop()
       apareceMunicion.stop()//nuevo
       ganarJuego.stop()
@@ -52,10 +88,14 @@ object etapaDelJuego {
   method reiniciar() { 
     finalizado = false
     game.clear()
-    self.iniciarPartida() 
+    self.menuInicio()
   }
 
   method iniciarPartida(){
+
+    game.clear()
+    fondo.image("Fondo.jpg")
+    game.addVisual(fondo)
     game.addVisual(personajePrincipal)
     barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
@@ -90,11 +130,6 @@ object etapaDelJuego {
     })
   }
 
-  method personajePrincipalRecibeDañoDe(enemigo) { //sin uso, se puede borrar
-    personajePrincipal.teHirieron()
-    enemigo.mori()
-  }
-
   method llegaALaCasa(enemigo) {
     self.terminar()
     enemigo.mori()
@@ -103,4 +138,13 @@ object etapaDelJuego {
 object cartelReiniciar { 
     method position() = game.at(5, 2) 
     method image() = "cartelDeReinicio.png"
+}
+
+object objetoInvisible{
+ method position() = game.at(2,2)
+}
+
+object fondo { 
+var property image = "menu_personajes_base.png" 
+method position() = game.at(0,0)  
 }

@@ -56,6 +56,7 @@ class Carga {
     method intentarRecargarA(personaje) {
         personaje.recargar()
         game.removeVisual(self)
+        game.sound("cs-Recarga.mp3").play()
     }
     method chocarConPersonaje(personaje) {}//nuevo
 }
