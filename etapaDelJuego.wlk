@@ -8,6 +8,7 @@ object etapaDelJuego {
   var finalizado = false 
   const personajePrincipal = new Terminator() //Personaje
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
+  const apareceMunicion = game.tick(12000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
   
@@ -36,6 +37,7 @@ object etapaDelJuego {
       game.clear()
       aparecenRobots.stop()
       ganarJuego.stop()
+      apareceMunicion.stop()
       spawnerRobots.limpiarRobots()
       game.addVisual(self)
       game.sound("game-over.mp3").play()
@@ -56,6 +58,8 @@ object etapaDelJuego {
     game.addVisual(barraVida)
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
+    etiquetaMunicion.personaje(personajePrincipal)
+    game.addVisual(etiquetaMunicion)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
     
@@ -73,6 +77,7 @@ object etapaDelJuego {
     //Eventos en relacion al tiempo
     aparecenRobots.start()
     ganarJuego.start()
+    apareceMunicion.start()
   }
 
   method perderAlRobotColisionarCon(activador) {

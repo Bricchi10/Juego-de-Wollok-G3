@@ -5,6 +5,7 @@ class Personaje{
   var property position=game.at(1,1)
   var property vida = 100
   var puedoDisparar = true 
+  var property balas = 10 //nuevo
 
   method image(){
   }
@@ -48,6 +49,18 @@ class Personaje{
   method mori(){
     etapaDelJuego.terminar()
   }
+   method agarrarCarga(){ //nuevo
+    game.colliders(self).forEach({ objeto => 
+            objeto.intentarRecargarA(self) 
+        })
+  }
+
+  method recargar(){
+    balas += 5
+  }
+  method reiniciarBalas(){
+    balas = 10
+  }
 }
 
 class Terminator inherits Personaje{
@@ -82,5 +95,15 @@ object etiquetaVida {
   }
   method position()= game.at(0,0)
   method text()= "Vida:" + personaje.vida()
+  method textColor() = "FFFFFFFF"
+}
+
+object etiquetaMunicion {
+  var personaje=null
+  method personaje(personaje_){
+    personaje=personaje_
+  }
+  method position()= game.at(1,0)
+  method text()= "Balas:" + personaje.balas()
   method textColor() = "FFFFFFFF"
 }

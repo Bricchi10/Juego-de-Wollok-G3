@@ -1,6 +1,7 @@
 import robot.*
 import wollok.game.*
 import direcciones.*
+import generadorAleatorio.*
 
 class Bala {
     var property position
@@ -37,5 +38,24 @@ class Bala {
         game.sound("muerteRobot.mp3").play()
         self.mori() // Si impacta a un enemigo, se destruye
     }
+    method chocarConPersonaje(personaje) {}// nuevo
+}
 
+object spawnerMunicion { 
+    method generarMunicion() { 
+        const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
+        const nuevaMunicion = new Carga(position=posicionInicial)
+        game.addVisual(nuevaMunicion) 
+    }
+}
+
+class Carga {
+    var property position
+    method image() = "proyectilDisparo.png" 
+    
+    method chocarConPersonaje(personaje) {
+        personaje.recargar()
+        game.removeVisual(self)
+        game.sound("muerteRobot.mp3").play()
+    }//nuevo
 }

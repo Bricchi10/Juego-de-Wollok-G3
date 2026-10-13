@@ -1,3 +1,4 @@
+import generadorAleatorio.*
 import direcciones.*
 import personajes.*
 import wollok.game.*
@@ -40,9 +41,8 @@ class RobotFuerte inherits Enemigo(vida = 100){
 object spawnerRobots { 
     const robotsActivos = []
     method generarRobot() { 
-        const filaAleatoria = (1 .. 5).anyOne() 
         const columnaEntrada = 9 
-        const posicionInicial = game.at(columnaEntrada, filaAleatoria) 
+        const posicionInicial = game.at(columnaEntrada, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
