@@ -7,8 +7,9 @@ import activador.*
 object etapaDelJuego { 
   var finalizado = false 
   var property personajePrincipal = new Terminator() //Personaje
+  const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
-  const apareceMunicion = game.tick(4000, { self.generarMunicionDePersonaje() }, false)//nuevo
+  const apareceMunicion = game.tick(6000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
   
@@ -16,7 +17,6 @@ object etapaDelJuego {
       game.clear()
       self.selTerminator()
       game.addVisual(fondo)
-      const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
       musicaFondoInicio.shouldLoop(true)
       game.schedule(500, { musicaFondoInicio.play()} )
 
@@ -73,14 +73,15 @@ fondo.image("menu_personajes_3_wolverine.png")
     if (not finalizado) { 
       finalizado = true 
       game.clear()
+      game.addVisual(fondo)
       fondo.image("Fondo.jpg")
       aparecenRobots.stop()
       apareceMunicion.stop()//nuevo
       ganarJuego.stop()
       spawnerRobots.limpiarRobots()
-      game.addVisual(self)
       game.sound("game-over.mp3").play()
       game.addVisual(cartelReiniciar)
+      game.addVisual(cartelGameOver)
       keyboard.r().onPressDo({ self.reiniciar() }) 
     }
   }
@@ -97,8 +98,11 @@ fondo.image("menu_personajes_3_wolverine.png")
     fondo.image("Fondo.jpg")
     game.addVisual(fondo)
     game.addVisual(personajePrincipal)
+    musicaFondoInicio.stop()
     barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
+    etiquetaDeBalas.personaje(personajePrincipal)
+    game.addVisual(etiquetaDeBalas)
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
@@ -140,8 +144,9 @@ object cartelReiniciar {
     method image() = "cartelDeReinicio.png"
 }
 
-object objetoInvisible{
- method position() = game.at(2,2)
+object cartelGameOver{
+ method position() = game.at(3,2)
+ method image()="game_over_re4_transparente.png"
 }
 
 object fondo { 

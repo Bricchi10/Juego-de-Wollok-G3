@@ -51,7 +51,7 @@ object spawnerMunicion {
 
 class Carga {
     var property position
-    method image() = "proyectilDisparo.png" 
+    method image() = "municion_azul_50px.png" 
     
     method intentarRecargarA(personaje) {
         personaje.recargar()

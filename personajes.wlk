@@ -5,7 +5,7 @@ class Personaje{
   var property position=game.at(1,1)
   var property vida = 100
   var puedoDisparar = true 
-  var balas=4 //nuevo
+  var property balas=4 //nuevo
 
   method image(){
   }
@@ -105,4 +105,15 @@ object etiquetaVida {
   method position()= game.at(0,0)
   method text()= "Vida:" + personaje.vida()
   method textColor() = "FFFFFFFF"
+}
+
+object etiquetaDeBalas{
+    var personaje = null 
+    method personaje(personaje_) { 
+      personaje = personaje_ 
+    }  
+    method position() = game.at(7, 0) 
+    method text() = "Balas: " + personaje.balas() 
+    method textColor() = "FFFFFFFF" // Blanco 
+    
 }
