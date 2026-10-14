@@ -77,7 +77,7 @@ class Terminator inherits Personaje{
   override method image(){
     return "terminatorDispara.png"
   }
-  override method imagenCarga() = "balaAzul.png"
+  override method imagenCarga() = "municionPickup.png"
   override method sonidoCarga() = "cs-Recarga.mp3"
 }
 class Spiderman inherits Personaje{

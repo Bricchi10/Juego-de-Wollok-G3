@@ -112,8 +112,6 @@ fondo.image("menu_personajes_3_goku.png")
     game.addVisual(etiquetaDeBalas)
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
-    etiquetaMunicion.personaje(personajePrincipal)
-    game.addVisual(etiquetaMunicion)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
