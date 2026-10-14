@@ -37,8 +37,8 @@ fondo.image("menu_personajes_2_spiderman.png")
 }
 
 method selWolverine(){
-   personajePrincipal = new Wolverine()
-fondo.image("menu_personajes_3_wolverine.png")
+   personajePrincipal = new Goku()
+fondo.image("menu_personajes_3_goku.png")
 }
 
 

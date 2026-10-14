@@ -73,9 +73,9 @@ class Spiderman inherits Personaje{
     return "spidermanIdle.png"
   }
 }
-class Wolverine inherits Personaje{
+class Goku inherits Personaje{
   override method image(){
-    return "wolverineIdle.png"
+    return "gokuIdle.png"
   }
 }
 object barraVida {
