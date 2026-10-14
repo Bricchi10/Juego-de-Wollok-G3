@@ -1,4 +1,4 @@
-import bala.*
+import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
 class Personaje{
@@ -10,6 +10,12 @@ class Personaje{
   method image(){
   }
 
+  method imagenCarga(){
+  }
+
+method sonidoCarga() {
+  
+}
   method mover(direccion) {
     const nuevaPosition = direccion.siguiente(position)
     position = nuevaPosition
@@ -30,17 +36,17 @@ class Personaje{
     position = abajo.siguiente(position)
   }
   
-  method disparar(){
-    if(puedoDisparar and balas>0){
-      puedoDisparar = false
-    const bala=new Bala(position=self.position().right(1))
-    game.sound("desert-eagle-cs.mp3").play()
-    game.addVisual(bala)
-    bala.moverse()
-    balas=balas-1
-    game.schedule(300, { puedoDisparar = true }) // cooldown de las balas 
+  method disparar() {
+    if (puedoDisparar and balas > 0) {
+        puedoDisparar = false
+        const proyectil = self.crearProyectil()
+        game.sound(self.sonidoDisparo()).play()
+        game.addVisual(proyectil)
+        proyectil.moverse()
+        balas = balas - 1
+        game.schedule(300, { puedoDisparar = true })
     }
-  }
+}
 
   method reiniciarVida(){
     vida = 100
@@ -61,22 +67,34 @@ class Personaje{
   method reiniciarBalas(){
     balas= 4
   }
+  method crearProyectil() = new Bala(position = self.position().right(1)) 
+  method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
 
 class Terminator inherits Personaje{
   override method image(){
     return "terminatorDispara.png"
   }
+  override method imagenCarga() = "balaAzul.png"
+  override method sonidoCarga() = "cs-Recarga.mp3"
 }
 class Spiderman inherits Personaje{
   override method image(){
     return "spidermanIdle.png"
   }
+  override method sonidoCarga() = "comer.mp3"
+  override method imagenCarga() = "pizza.png"
+  override method crearProyectil() = new Telaraña(position = self.position().right(1)) 
+  override method sonidoDisparo() = "spider-web.mp3"
 }
 class Goku inherits Personaje{
   override method image(){
     return "gokuIdle.png"
   }
+  override method sonidoCarga() = "power-up-mario.mp3"
+  override method imagenCarga() = "semillaErmitaño.png"
+  override method crearProyectil() = new Energia(position = self.position().right(1)) 
+  override method sonidoDisparo() = "ki_blast.mp3"
 }
 object barraVida {
   var personaje=null

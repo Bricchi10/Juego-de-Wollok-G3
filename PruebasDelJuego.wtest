@@ -1,6 +1,6 @@
 import robot.*
 import personajes.*
-import bala.*
+import proyectiles.*
 import direcciones.*
 
 describe "Pruebas de Peliculas vs Robots" {

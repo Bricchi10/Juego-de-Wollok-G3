@@ -1,7 +1,7 @@
 import wollok.game.*
 import robot.*
 import personajes.*
-import bala.*
+import proyectiles.*
 import activador.*
 
 object etapaDelJuego { 

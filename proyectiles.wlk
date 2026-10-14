@@ -1,6 +1,7 @@
 import robot.*
 import wollok.game.*
 import direcciones.*
+import etapaDelJuego.*
 
 class Bala {
     var property position
@@ -40,6 +41,14 @@ class Bala {
     method chocarConPersonaje(personaje) {}// nuevo
 }
 
+class Telaraña inherits Bala{
+    override method image()="proyectilTelaraña.png"
+}
+
+class Energia inherits Bala{
+    override method image()="bolaEnergiaAzul.png"
+}
+
 object spawnerMunicion { 
     method generarMunicion() { 
         const filaEntrada = (1 .. 5).anyOne()  
@@ -51,12 +60,21 @@ object spawnerMunicion {
 
 class Carga {
     var property position
-    method image() = "municion_azul_50px.png" 
+    method image() = etapaDelJuego.personajePrincipal().imagenCarga()
     
     method intentarRecargarA(personaje) {
         personaje.recargar()
         game.removeVisual(self)
-        game.sound("cs-Recarga.mp3").play()
+        game.sound(personaje.sonidoCarga()).play()
     }
     method chocarConPersonaje(personaje) {}//nuevo
 }
+
+class CargaTelaraña inherits Carga{
+    override method image() = "pizza.png" 
+}
+
+class CargaSemilla inherits Carga{
+    override method image() = "semillaErmitaño.png" 
+    
+} 
