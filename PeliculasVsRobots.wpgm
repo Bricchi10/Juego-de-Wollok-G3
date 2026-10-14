@@ -8,9 +8,8 @@ program PeliculasVsRobots {
     game.height(7)
     game.cellSize(50)
 
-    game.boardGround("Fondo.jpg")
     
-    etapaDelJuego.iniciarPartida()
+    etapaDelJuego.menuInicio()
 
     game.start()
 }

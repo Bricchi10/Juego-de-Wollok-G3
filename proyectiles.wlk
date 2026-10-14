@@ -1,7 +1,7 @@
 import robot.*
 import wollok.game.*
 import direcciones.*
-import generadorAleatorio.*
+import etapaDelJuego.*
 
 class Bala {
     var property position
@@ -41,9 +41,18 @@ class Bala {
     method chocarConPersonaje(personaje) {}// nuevo
 }
 
+class Telaraña inherits Bala{
+    override method image()="proyectilTelaraña.png"
+}
+
+class Energia inherits Bala{
+    override method image()="bolaEnergiaAzul.png"
+}
+
 object spawnerMunicion { 
     method generarMunicion() { 
-        const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
+        const filaEntrada = (1 .. 5).anyOne()  
+        const posicionInicial = game.at(1, filaEntrada) 
         const nuevaMunicion = new Carga(position=posicionInicial)
         game.addVisual(nuevaMunicion) 
     }
@@ -51,11 +60,21 @@ object spawnerMunicion {
 
 class Carga {
     var property position
-    method image() = "municionPickup.png" 
+    method image() = etapaDelJuego.personajePrincipal().imagenCarga()
     
-    method chocarConPersonaje(personaje) {
+    method intentarRecargarA(personaje) {
         personaje.recargar()
         game.removeVisual(self)
-        game.sound("clipin1.mp3").play()
-    }//nuevo
+        game.sound(personaje.sonidoCarga()).play()
+    }
+    method chocarConPersonaje(personaje) {}//nuevo
 }
+
+class CargaTelaraña inherits Carga{
+    override method image() = "pizza.png" 
+}
+
+class CargaSemilla inherits Carga{
+    override method image() = "semillaErmitaño.png" 
+    
+} 
