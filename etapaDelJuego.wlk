@@ -9,9 +9,11 @@ object etapaDelJuego {
   var property personajePrincipal = new Terminator() //Personaje
   const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
-  const apareceMunicion = game.tick(6000, { self.generarMunicionDePersonaje() }, false)//nuevo
+  const apareceMunicion = game.tick(12000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
+  const musicaDeFondo = game.sound("musicaNivel.mp3")
+  const sonidoDeGameOver = game.sound("game-over.mp3")
   
   method menuInicio(){
       game.clear()
@@ -59,7 +61,8 @@ fondo.image("menu_personajes_3_goku.png")
   method generarRobots() {
     spawnerRobots.generarRobot()
   }
-   method generarMunicionDePersonaje() { //nuevo
+
+  method generarMunicionDePersonaje() { //nuevo
     spawnerMunicion.generarMunicion()
   }
   
@@ -78,8 +81,11 @@ fondo.image("menu_personajes_3_goku.png")
       aparecenRobots.stop()
       apareceMunicion.stop()//nuevo
       ganarJuego.stop()
+      apareceMunicion.stop()
       spawnerRobots.limpiarRobots()
-      game.sound("game-over.mp3").play()
+      game.addVisual(self)
+      musicaDeFondo.stop()
+      sonidoDeGameOver.play()
       game.addVisual(cartelReiniciar)
       game.addVisual(cartelGameOver)
       keyboard.r().onPressDo({ self.reiniciar() }) 
@@ -89,6 +95,7 @@ fondo.image("menu_personajes_3_goku.png")
   method reiniciar() { 
     finalizado = false
     game.clear()
+    sonidoDeGameOver.stop()
     self.menuInicio()
   }
 
@@ -107,8 +114,10 @@ fondo.image("menu_personajes_3_goku.png")
     game.addVisual(etiquetaVida)
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
-    personajePrincipal.reiniciarBalas()//nuevo
-    
+    personajePrincipal.reiniciarBalas()
+    musicaDeFondo.volume(0.5)
+    musicaDeFondo.play()
+
     game.onCollideDo(personajePrincipal, { elemento =>
       elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
@@ -116,15 +125,15 @@ fondo.image("menu_personajes_3_goku.png")
     activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
 
     //Teclas
-	keyboard.up().onPressDo({personajePrincipal.subir()})
-	keyboard.down().onPressDo({personajePrincipal.bajar()})
-  keyboard.d().onPressDo({personajePrincipal.disparar()})
-  keyboard.a().onPressDo({personajePrincipal.agarrarCarga()}) //nuevo
+    keyboard.up().onPressDo({personajePrincipal.subir()})
+    keyboard.down().onPressDo({personajePrincipal.bajar()})
+    keyboard.d().onPressDo({personajePrincipal.disparar()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
     apareceMunicion.start()//nuevo
     ganarJuego.start()
+    apareceMunicion.start()
   }
 
   method perderAlRobotColisionarCon(activador) {

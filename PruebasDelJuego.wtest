@@ -32,9 +32,8 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   //Prueba con bala
-  test "Bala baja la vida de robot al chocar con este " { //No funciona
-    self.initialize()
-    bala.moverse()
+  test "Bala baja la vida de robot al chocar con este " {
+    bala.herirA(robotFuerte)
     assert.equals(50, robotFuerte.vida())
   }
 }

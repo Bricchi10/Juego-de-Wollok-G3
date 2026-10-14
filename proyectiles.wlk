@@ -2,6 +2,7 @@ import robot.*
 import wollok.game.*
 import direcciones.*
 import etapaDelJuego.*
+import generadorAleatorio.*
 
 class Bala {
     var property position
@@ -51,8 +52,7 @@ class Energia inherits Bala{
 
 object spawnerMunicion { 
     method generarMunicion() { 
-        const filaEntrada = (1 .. 5).anyOne()  
-        const posicionInicial = game.at(1, filaEntrada) 
+        const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
         const nuevaMunicion = new Carga(position=posicionInicial)
         game.addVisual(nuevaMunicion) 
     }
@@ -62,12 +62,11 @@ class Carga {
     var property position
     method image() = etapaDelJuego.personajePrincipal().imagenCarga()
     
-    method intentarRecargarA(personaje) {
+    method chocarConPersonaje(personaje) {
         personaje.recargar()
         game.removeVisual(self)
         game.sound(personaje.sonidoCarga()).play()
     }
-    method chocarConPersonaje(personaje) {}//nuevo
 }
 
 class CargaTelaraña inherits Carga{

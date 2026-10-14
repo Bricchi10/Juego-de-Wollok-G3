@@ -5,7 +5,7 @@ class Personaje{
   var property position=game.at(1,1)
   var property vida = 100
   var puedoDisparar = true 
-  var property balas=4 //nuevo
+  var property balas = 10 //nuevo
 
   method image(){
   }
@@ -43,8 +43,10 @@ method sonidoCarga() {
         game.sound(self.sonidoDisparo()).play()
         game.addVisual(proyectil)
         proyectil.moverse()
-        balas = balas - 1
+        balas -= 1
         game.schedule(300, { puedoDisparar = true })
+    } else {
+      game.sound("pinpull.mp3").play()
     }
 }
 
@@ -62,10 +64,10 @@ method sonidoCarga() {
   }
 
   method recargar(){
-    balas=balas+3
+    balas += 5
   }
   method reiniciarBalas(){
-    balas= 4
+    balas= 10
   }
   method crearProyectil() = new Bala(position = self.position().right(1)) 
   method sonidoDisparo() = "desert-eagle-cs.mp3"
@@ -75,7 +77,7 @@ class Terminator inherits Personaje{
   override method image(){
     return "terminatorDispara.png"
   }
-  override method imagenCarga() = "balaAzul.png"
+  override method imagenCarga() = "municionPickup.png"
   override method sonidoCarga() = "cs-Recarga.mp3"
 }
 class Spiderman inherits Personaje{
