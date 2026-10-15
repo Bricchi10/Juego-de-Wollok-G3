@@ -14,6 +14,7 @@ object etapaDelJuego {
   const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
   const musicaDeFondo = game.sound("musicaNivel.mp3")
   const sonidoDeGameOver = game.sound("game-over.mp3")
+  const sonidoDeVictoria = game.sound("victoria.mp3")
   
   method menuInicio(){
       game.clear()
@@ -45,7 +46,7 @@ fondo.image("menu_personajes_3_goku.png")
 
 
   method menuIstrucciones(){
-    game.boardGround()
+    fondo.image("")
     keyboard.b().onPressDo({self.menuInicio()})
   }
   
@@ -54,8 +55,7 @@ fondo.image("menu_personajes_3_goku.png")
   }
 
   method ganarPartida() {
-    game.say(personajePrincipal, "¡Gane!")
-    game.schedule(1000, { game.stop() })
+    game.schedule(1000, { self.terminarVictoria() })
   }
 
   method generarRobots() {
@@ -72,11 +72,13 @@ fondo.image("menu_personajes_3_goku.png")
     return "game_over_re4_transparente.png"
   }
 
-  method terminar() { 
+  method terminarDerrota() { 
     if (not finalizado) { 
       finalizado = true 
       game.clear()
       game.addVisual(fondo)
+      personajePrincipal.mostrarDerrota() 
+      game.addVisual(personajePrincipal)
       fondo.image("Fondo.jpg")
       aparecenRobots.stop()
       apareceMunicion.stop()//nuevo
@@ -88,23 +90,50 @@ fondo.image("menu_personajes_3_goku.png")
       sonidoDeGameOver.play()
       game.addVisual(cartelReiniciar)
       game.addVisual(cartelGameOver)
-      keyboard.r().onPressDo({ self.reiniciar() }) 
+      keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
     }
   }
 
-  method reiniciar() { 
+  method reiniciarDerrota() { 
     finalizado = false
     game.clear()
     sonidoDeGameOver.stop()
     self.menuInicio()
   }
 
-  method iniciarPartida(){
+  
+  method terminarVictoria() {
+    if (not finalizado) {
+        finalizado = true
+        game.clear() 
+        fondo.image("Fondo.jpg")
+        game.addVisual(fondo)
+        aparecenRobots.stop()
+        apareceMunicion.stop()
+        ganarJuego.stop()
+        spawnerRobots.limpiarRobots()
+        game.addVisual(cartelVictoria)
+        game.addVisual(cartelReiniciar)
+        musicaDeFondo.stop()
 
+        sonidoDeVictoria.play()
+
+        keyboard.r().onPressDo({ self.reiniciarVictoria() })
+    }
+}
+method reiniciarVictoria() { 
+    finalizado = false
+    game.clear()
+    sonidoDeVictoria.stop()
+    self.menuInicio()
+  }
+
+  method iniciarPartida(){
     game.clear()
     fondo.image("Fondo.jpg")
     game.addVisual(fondo)
     game.addVisual(personajePrincipal)
+    personajePrincipal.position( game.at(1,1))
     musicaFondoInicio.stop()
     barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
@@ -138,13 +167,13 @@ fondo.image("menu_personajes_3_goku.png")
 
   method perderAlRobotColisionarCon(activador) {
     game.onCollideDo(activador, { robot =>
-      self.terminar()
+      self.terminarDerrota()
       robot.mori()
     })
   }
 
   method llegaALaCasa(enemigo) {
-    self.terminar()
+    self.terminarDerrota()
     enemigo.mori()
   }
 }
@@ -158,6 +187,10 @@ object cartelGameOver{
  method image()="game_over_re4_transparente.png"
 }
 
+object cartelVictoria{
+ method position() = game.at(3,2)
+ method image()="cartel_victoria.png"
+}
 object fondo { 
 var property image = "menu_personajes_base.png" 
 method position() = game.at(0,0)  
