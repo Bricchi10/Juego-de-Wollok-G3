@@ -82,7 +82,6 @@ fondo.image("menu_personajes_3_goku.png")
     finalizado = true 
     game.clear()
     game.addVisual(fondo)
-    personajePrincipal.mostrarDerrota() 
     game.addVisual(personajePrincipal)
     fondo.image("Fondo.jpg")
     aparecenRobots.stop()

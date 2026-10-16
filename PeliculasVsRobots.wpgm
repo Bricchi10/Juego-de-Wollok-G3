@@ -7,7 +7,6 @@ program PeliculasVsRobots {
 	game.width(14)
     game.height(7)
     game.cellSize(50)
-
     
     etapaDelJuego.menuInicio()
 
