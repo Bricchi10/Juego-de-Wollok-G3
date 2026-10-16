@@ -7,7 +7,7 @@ describe "Pruebas de Peliculas vs Robots" {
   const bala = new Bala(position = game.at(4,5))
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
-  const personaje = new Personaje()
+  const personaje = new Terminator()
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{

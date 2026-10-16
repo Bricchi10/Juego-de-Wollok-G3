@@ -3,6 +3,7 @@ import robot.*
 import personajes.*
 import proyectiles.*
 import activador.*
+import interfaz.*
 
 object etapaDelJuego { 
   var finalizado = false 
@@ -15,7 +16,8 @@ object etapaDelJuego {
   const musicaDeFondo = game.sound("musicaNivel.mp3")
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
-  
+  const aumentoBarraProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
+  var property progresoActual = 0
   method menuInicio(){
       game.clear()
       self.selTerminator()
@@ -65,6 +67,10 @@ fondo.image("menu_personajes_3_goku.png")
   method generarMunicionDePersonaje() { //nuevo
     spawnerMunicion.generarMunicion()
   }
+
+  method incrementarProgreso() {
+    progresoActual += 1
+  }
   
   method position() = game.at(3, 2)
 
@@ -72,63 +78,54 @@ fondo.image("menu_personajes_3_goku.png")
     return "game_over_re4_transparente.png"
   }
 
+  method terminar() { 
+    finalizado = true 
+    game.clear()
+    game.addVisual(fondo)
+    game.addVisual(personajePrincipal)
+    fondo.image("Fondo.jpg")
+    aparecenRobots.stop()
+    apareceMunicion.stop()
+    ganarJuego.stop()
+    spawnerRobots.limpiarRobots()
+    musicaDeFondo.stop()
+    game.addVisual(cartelReiniciar)
+    aumentoBarraProgreso.stop()
+    progresoActual = 0
+  }
+
   method terminarDerrota() { 
-    if (not finalizado) { 
-      finalizado = true 
-      game.clear()
-      game.addVisual(fondo)
-      personajePrincipal.mostrarDerrota() 
-      game.addVisual(personajePrincipal)
-      fondo.image("Fondo.jpg")
-      aparecenRobots.stop()
-      apareceMunicion.stop()//nuevo
-      ganarJuego.stop()
-      apareceMunicion.stop()
-      spawnerRobots.limpiarRobots()
-      game.addVisual(self)
-      musicaDeFondo.stop()
-      sonidoDeGameOver.play()
-      game.addVisual(cartelReiniciar)
-      game.addVisual(cartelGameOver)
-      keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
-    }
+    self.terminar()
+    personajePrincipal.mostrarDerrota()
+    game.addVisual(cartelGameOver)
+    sonidoDeGameOver.play()
+    keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
+  }
+
+  method reiniciar() {
+    finalizado = false
+    game.clear()
+    self.menuInicio()
   }
 
   method reiniciarDerrota() { 
-    finalizado = false
-    game.clear()
     sonidoDeGameOver.stop()
-    self.menuInicio()
+    self.reiniciar()
   }
-
   
   method terminarVictoria() {
-    if (not finalizado) {
-        finalizado = true
-        game.clear() 
-        fondo.image("Fondo.jpg")
-        game.addVisual(fondo)
-        aparecenRobots.stop()
-        apareceMunicion.stop()
-        ganarJuego.stop()
-        spawnerRobots.limpiarRobots()
-        game.addVisual(cartelVictoria)
-        game.addVisual(cartelReiniciar)
-        musicaDeFondo.stop()
-
-        sonidoDeVictoria.play()
-
-        keyboard.r().onPressDo({ self.reiniciarVictoria() })
-    }
+    self.terminar()
+    game.addVisual(cartelVictoria)
+    sonidoDeVictoria.play()
+    keyboard.r().onPressDo({ self.reiniciarVictoria() })
 }
 method reiniciarVictoria() { 
-    finalizado = false
-    game.clear()
     sonidoDeVictoria.stop()
-    self.menuInicio()
+    self.reiniciar()
   }
 
   method iniciarPartida(){
+
     game.clear()
     fondo.image("Fondo.jpg")
     game.addVisual(fondo)
@@ -141,6 +138,8 @@ method reiniciarVictoria() {
     game.addVisual(etiquetaDeBalas)
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
+    game.addVisual(barraProgreso)
+    aumentoBarraProgreso.start()
     activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
@@ -157,6 +156,7 @@ method reiniciarVictoria() {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
+    keyboard.a().onPressDo({self.ganarPartida()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
@@ -167,8 +167,7 @@ method reiniciarVictoria() {
 
   method perderAlRobotColisionarCon(activador) {
     game.onCollideDo(activador, { robot =>
-      self.terminarDerrota()
-      robot.mori()
+      self.llegaALaCasa(robot)
     })
   }
 
@@ -191,6 +190,7 @@ object cartelVictoria{
  method position() = game.at(3,2)
  method image()="cartel_victoria.png"
 }
+
 object fondo { 
 var property image = "menu_personajes_base.png" 
 method position() = game.at(0,0)  
