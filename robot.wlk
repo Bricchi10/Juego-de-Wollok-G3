@@ -36,6 +36,10 @@ class Enemigo{
         personaje.teHirieron()
         self.mori()
     }
+
+    method aumentaDefensa(){
+        vida + 50
+    }
 }
 class Robot inherits Enemigo(vida = 50) { 
     override method image() = "robotBasico.png" 
@@ -43,6 +47,19 @@ class Robot inherits Enemigo(vida = 50) {
 class RobotFuerte inherits Enemigo(vida = 100){
     override method image() = "robotFuerteCamina.png"
 } 
+class RobotJefe inherits Enemigo(vida = 1000) {
+    override method chocarConPersonaje(personaje){
+        self.teHirieron()
+    }
+}
+class RobotEscudero inherits RobotJefe{
+    override method image() = "robotEscuderoCamina.png"
+    method aumentaDefensaDeRobots(){
+        //Se detiene y se vuelve inmune al daño
+        spawnerRobots.robotsActivos.forEach({robot => robot.aumentaDefensa() })
+        //Aca deberia volver a moverse o fuera de este metodo?
+    }
+}
 object spawnerRobots { 
     const robotsActivos = []
     method generarRobot() { 
