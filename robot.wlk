@@ -38,7 +38,11 @@ class Enemigo{
     }
 
     method aumentaDefensa(){
-        vida + 50
+        vida += 50
+    }
+
+    method detenerse(){
+        moverRobot.stop()
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
@@ -55,7 +59,7 @@ class RobotJefe inherits Enemigo(vida = 1000) {
 class RobotEscudero inherits RobotJefe{
     override method image() = "robotEscuderoCamina.png"
     method aumentaDefensaDeRobots(){
-        //Se detiene y se vuelve inmune al daño
+        self.detenerse() //Se detiene y se vuelve inmune al daño
         spawnerRobots.robotsActivos.forEach({robot => robot.aumentaDefensa() })
         //Aca deberia volver a moverse o fuera de este metodo?
     }

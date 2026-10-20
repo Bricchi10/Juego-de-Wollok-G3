@@ -18,7 +18,12 @@ describe "Pruebas de Peliculas vs Robots" {
     robotFuerte.teHirieron()
     assert.equals(50,robotFuerte.vida())
   }
-
+  test "Robot normal y robot fuerte entienden aumentar su defensa"{
+    robotNormal.aumentaDefensa()
+    robotFuerte.aumentaDefensa()
+    assert.equals(100, robotNormal.vida())
+    assert.equals(150,robotFuerte.vida())
+  }
   //Pruebas con personaje
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
     personaje.teHirieron()
