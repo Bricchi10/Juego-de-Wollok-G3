@@ -107,8 +107,8 @@ class Goku inherits Personaje{
   override method spritePasivo() = "gokuIdle.png" 
   override method spriteAtaque() = "gokuAtaque.png"
   override method spriteMuerte() = "gokuCaido.png"
-  override method sonidoCarga() = "power-up-mario.mp3"
+  override method sonidoCarga() = "semillaErmitaño.mp3"
   override method imagenCarga() = "semillaErmitaño.png"
   override method crearProyectil() = new Energia(position = self.position().right(1)) 
-  override method sonidoDisparo() = "ki_blast.mp3"
+  override method sonidoDisparo() = "ki_blast.wav"
 }
