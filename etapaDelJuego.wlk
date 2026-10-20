@@ -23,6 +23,7 @@ object etapaDelJuego {
       self.selTerminator()
       game.addVisual(fondo)
       musicaFondoInicio.shouldLoop(true)
+      musicaFondoInicio.volume(0.8)
       game.schedule(500, { musicaFondoInicio.play()} )
 
       keyboard.space().onPressDo({self.iniciarPartida()})
@@ -83,7 +84,7 @@ fondo.image("menu_personajes_3_goku.png")
     game.clear()
     game.addVisual(fondo)
     game.addVisual(personajePrincipal)
-    fondo.image("Fondo.jpg")
+    fondo.image("FondoFuturo.jpg")
     aparecenRobots.stop()
     apareceMunicion.stop()
     ganarJuego.stop()
@@ -125,9 +126,8 @@ method reiniciarVictoria() {
   }
 
   method iniciarPartida(){
-
     game.clear()
-    fondo.image("Fondo.jpg")
+    fondo.image("FondoFuturo.jpg")
     game.addVisual(fondo)
     game.addVisual(personajePrincipal)
     personajePrincipal.position( game.at(1,1))
