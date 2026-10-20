@@ -17,7 +17,7 @@ object etapaDelJuego {
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aumentoBarraProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
-  var property progresoActual = 0
+  var property progresoActual = 2
   method menuInicio(){
       game.clear()
       self.selTerminator()
@@ -71,8 +71,13 @@ fondo.image("menu_personajes_3_goku.png")
 
   method incrementarProgreso() {
     progresoActual += 1
+    if(progresoActual == 3){
+      spawnerRobots.generarJefe()
+    }
   }
-  
+  method generarJefe(){
+    
+  }
   method position() = game.at(3, 2)
 
   method image(){

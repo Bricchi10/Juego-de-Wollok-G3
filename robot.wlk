@@ -59,9 +59,9 @@ class RobotJefe inherits Enemigo(vida = 1000) {
 class RobotEscudero inherits RobotJefe{
     override method image() = "robotEscuderoCamina.png"
     method aumentaDefensaDeRobots(){
-        self.detenerse() //Se detiene y se vuelve inmune al daño
+        self.detenerse() //Se detiene (se vuelve inmune al daño?)
         spawnerRobots.robotsActivos.forEach({robot => robot.aumentaDefensa() })
-        //Aca deberia volver a moverse o fuera de este metodo?
+        game.schedule(2000, { self.avanzar()}  ) //Aca deberia volver a moverse o fuera de este metodo?
     }
 }
 object spawnerRobots { 
@@ -75,7 +75,15 @@ object spawnerRobots {
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()
     }
-   
+
+    method generarJefe(){
+        const nuevoJefe = new RobotEscudero()
+        robotsActivos.add(nuevoJefe) 
+        game.addVisual(nuevoJefe) 
+        nuevoJefe.avanzar()
+        game.schedule(2000,nuevoJefe.aumentaDefensaDeRobots() )
+    }
+
     method eliminarRobot(robot) { 
         if(robotsActivos.contains(robot)){
         robotsActivos.remove(robot) 
