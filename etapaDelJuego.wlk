@@ -75,9 +75,7 @@ fondo.image("menu_personajes_3_goku.png")
       spawnerRobots.generarJefe()
     }
   }
-  method generarJefe(){
-    
-  }
+
   method position() = game.at(3, 2)
 
   method image(){

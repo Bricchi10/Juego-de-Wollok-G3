@@ -51,21 +51,28 @@ class Robot inherits Enemigo(vida = 50) {
 class RobotFuerte inherits Enemigo(vida = 100){
     override method image() = "robotFuerteCamina.png"
 } 
-class RobotJefe inherits Enemigo(vida = 1000) {
+class RobotJefe inherits Enemigo(vida = 500) {
     override method chocarConPersonaje(personaje){
         self.teHirieron()
     }
 }
 class RobotEscudero inherits RobotJefe{
-    override method image() = "robotEscuderoCamina.png"
+    override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
-        self.detenerse() //Se detiene (se vuelve inmune al daño?)
-        spawnerRobots.robotsActivos.forEach({robot => robot.aumentaDefensa() })
-        game.schedule(2000, { self.avanzar()}  ) //Aca deberia volver a moverse o fuera de este metodo?
+        //self.detenerse() //Se detiene (se vuelve inmune al daño?)
+        spawnerRobots.robotsActivos().forEach({robot => robot.aumentaDefensa() })
+        //game.schedule(2000, { self.avanzar()}  ) //Aca deberia volver a moverse o fuera de este metodo?
     }
 }
 object spawnerRobots { 
     const robotsActivos = []
+
+    method robotsActivos(){
+        return robotsActivos
+    }
+    method agregarRobot(robot){ //Preguntar a profe como evitar esto, ya que solo se utiliza en el test
+        robotsActivos.add(robot)
+    }
     method generarRobot() { 
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, generadorAleatorio.filaAleatoria()) 
@@ -77,11 +84,12 @@ object spawnerRobots {
     }
 
     method generarJefe(){
-        const nuevoJefe = new RobotEscudero()
+        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria())
+        const nuevoJefe = new RobotEscudero(position = posicionInicial)
         robotsActivos.add(nuevoJefe) 
         game.addVisual(nuevoJefe) 
         nuevoJefe.avanzar()
-        game.schedule(2000,nuevoJefe.aumentaDefensaDeRobots() )
+        game.schedule(6000,{nuevoJefe.aumentaDefensaDeRobots()} )
     }
 
     method eliminarRobot(robot) { 

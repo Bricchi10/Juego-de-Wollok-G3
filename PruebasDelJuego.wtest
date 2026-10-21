@@ -8,6 +8,7 @@ describe "Pruebas de Peliculas vs Robots" {
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Terminator()
+  const robotEscudero = new RobotEscudero(position = game.at(5,5))
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
@@ -21,6 +22,14 @@ describe "Pruebas de Peliculas vs Robots" {
   test "Robot normal y robot fuerte entienden aumentar su defensa"{
     robotNormal.aumentaDefensa()
     robotFuerte.aumentaDefensa()
+    assert.equals(100, robotNormal.vida())
+    assert.equals(150,robotFuerte.vida())
+  }
+
+  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
+    spawnerRobots.agregarRobot(robotNormal)
+    spawnerRobots.agregarRobot(robotFuerte)
+    robotEscudero.aumentaDefensaDeRobots()
     assert.equals(100, robotNormal.vida())
     assert.equals(150,robotFuerte.vida())
   }
