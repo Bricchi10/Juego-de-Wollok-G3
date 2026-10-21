@@ -17,7 +17,7 @@ object etapaDelJuego {
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aumentoBarraProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
-  var property progresoActual = 0
+  var property progresoActual = 2
   method menuInicio(){
       game.clear()
       self.selTerminator()
@@ -71,7 +71,7 @@ fondo.image("menu_personajes_3_goku.png")
 
   method incrementarProgreso() {
     progresoActual += 1
-    if(progresoActual == 3){
+    if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
       spawnerRobots.generarJefe()
     }
   }
@@ -159,7 +159,7 @@ method reiniciarVictoria() {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    keyboard.a().onPressDo({self.ganarPartida()})
+    //keyboard.a().onPressDo({self.ganarPartida()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
