@@ -33,6 +33,18 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(100, robotNormal.vida())
     assert.equals(150,robotFuerte.vida())
   }
+
+  test "El robot escudero no recibe daño cuando esta detenido"{
+    robotEscudero.detenerse()
+    robotEscudero.teHirieron()
+    assert.equals(500, robotEscudero.vida() )
+  }
+
+  test "El robot escudero recibe daño cuando no esta detenido"{
+    robotEscudero.teHirieron()
+    assert.notThat(robotEscudero.estaDetenido()) //robotEscudero.avanzar() no se puede por que este depende un tick
+    assert.equals(450, robotEscudero.vida() )
+  }
   //Pruebas con personaje
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
     personaje.teHirieron()
