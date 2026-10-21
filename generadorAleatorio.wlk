@@ -14,5 +14,7 @@ object generadorAleatorio {
 			return self.filaAleatoriaVaciaEnX(x)
 		}
 	}
+
+	
 	
 }

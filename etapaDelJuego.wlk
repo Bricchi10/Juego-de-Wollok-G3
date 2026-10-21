@@ -71,8 +71,11 @@ fondo.image("menu_personajes_3_goku.png")
 
   method incrementarProgreso() {
     progresoActual += 1
+    if(progresoActual == 3){
+      spawnerRobots.generarJefe()
+    }
   }
-  
+
   method position() = game.at(3, 2)
 
   method image(){
