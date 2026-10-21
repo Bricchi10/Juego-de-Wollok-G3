@@ -6,9 +6,11 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
+    var property estaDetenido = false
     method image() = "robotBasico.png" 
     const moverRobot = game.tick(1500, { 
-        self.mover()
+        self.mover() 
+        estaDetenido = false
         }, 
         false)
 
@@ -43,6 +45,7 @@ class Enemigo{
 
     method detenerse(){
         moverRobot.stop()
+        estaDetenido = true
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
@@ -59,9 +62,17 @@ class RobotJefe inherits Enemigo(vida = 500) {
 class RobotEscudero inherits RobotJefe{
     override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
-        //self.detenerse() //Se detiene (se vuelve inmune al daño?)
+        self.detenerse() //Se detiene y se vuelve inmune al daño
         spawnerRobots.robotsActivos().forEach({robot => robot.aumentaDefensa() })
-        //game.schedule(2000, { self.avanzar()}  ) //Aca deberia volver a moverse o fuera de este metodo?
+        game.schedule(4000, { self.avanzar() }  ) //Vuelve a moverse despues de 4 segundos
+    }
+
+    override method teHirieron(){
+        if(vida <= 0){
+            self.mori()
+        } else if(not estaDetenido){
+            vida= vida-50
+        }
     }
 }
 object spawnerRobots { 

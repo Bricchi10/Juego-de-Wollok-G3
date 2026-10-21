@@ -17,7 +17,7 @@ object etapaDelJuego {
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aumentoBarraProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
-  var property progresoActual = 2
+  var property progresoActual = 0
   method menuInicio(){
       game.clear()
       self.selTerminator()
