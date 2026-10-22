@@ -12,7 +12,6 @@ object etapaDelJuego {
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(12000, { self.generarMunicionDePersonaje() }, false)//nuevo
   const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
-  const activadoresCasa = [self.activadorEnY(1), self.activadorEnY(2), self.activadorEnY(3), self.activadorEnY(4), self.activadorEnY(5)]
   const musicaDeFondo = game.sound("musicaNivel.mp3")
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
@@ -52,10 +51,6 @@ fondo.image("menu_personajes_3_goku.png")
     fondo.image("")
     keyboard.b().onPressDo({self.menuInicio()})
   }
-  
-  method activadorEnY(posicionY) {
-    return new Activador(position = game.at(0,posicionY))
-  }
 
   method ganarPartida() {
     game.schedule(1000, { self.terminarVictoria() })
@@ -70,7 +65,7 @@ fondo.image("menu_personajes_3_goku.png")
   }
 
   method incrementarProgreso() {
-    progresoActual += 1
+    progresoActual = (progresoActual + 1).max(6)
     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
       spawnerRobots.generarJefe()
     }
@@ -143,7 +138,13 @@ method reiniciarVictoria() {
     game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
     aumentoBarraProgreso.start()
-    activadoresCasa.forEach { activadorCasa => game.addVisual(activadorCasa) }
+
+    (1 .. game.height() -2).forEach({ y =>
+      const activador = new Activador(position = game.at(0,y))
+      game.addVisual(activador)
+      self.perderAlRobotColisionarCon(activador)
+    })
+
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
     musicaDeFondo.volume(0.5)
@@ -153,13 +154,11 @@ method reiniciarVictoria() {
       elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
 
-    activadoresCasa.forEach { activadorCasa => self.perderAlRobotColisionarCon(activadorCasa) }
-
     //Teclas
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    //keyboard.a().onPressDo({self.ganarPartida()})
+    keyboard.a().onPressDo({self.progresoActual(2)})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()

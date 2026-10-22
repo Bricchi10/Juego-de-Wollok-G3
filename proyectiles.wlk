@@ -39,7 +39,6 @@ class Bala {
         game.sound("muerteRobot.mp3").play()
         self.mori() // Si impacta a un enemigo, se destruye
     }
-    method chocarConPersonaje(personaje) {}// nuevo
 }
 
 class Telaraña inherits Bala{

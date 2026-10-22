@@ -56,7 +56,10 @@ class RobotFuerte inherits Enemigo(vida = 100){
 } 
 class RobotJefe inherits Enemigo(vida = 500) {
     override method chocarConPersonaje(personaje){
-        self.teHirieron()
+        super(personaje)
+        personaje.teHirieron()
+        personaje.teHirieron()
+        personaje.teHirieron()
     }
 }
 class RobotEscudero inherits RobotJefe{
