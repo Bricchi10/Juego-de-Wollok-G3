@@ -48,16 +48,15 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(550, robotEscudero.vida())
   }
 
-  test "Eliminar robot solo elimina a el robotFuerte de la lista robots activos"{
-    spawnerRobots.agregarRobot(robotNormal)
-    spawnerRobots.agregarRobot(robotFuerte)
-    spawnerRobots.eliminarRobot(robotFuerte)
-    assert.equals([robotNormal], spawnerRobots.robotsActivos() )
+  test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.eliminarRobot(robotEscudero)
+    assert.equals([robotNormal], spawnerRobots.robotsActivos() + [robotNormal])
   }
 
   test "Limpiar robots elimina a todos los robots de la lista robots activos"{
-    spawnerRobots.agregarRobot(robotNormal)
-    spawnerRobots.agregarRobot(robotFuerte)
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.generarRobot()
     spawnerRobots.limpiarRobots()
     assert.equals([], spawnerRobots.robotsActivos() )
   }
