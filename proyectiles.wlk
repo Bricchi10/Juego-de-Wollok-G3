@@ -36,7 +36,6 @@ class Bala {
 
     method herirA(elemento) {
         elemento.teHirieron()
-        game.sound("muerteRobot.mp3").play()
         self.mori() // Si impacta a un enemigo, se destruye
     }
 }

@@ -1,3 +1,4 @@
+import interfaz.*
 import generadorAleatorio.*
 import direcciones.*
 import personajes.*
@@ -19,6 +20,7 @@ class Enemigo{
     }
 
     method teHirieron(){
+        game.sound("muerteRobot.mp3").play()
         vida=vida-50
         if(vida<=0){
           self.mori()
@@ -66,7 +68,10 @@ class RobotEscudero inherits RobotJefe{
     override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
         self.detenerse() //Se detiene y se vuelve inmune al daño
-        spawnerRobots.robotsActivos().forEach({robot => robot.aumentaDefensa() })
+        spawnerRobots.robotsActivos().forEach({robot => 
+            robot.aumentaDefensa()
+            game.addVisual(new DefensaArriba(robotAsignado = robot))
+        })
         game.schedule(4000, { self.avanzar() }  ) //Vuelve a moverse despues de 4 segundos
     }
 

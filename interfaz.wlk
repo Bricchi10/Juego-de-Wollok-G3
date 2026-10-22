@@ -36,3 +36,19 @@ object barraProgreso {
     method position() = game.at(game.width() -6, 0)
     method image() = "BarraProgreso_" + etapaDelJuego.progresoActual() + ".png"
 }
+
+class DefensaArriba {
+  const property robotAsignado
+  method position() = robotAsignado.position()
+  method image() = "defensaArriba.png"
+  method teHirieron(){
+    self.mori()
+  }
+  method chocarConPersonaje(personaje) {
+    self.mori()
+  }
+  method mori() {
+    game.sound("muerteRobot.mp3").play()
+    game.removeVisual(self)
+  }
+}
