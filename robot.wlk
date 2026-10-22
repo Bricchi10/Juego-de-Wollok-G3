@@ -90,9 +90,7 @@ object spawnerRobots {
     method robotsActivos(){
         return robotsActivos
     }
-    method agregarRobot(robot){ //Preguntar a profe como evitar esto, ya que solo se utiliza en el test
-        robotsActivos.add(robot)
-    }
+    
     method generarRobot() { 
         const columnaEntrada = 9 
         const posicionInicial = game.at(columnaEntrada, generadorAleatorio.filaAleatoria()) 
