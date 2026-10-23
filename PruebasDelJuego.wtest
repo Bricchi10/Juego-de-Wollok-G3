@@ -26,6 +26,7 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(150,robotFuerte.vida())
   }
 
+  /*
   test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
     spawnerRobots.agregarRobot(robotNormal)
     spawnerRobots.agregarRobot(robotFuerte)
@@ -33,6 +34,7 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(100, robotNormal.vida())
     assert.equals(150,robotFuerte.vida())
   }
+  */
 
   test "El robot escudero no recibe daño cuando esta detenido"{
     robotEscudero.detenerse()

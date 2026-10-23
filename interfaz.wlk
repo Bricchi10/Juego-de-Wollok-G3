@@ -52,3 +52,18 @@ class DefensaArriba {
     game.removeVisual(self)
   }
 }
+
+object cartelReiniciar { 
+  method position() = game.at(5, 2) 
+  method image() = "cartelDeReinicio.png"
+}
+
+object cartelGameOver{
+  method position() = game.at(3,2)
+  method image()="game_over_re4_transparente.png"
+}
+
+object cartelVictoria{
+  method position() = game.at(3,2)
+  method image()="cartel_victoria.png"
+}

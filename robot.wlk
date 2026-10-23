@@ -7,13 +7,8 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
-    var property estaDetenido = false
     method image() = "robotBasico.png" 
-    const moverRobot = game.tick(1500, { 
-        self.mover() 
-        estaDetenido = false
-        }, 
-        false)
+    const moverRobot = game.tick(1500, { self.mover() }, false)
 
     method avanzar() {
         moverRobot.start()
@@ -21,14 +16,15 @@ class Enemigo{
 
     method teHirieron(){
         game.sound("muerteRobot.mp3").play()
-        vida=vida-50
-        if(vida<=0){
+        vida -= 50
+        if(vida <= 0){
           self.mori()
         }
     }
 
     method mori(){
         moverRobot.stop()
+        game.removeVisual(self)
         spawnerRobots.eliminarRobot(self)
     }
 
@@ -47,7 +43,6 @@ class Enemigo{
 
     method detenerse(){
         moverRobot.stop()
-        estaDetenido = true
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
@@ -56,30 +51,29 @@ class Robot inherits Enemigo(vida = 50) {
 class RobotFuerte inherits Enemigo(vida = 100){
     override method image() = "robotFuerteCamina.png"
 } 
-class RobotJefe inherits Enemigo(vida = 500) {
+class RobotJefe inherits Enemigo(vida = 300) {
     override method chocarConPersonaje(personaje){
         super(personaje)
-        personaje.teHirieron()
-        personaje.teHirieron()
-        personaje.teHirieron()
+        personaje.mori()
     }
 }
 class RobotEscudero inherits RobotJefe{
+    var property esInmune = false
+    
     override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
-        self.detenerse() //Se detiene y se vuelve inmune al daño
+        self.detenerse()
+        self.esInmune(true) //Se detiene y se vuelve inmune al daño
         spawnerRobots.robotsActivos().forEach({robot => 
             robot.aumentaDefensa()
             game.addVisual(new DefensaArriba(robotAsignado = robot))
         })
-        game.schedule(4000, { self.avanzar() }  ) //Vuelve a moverse despues de 4 segundos
+        game.schedule(4000, { self.avanzar() self.esInmune(false) }  ) //Vuelve a moverse despues de 4 segundos
     }
 
     override method teHirieron(){
-        if(vida <= 0){
-            self.mori()
-        } else if(not estaDetenido){
-            vida= vida-50
+        if (not esInmune) {
+            super()
         }
     }
 }
@@ -89,36 +83,26 @@ object spawnerRobots {
     method robotsActivos(){
         return robotsActivos
     }
-    method agregarRobot(robot){ //Preguntar a profe como evitar esto, ya que solo se utiliza en el test
-        robotsActivos.add(robot)
-    }
     method generarRobot() { 
-        const columnaEntrada = 9 
-        const posicionInicial = game.at(columnaEntrada, generadorAleatorio.filaAleatoria()) 
+        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()
     }
-
     method generarJefe(){
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria())
         const nuevoJefe = new RobotEscudero(position = posicionInicial)
         robotsActivos.add(nuevoJefe) 
         game.addVisual(nuevoJefe) 
         nuevoJefe.avanzar()
-        game.schedule(6000,{nuevoJefe.aumentaDefensaDeRobots()} )
+        game.schedule(6000, { nuevoJefe.aumentaDefensaDeRobots() })
     }
-
     method eliminarRobot(robot) { 
-        if(robotsActivos.contains(robot)){
-        robotsActivos.remove(robot) 
-        game.removeVisual(robot) 
-        game.sound("muerteRobot.mp3").play()
-        }
+        robotsActivos.remove(robot)
     }
     method limpiarRobots(){
         robotsActivos.clear()
-    } 
+    }
 }
