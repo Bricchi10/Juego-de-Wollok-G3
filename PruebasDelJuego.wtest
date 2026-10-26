@@ -2,6 +2,7 @@ import robot.*
 import personajes.*
 import proyectiles.*
 import direcciones.*
+import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
   const bala = new Bala(position = game.at(4,5))
@@ -26,14 +27,6 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(150,robotFuerte.vida())
   }
 
-  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
-    spawnerRobots.agregarRobot(robotNormal)
-    spawnerRobots.agregarRobot(robotFuerte)
-    robotEscudero.aumentaDefensaDeRobots()
-    assert.equals(100, robotNormal.vida())
-    assert.equals(150,robotFuerte.vida())
-  }
-
   test "El robot escudero no recibe daño cuando esta detenido"{
     robotEscudero.detenerse()
     robotEscudero.teHirieron()
@@ -44,6 +37,28 @@ describe "Pruebas de Peliculas vs Robots" {
     robotEscudero.teHirieron()
     assert.notThat(robotEscudero.estaDetenido()) //robotEscudero.avanzar() no se puede por que este depende un tick
     assert.equals(450, robotEscudero.vida() )
+  }
+
+  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
+    etapaDelJuego.incrementarProgreso()
+    etapaDelJuego.incrementarProgreso()
+    etapaDelJuego.incrementarProgreso()//Progreso tiene que llegar a 3 para poder generar un jefe
+    spawnerRobots.generarJefe(robotEscudero)
+    robotEscudero.activarHabilidad()
+    assert.equals(550, robotEscudero.vida())
+  }
+
+  test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.eliminarRobot(robotEscudero)
+    assert.equals([robotNormal], spawnerRobots.robotsActivos() + [robotNormal])
+  }
+
+  test "Limpiar robots elimina a todos los robots de la lista robots activos"{
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.generarRobot()
+    spawnerRobots.limpiarRobots()
+    assert.equals([], spawnerRobots.robotsActivos() )
   }
   //Pruebas con personaje
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual

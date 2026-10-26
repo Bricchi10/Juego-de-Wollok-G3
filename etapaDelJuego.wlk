@@ -4,6 +4,7 @@ import personajes.*
 import proyectiles.*
 import activador.*
 import interfaz.*
+import generadorAleatorio.*
 
 object etapaDelJuego { 
   var finalizado = false 
@@ -65,9 +66,9 @@ fondo.image("menu_personajes_3_goku.png")
   }
 
   method incrementarProgreso() {
-    progresoActual = (progresoActual + 1).max(6)
+    progresoActual = (progresoActual + 1).min(6)
     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
-      spawnerRobots.generarJefe()
+      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())) )
     }
   }
 
