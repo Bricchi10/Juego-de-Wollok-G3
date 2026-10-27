@@ -149,7 +149,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    keyboard.a().onPressDo({self.progresoActual(2)})
+    //keyboard.a().onPressDo({spawnerRobots.generarJefe()})
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
