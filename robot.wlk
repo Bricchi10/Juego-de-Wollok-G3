@@ -7,7 +7,13 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
-    method image() = "robotBasico.png" 
+
+    var property imagenBasica="robotBasico.png"//añadido
+    var property imagenCaminando="robotBasicoCamina.png" //añadido
+    var property imagenActual= imagenBasica//añadido
+
+    method image() = imagenActual//cambiado
+
     const moverRobot = game.tick(1500, { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
 
@@ -40,6 +46,16 @@ class Enemigo{
 
     method mover() {
         position = izquierda.siguiente(position) 
+        self.cambiarImagen()//añadido
+
+    }
+
+    method cambiarImagen(){//añadido
+        if(imagenActual==imagenBasica){
+            imagenActual=imagenCaminando
+        }else{
+            imagenActual=imagenBasica
+        }
     }
 
     method chocarConPersonaje(personaje) {
@@ -56,10 +72,11 @@ class Enemigo{
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
-    override method image() = "robotBasico.png" 
+   // override method image() = "robotBasico.png" 
 } 
-class RobotFuerte inherits Enemigo(vida = 100){
-    override method image() = "robotFuerteCamina.png"
+class RobotFuerte inherits Enemigo(vida = 100,imagenBasica = "robotFuerte.png", 
+    imagenCaminando = "robotFuerteCamina.png"){
+ //   override method image() = "robotFuerteCamina.png"
 } 
 class RobotJefe inherits Enemigo(vida = 350) {
     override method chocarConPersonaje(personaje){
@@ -69,10 +86,11 @@ class RobotJefe inherits Enemigo(vida = 350) {
 
     method activarHabilidad()
 }
-class RobotEscudero inherits RobotJefe{
+class RobotEscudero inherits RobotJefe(imagenBasica = "robotEscudoCamina2.png", 
+    imagenCaminando = "robotEscudoCamina1.png"){
     var property esInmune = false
     
-    override method image() = "robotEscudoCamina1.png"
+    //override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
         self.detenerse()
         self.esInmune(true) //Se detiene y se vuelve inmune al daño
