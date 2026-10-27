@@ -36,20 +36,19 @@ class Bala {
 
     method herirA(elemento) {
         elemento.teHirieron()
-        game.sound("muerteRobot.mp3").play()
         self.mori() // Si impacta a un enemigo, se destruye
     }
 }
 
 class Telaraña inherits Bala{
-    override method image()="proyectilTelaraña.png"
+    override method image() = "proyectilTelaraña.png"
 }
 
 class Energia inherits Bala{
-    override method image()="bolaEnergiaAzul.png"
+    override method image() = "bolaEnergiaAzul.png"
 }
 
-object spawnerMunicion { 
+object spawnerMunicion {
     method generarMunicion() { 
         const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
         const nuevaMunicion = new Carga(position=posicionInicial)

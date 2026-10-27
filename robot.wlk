@@ -1,3 +1,4 @@
+import interfaz.*
 import generadorAleatorio.*
 import direcciones.*
 import personajes.*
@@ -6,27 +7,34 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
-    var property estaDetenido = false
     method image() = "robotBasico.png" 
-    const moverRobot = game.tick(1500, { 
-        self.mover() 
-        estaDetenido = false
-        }, 
-        false)
+    const moverRobot = game.tick(1500, { self.mover() }, false)
+    const iconoDefensa = new DefensaArriba(robotAsignado = self)
 
     method avanzar() {
         moverRobot.start()
     }
 
     method teHirieron(){
-        vida=vida-50
-        if(vida<=0){
+        game.sound("muerteRobot.mp3").play()
+        self.bajarVidaOArmadura()
+        if(vida <= 0){
           self.mori()
+        }
+    }
+
+    method bajarVidaOArmadura() {
+        if (game.hasVisual(iconoDefensa)) {
+            game.removeVisual(iconoDefensa)
+        } else {
+            vida -= 50
         }
     }
 
     method mori(){
         moverRobot.stop()
+        game.removeVisual(self)
+        game.removeVisual(iconoDefensa)
         spawnerRobots.eliminarRobot(self)
     }
 
@@ -39,13 +47,12 @@ class Enemigo{
         self.mori()
     }
 
-    method aumentaDefensa(){
-        vida += 50
+    method aumentaDefensa() {
+        game.addVisual(iconoDefensa)
     }
 
     method detenerse(){
         moverRobot.stop()
-        estaDetenido = true
     }
 }
 class Robot inherits Enemigo(vida = 50) { 
@@ -54,29 +61,36 @@ class Robot inherits Enemigo(vida = 50) {
 class RobotFuerte inherits Enemigo(vida = 100){
     override method image() = "robotFuerteCamina.png"
 } 
-class RobotJefe inherits Enemigo(vida = 500) {
+class RobotJefe inherits Enemigo(vida = 350) {
     override method chocarConPersonaje(personaje){
         super(personaje)
-        personaje.teHirieron()
-        personaje.teHirieron()
-        personaje.teHirieron()
+        personaje.mori()
     }
 
     method activarHabilidad()
 }
 class RobotEscudero inherits RobotJefe{
+    var property esInmune = false
+    
     override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
-        self.detenerse() //Se detiene y se vuelve inmune al daño
-        spawnerRobots.robotsActivos().forEach({robot => robot.aumentaDefensa() })
-        game.schedule(4000, { self.avanzar() }  ) //Vuelve a moverse despues de 4 segundos
+        self.detenerse()
+        self.esInmune(true) //Se detiene y se vuelve inmune al daño
+        spawnerRobots.robotsActivos().forEach({robot => 
+            robot.aumentaDefensa()
+        })
+        game.sound("armaduraInvocada.wav").play()
+        game.schedule(4000, { self.avanzar() self.esInmune(false) }  ) //Vuelve a moverse despues de 4 segundos
+        etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
     }
 
+    override method aumentaDefensa() {}
+
     override method teHirieron(){
-        if(vida <= 0){
-            self.mori()
-        } else if(not estaDetenido){
-            vida= vida-50
+        if (not esInmune) {
+            super()
+        } else {
+            game.sound("shieldhit.ogg").play()
         }
     }
 
@@ -90,10 +104,8 @@ object spawnerRobots {
     method robotsActivos(){
         return robotsActivos
     }
-    
     method generarRobot() { 
-        const columnaEntrada = 9 
-        const posicionInicial = game.at(columnaEntrada, generadorAleatorio.filaAleatoria()) 
+        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
@@ -107,15 +119,10 @@ object spawnerRobots {
         jefe.avanzar()
         game.schedule(6000,{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
     }
-
     method eliminarRobot(robot) { 
-        if(robotsActivos.contains(robot)){
-        robotsActivos.remove(robot) 
-        game.removeVisual(robot) 
-        game.sound("muerteRobot.mp3").play()
-        }
+        robotsActivos.remove(robot)
     }
       method limpiarRobots(){
         robotsActivos.clear()
-    } 
+    }
 }

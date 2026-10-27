@@ -36,3 +36,25 @@ object barraProgreso {
     method position() = game.at(game.width() -6, 0)
     method image() = "BarraProgreso_" + etapaDelJuego.progresoActual() + ".png"
 }
+
+class DefensaArriba {
+  const property robotAsignado
+  method position() = robotAsignado.position()
+  method image() = "defensaArriba.png"
+  method chocarConPersonaje(personaje) {}
+}
+
+object cartelReiniciar { 
+  method position() = game.at(5, 2) 
+  method image() = "cartelDeReinicio.png"
+}
+
+object cartelGameOver{
+  method position() = game.at(3,2)
+  method image()="game_over_re4_transparente.png"
+}
+
+object cartelVictoria{
+  method position() = game.at(3,2)
+  method image()="cartel_victoria.png"
+}

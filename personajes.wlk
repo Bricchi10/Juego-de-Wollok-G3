@@ -2,18 +2,16 @@ import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
 class Personaje{
-  var property position=game.at(1,1)
+  var property position = game.at(1,1)
   var property vida = 100
-  var puedoDisparar = true 
-  var property balas = 10 //nuevo
-  var imagenActual= null
+  var puedoDisparar = true
+  var property balas = 10
+  var imagenActual = self.spritePasivo() 
 
   method image() { 
-    if (imagenActual == null) { 
-      imagenActual = self.spritePasivo() 
-      }
     return imagenActual
   }
+
   method mostrarDerrota() { 
     imagenActual = self.spriteMuerte() 
   }
@@ -21,13 +19,11 @@ class Personaje{
   method spritePasivo() 
   method spriteAtaque()
   method spriteMuerte()
-
-  method imagenCarga(){
-  }
-
-method sonidoCarga() {
+  method imagenCarga()
+  method sonidoCarga()
+  method crearProyectil()
+  method sonidoDisparo()
   
-}
   method mover(direccion) {
     const nuevaPosition = direccion.siguiente(position)
     position = nuevaPosition
@@ -62,7 +58,7 @@ method sonidoCarga() {
     } else {
       game.sound("pinpull.mp3").play()
     }
-}
+  }
 
   method reiniciarVida(){
     vida = 100
@@ -71,28 +67,30 @@ method sonidoCarga() {
   method mori(){
     etapaDelJuego.terminarDerrota()
   }
-   method agarrarCarga(){ //nuevo
+
+  method agarrarCarga(){
     game.colliders(self).forEach({ objeto => 
-            objeto.intentarRecargarA(self) 
-        })
+        objeto.intentarRecargarA(self) 
+    })
   }
 
   method recargar(){
     balas += 5
   }
+  
   method reiniciarBalas(){
     balas= 10
   }
-  method crearProyectil() = new Bala(position = self.position().right(1)) 
-  method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
 
 class Terminator inherits Personaje{
   override method spritePasivo() = "terminatorIdle.png" 
   override method spriteAtaque() = "terminatorDispara.png"
   override method spriteMuerte() = "terminatorCaido.png"
-  override method imagenCarga() = "municionPickup.png"
   override method sonidoCarga() = "cs-Recarga.mp3"
+  override method imagenCarga() = "municionPickup.png"
+  override method crearProyectil() = new Bala(position = self.position().right(1)) 
+  override method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
 class Spiderman inherits Personaje{
   override method spritePasivo() = "spidermanIdle.png" 
