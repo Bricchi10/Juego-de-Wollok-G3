@@ -2,13 +2,16 @@ import robot.*
 import personajes.*
 import proyectiles.*
 import direcciones.*
+import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
+  const spiderman = new Spiderman()
   const bala = new Bala(position = game.at(4,5))
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Terminator()
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
+  const telaraña = new CargaTelaraña(position = game.at(1,5))
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
@@ -26,16 +29,6 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(150,robotFuerte.vida())
   }
 
-  /*
-  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
-    spawnerRobots.agregarRobot(robotNormal)
-    spawnerRobots.agregarRobot(robotFuerte)
-    robotEscudero.aumentaDefensaDeRobots()
-    assert.equals(100, robotNormal.vida())
-    assert.equals(150,robotFuerte.vida())
-  }
-  */
-
   test "El robot escudero no recibe daño cuando esta detenido"{
     robotEscudero.detenerse()
     robotEscudero.teHirieron()
@@ -47,7 +40,29 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.notThat(robotEscudero.estaDetenido()) //robotEscudero.avanzar() no se puede por que este depende un tick
     assert.equals(450, robotEscudero.vida() )
   }
-  //Pruebas con personaje
+
+  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
+    etapaDelJuego.incrementarProgreso()
+    etapaDelJuego.incrementarProgreso()
+    etapaDelJuego.incrementarProgreso()//Progreso tiene que llegar a 3 para poder generar un jefe
+    spawnerRobots.generarJefe(robotEscudero)
+    robotEscudero.activarHabilidad()
+    assert.equals(550, robotEscudero.vida())
+  }
+
+  test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.eliminarRobot(robotEscudero)
+    assert.equals([robotNormal], spawnerRobots.robotsActivos() + [robotNormal])
+  }
+
+  test "Limpiar robots elimina a todos los robots de la lista robots activos"{
+    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.generarRobot()
+    spawnerRobots.limpiarRobots()
+    assert.equals([], spawnerRobots.robotsActivos() )
+  }
+  //Pruebas con personajes
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
     personaje.teHirieron()
     assert.equals(80, personaje.vida())
@@ -59,9 +74,33 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(100, personaje.vida())
   }
 
-  //Prueba con bala
+  test "Al reiniciar la vida de un personaje esta vuelve a 100 aun si fue dañado antes del reinicio"{
+    spiderman.teHirieron()
+    spiderman.teHirieron()
+    spiderman.reiniciarVida()
+    assert.equals(100, spiderman.vida() )
+  }
+
+  test "Al reiniciar la municion de un personaje esta vuelve a 10 aun si gasto antes del reinicio"{
+    spiderman.disparar()
+    spiderman.disparar()
+    spiderman.reiniciarBalas()
+    assert.equals(10, spiderman.balas() )
+  }
+  //Pruebas con proyectiles
   test "Bala baja la vida de robot al chocar con este " {
     bala.herirA(robotFuerte)
     assert.equals(50, robotFuerte.vida())
+  }
+
+  test "Cuando spiderman dispara este gasta esa municion"{
+    spiderman.disparar()
+    spiderman.disparar()
+    assert.equals(8, spiderman.balas() )//Devuelve 9 balas en lugar de 8
+  }
+
+  test "Cuando spiderman se choca con una carga para sus telarañas este recarga"{
+    telaraña.chocarConPersonaje(spiderman) //agrega 5 telarañas a las que ya tenia spiderman
+    assert.equals(15, spiderman.balas() ) //La municion de los personajes siempre empieza en 10
   }
 }

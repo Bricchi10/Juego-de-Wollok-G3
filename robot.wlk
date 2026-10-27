@@ -66,6 +66,8 @@ class RobotJefe inherits Enemigo(vida = 350) {
         super(personaje)
         personaje.mori()
     }
+
+    method activarHabilidad()
 }
 class RobotEscudero inherits RobotJefe{
     var property esInmune = false
@@ -91,6 +93,10 @@ class RobotEscudero inherits RobotJefe{
             game.sound("shieldhit.ogg").play()
         }
     }
+
+    override method activarHabilidad(){
+        self.aumentaDefensaDeRobots()
+    }
 }
 object spawnerRobots { 
     const robotsActivos = []
@@ -106,18 +112,17 @@ object spawnerRobots {
         game.addVisual(nuevoRobot) 
         nuevoRobot.avanzar()
     }
-    method generarJefe(){
-        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria())
-        const nuevoJefe = new RobotEscudero(position = posicionInicial)
-        robotsActivos.add(nuevoJefe) 
-        game.addVisual(nuevoJefe) 
-        nuevoJefe.avanzar()
-        game.schedule(6000, { nuevoJefe.aumentaDefensaDeRobots() })
+
+    method generarJefe(jefe){
+        robotsActivos.add(jefe) 
+        game.addVisual(jefe) 
+        jefe.avanzar()
+        game.schedule(6000,{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
     }
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot)
     }
-    method limpiarRobots(){
+      method limpiarRobots(){
         robotsActivos.clear()
     }
 }
