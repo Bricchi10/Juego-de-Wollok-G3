@@ -48,7 +48,7 @@ object etapaDelJuego {
 
 
   method menuIstrucciones(){
-    fondo.image("")
+    fondo.image("fondo_Instrucciones.png")
     keyboard.b().onPressDo({self.menuInicio()})
   }
 
