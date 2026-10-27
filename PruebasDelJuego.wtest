@@ -22,32 +22,60 @@ describe "Pruebas de Peliculas vs Robots" {
     robotFuerte.teHirieron()
     assert.equals(50,robotFuerte.vida())
   }
-  test "Robot normal y robot fuerte entienden aumentar su defensa"{
+  test "Robot normal es protegido de un disparo despues de aumentar su defensa"{
     robotNormal.aumentaDefensa()
+    robotNormal.teHirieron()
+    assert.equals(50, robotNormal.vida())
+  }
+
+  test "Robot normal muere de dos disparos despues de aumentar su defensa"{
+    robotNormal.aumentaDefensa()
+    robotNormal.teHirieron()
+    robotNormal.teHirieron()
+    assert.equals(0, robotNormal.vida())
+  }
+
+  test "Robot fuerte es protegido de un disparo despues de aumentar su defensa"{
     robotFuerte.aumentaDefensa()
-    assert.equals(100, robotNormal.vida())
-    assert.equals(150,robotFuerte.vida())
+    robotFuerte.teHirieron()
+    assert.equals(100,robotFuerte.vida())
   }
 
   test "El robot escudero no recibe daño cuando esta detenido"{
-    robotEscudero.detenerse()
+    robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.teHirieron()
-    assert.equals(500, robotEscudero.vida() )
+    assert.equals(400, robotEscudero.vida() )
   }
 
   test "El robot escudero recibe daño cuando no esta detenido"{
     robotEscudero.teHirieron()
-    assert.notThat(robotEscudero.estaDetenido()) //robotEscudero.avanzar() no se puede por que este depende un tick
-    assert.equals(450, robotEscudero.vida() )
+    assert.equals(350, robotEscudero.vida() )
   }
 
-  test "El robot escudero aumenta la defensa (+50 de vida) de todos los robots activos"{
-    etapaDelJuego.incrementarProgreso()
-    etapaDelJuego.incrementarProgreso()
-    etapaDelJuego.incrementarProgreso()//Progreso tiene que llegar a 3 para poder generar un jefe
+  test "El robot escudero no se aumenta la defensa a si mismo"{
     spawnerRobots.generarJefe(robotEscudero)
     robotEscudero.activarHabilidad()
-    assert.equals(550, robotEscudero.vida())
+    robotEscudero.dejaDeCubrirse()
+    robotEscudero.teHirieron()
+    assert.equals(350, robotEscudero.vida())
+  }
+
+  test "El robot escudero aumenta la defensa del resto de robots"{
+    spawnerRobots.generarRobot()
+    const robotRandom = spawnerRobots.robotsActivos().first()
+    const vidaInicialDelRobotRandom = robotRandom.vida()
+    spawnerRobots.generarJefe(robotEscudero)
+    robotEscudero.activarHabilidad()
+    robotRandom.teHirieron()
+    assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
+  }
+
+  test "Un robot random recibe daño al ser herido"{
+    spawnerRobots.generarRobot()
+    const robotRandom = spawnerRobots.robotsActivos().first()
+    const vidaInicialDelRobotRandom = robotRandom.vida()
+    robotRandom.teHirieron()
+    assert.notEquals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
   test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
@@ -82,8 +110,8 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Al reiniciar la municion de un personaje esta vuelve a 10 aun si gasto antes del reinicio"{
-    spiderman.disparar()
-    spiderman.disparar()
+    spiderman.dispararProyectil()
+    spiderman.dispararProyectil()
     spiderman.reiniciarBalas()
     assert.equals(10, spiderman.balas() )
   }
@@ -94,8 +122,8 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Cuando spiderman dispara este gasta esa municion"{
-    spiderman.disparar()
-    spiderman.disparar()
+    spiderman.dispararProyectil()
+    spiderman.dispararProyectil()
     assert.equals(8, spiderman.balas() )//Devuelve 9 balas en lugar de 8
   }
 

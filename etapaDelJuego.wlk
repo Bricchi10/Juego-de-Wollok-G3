@@ -70,7 +70,7 @@ object etapaDelJuego {
   method incrementarProgreso() {
     progresoActual += 1
     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
-      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())) )
+      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
     if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
       aumentoProgreso.stop()
@@ -150,7 +150,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    //keyboard.a().onPressDo({spawnerRobots.generarJefe()})
+    //keyboard.a().onPressDo({spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))}) //Tecla debug para probar cosas
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()

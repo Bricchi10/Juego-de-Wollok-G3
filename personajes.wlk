@@ -46,18 +46,22 @@ class Personaje{
   
   method disparar() {
     if (puedoDisparar and balas > 0) {
-        puedoDisparar = false
-        imagenActual = self.spriteAtaque() //sprite de ataque
-        const proyectil = self.crearProyectil()
-        game.sound(self.sonidoDisparo()).play()
-        game.addVisual(proyectil)
-        proyectil.moverse()
-        balas -= 1
-        game.schedule(300, { puedoDisparar = true })
-        game.schedule(200, { imagenActual = self.spritePasivo() })
+      self.dispararProyectil()
     } else {
       game.sound("pinpull.mp3").play()
     }
+  }
+
+  method dispararProyectil() {
+    puedoDisparar = false
+    imagenActual = self.spriteAtaque() //sprite de ataque
+    const proyectil = self.crearProyectil()
+    game.sound(self.sonidoDisparo()).play()
+    game.addVisual(proyectil)
+    proyectil.moverse()
+    balas -= 1
+    game.schedule(300, { puedoDisparar = true })
+    game.schedule(200, { imagenActual = self.spritePasivo() })
   }
 
   method reiniciarVida(){

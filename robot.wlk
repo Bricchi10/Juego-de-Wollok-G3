@@ -61,7 +61,7 @@ class Robot inherits Enemigo(vida = 50) {
 class RobotFuerte inherits Enemigo(vida = 100){
     override method image() = "robotFuerteCamina.png"
 } 
-class RobotJefe inherits Enemigo(vida = 350) {
+class RobotJefe inherits Enemigo(vida = 400) {
     override method chocarConPersonaje(personaje){
         super(personaje)
         personaje.mori()
@@ -80,22 +80,27 @@ class RobotEscudero inherits RobotJefe{
             robot.aumentaDefensa()
         })
         game.sound("armaduraInvocada.wav").play()
-        game.schedule(4000, { self.avanzar() self.esInmune(false) }  ) //Vuelve a moverse despues de 4 segundos
+        game.schedule(4000, { self.dejaDeCubrirse() }  ) //Vuelve a moverse despues de 4 segundos
         etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
     }
 
     override method aumentaDefensa() {}
 
     override method teHirieron(){
-        if (not esInmune) {
-            super()
-        } else {
+        if (esInmune) {
             game.sound("shieldhit.ogg").play()
+        } else {
+            super()
         }
     }
 
     override method activarHabilidad(){
         self.aumentaDefensaDeRobots()
+    }
+
+    method dejaDeCubrirse() {
+        self.avanzar()
+        self.esInmune(false)
     }
 }
 object spawnerRobots { 
