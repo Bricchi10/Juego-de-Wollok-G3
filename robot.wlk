@@ -118,6 +118,7 @@ class RobotExplosivo inherits Enemigo(vida = 100) {
 class RobotVeloz inherits Enemigo(vida = 60) {
     var etapa = "caminando"
     var imagenActual = "robotVelozCamina.png"
+    const tickAlCorrer = game.tick(400, { self.mover() }, false)
 
     override method image() = imagenActual
 
@@ -157,6 +158,8 @@ class RobotVeloz inherits Enemigo(vida = 60) {
         game.schedule(1000, {
             imagenActual = "robotVelozGolpea.png"
             etapa = "corriendo"
+            moverRobot.stop()
+            tickAlCorrer.start()
         })
     }
 
@@ -172,11 +175,23 @@ class RobotVeloz inherits Enemigo(vida = 60) {
         imagenActual = "robotVelozCamina.png"
         etapa = "reposo"
         game.sound("robotSprint.mp3").play()
+        tickAlCorrer.stop() 
+        moverRobot.start()
 
         if (position == personaje.position()) {
             self.chocarConPersonaje(personaje)
         }
     }
+    
+    override method mori() { 
+        tickAlCorrer.stop() 
+        super() 
+    } 
+    
+    override method detenerse() { 
+        tickAlCorrer.stop() 
+        super() 
+        }
 }
 object spawnerRobots { 
     const robotsActivos = []
