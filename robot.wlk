@@ -115,6 +115,69 @@ class RobotExplosivo inherits Enemigo(vida = 100) {
         self.mori()
     }
 }
+class RobotVeloz inherits Enemigo(vida = 60) {
+    var etapa = "caminando"
+    var imagenActual = "robotVelozCamina.png"
+
+    override method image() = imagenActual
+
+    override method mover() {
+        if (etapa == "caminando") {
+            self.moverCaminando()
+        } else if (etapa == "corriendo") {
+            self.moverCorriendo()
+        } else if (etapa == "reposo") {
+            self.darUnPaso()
+        }
+        // Si etapa == "pausa", no entra a ningún if y se queda congelado durante el segundo de preparación
+    }
+
+    method moverCaminando() {
+        if (position.x() == 6) {
+            self.iniciarPreparacion()
+        } else {
+            self.darUnPaso()
+        }
+    }
+
+    method moverCorriendo() {
+        if (position.x() <= 3) {
+            self.ejecutarSalto()
+        } else {
+            self.darUnPaso()
+        }
+    }
+
+    method iniciarPreparacion() {
+        position = izquierda.siguiente(position) 
+        imagenActual = "robotVelozSePrepara.png"
+        etapa = "pausa"
+
+        // Pausa de 1 segundo en X = 5 antes de salir corriendo
+        game.schedule(1000, {
+            imagenActual = "robotVelozGolpea.png"
+            etapa = "corriendo"
+        })
+    }
+
+    method darUnPaso(){
+        if (position.x() > 2) {
+            position = izquierda.siguiente(position)
+        }
+    }
+
+    method ejecutarSalto() {
+        const personaje = etapaDelJuego.personajePrincipal()
+        position = game.at(1, position.y())
+        imagenActual = "robotVelozCamina.png"
+        etapa = "reposo"
+        game.sound("robotSprint.mp3").play()
+
+        if (position == personaje.position()) {
+            self.chocarConPersonaje(personaje)
+        }
+    }
+}
 object spawnerRobots { 
     const robotsActivos = []
 
@@ -124,7 +187,7 @@ object spawnerRobots {
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
-        new RobotExplosivo(position = posicionInicial)]
+        new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
