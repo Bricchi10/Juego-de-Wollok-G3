@@ -6,6 +6,7 @@ class Personaje{
   var property vida = 100
   var puedoDisparar = true
   var property balas = 10
+  var inmovilizado = false
   var imagenActual = self.spritePasivo() 
 
   method image() { 
@@ -15,6 +16,12 @@ class Personaje{
   method mostrarDerrota() { 
     imagenActual = self.spriteMuerte() 
   }
+
+  method inmovilizarPor(milisegundos) {
+    inmovilizado = true
+    self.mostrarDerrota()
+    game.schedule(milisegundos, { inmovilizado = false } )
+}
 
   method spritePasivo() 
   method spriteAtaque()
@@ -38,10 +45,14 @@ class Personaje{
   }
 
   method subir() {
-    position = arriba.siguiente(position)
+    if(not inmovilizado){
+       position = arriba.siguiente(position)
+    }
   }
   method bajar() {
-    position = abajo.siguiente(position)
+     if(not inmovilizado){
+        position = abajo.siguiente(position)
+    }
   }
   
   method disparar() {

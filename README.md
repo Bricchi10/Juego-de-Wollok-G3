@@ -15,6 +15,15 @@
 - Robots **Fuertes**:  
 	Tienen 100 de vida, se acercan a una velocidad promedio a la casa y solo pueden atacar al personaje seleccionado si se "chocan" con el 	
 
+- Robots **Fuertes**:  
+	Tienen 100 de vida, se acercan a una velocidad promedio a la casa y solo pueden atacar al personaje seleccionado si se "chocan" con el 
+	Habilidad especial: Al chocar con el jugador este robot pierde la vida pero el jugador es
+	incapaz de moverse por 3 segundos
+
+- Robots **Escuderos**:  
+	Tienen 400 de vida, se acercan a una velocidad promedio a la casa y solo pueden atacar al personaje seleccionado si se "chocan" con el.
+	Habilidad especial: durante 4 segundos se queda totalmente quieto y es inmune a los proyectiles, mejorando las defensas de los demas robots en el tablero en ese tiempo.  	
+
 ## Controles
 D para atacar
 

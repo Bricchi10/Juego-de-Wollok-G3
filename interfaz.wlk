@@ -44,6 +44,11 @@ class DefensaArriba {
   method chocarConPersonaje(personaje) {}
 }
 
+class Explosion { 
+  var property position 
+  method image() = "explosion_pequeña.png" 
+}
+
 object cartelReiniciar { 
   method position() = game.at(5, 2) 
   method image() = "cartelDeReinicio.png"

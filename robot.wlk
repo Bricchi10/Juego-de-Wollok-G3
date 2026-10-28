@@ -103,6 +103,18 @@ class RobotEscudero inherits RobotJefe{
         self.esInmune(false)
     }
 }
+class RobotExplosivo inherits Enemigo(vida = 100) {
+    override method image() = "robotExplosivoCamina3.png" 
+    override method chocarConPersonaje(personaje) {
+        game.sound("explosion.mp3").play() 
+        personaje.teHirieron()
+        const efectoExplosion = new Explosion(position = personaje.position().right(1)) 
+        game.addVisual(efectoExplosion)
+        game.schedule(1000, { game.removeVisual(efectoExplosion) })
+        personaje.inmovilizarPor(3000) // Inmoviliza al jugador durante 3000 ms
+        self.mori()
+    }
+}
 object spawnerRobots { 
     const robotsActivos = []
 
@@ -111,7 +123,8 @@ object spawnerRobots {
     }
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
+        new RobotExplosivo(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         robotsActivos.add(nuevoRobot) 
         game.addVisual(nuevoRobot) 
