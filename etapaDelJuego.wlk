@@ -49,7 +49,7 @@ object etapaDelJuego {
 
   method menuIstrucciones(){
     fondo.image("fondo_Instrucciones.png")
-    keyboard.b().onPressDo({self.menuInicio()})
+    keyboard.b().onPressDo({fondo.image("menu_personajes_1_terminator.png")})
   }
 
   method ganarPartida() {

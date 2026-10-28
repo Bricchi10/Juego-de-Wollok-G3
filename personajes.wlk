@@ -9,6 +9,7 @@ class Personaje{
   var inmovilizado = false
   var imagenActual = self.spritePasivo() 
 
+
   method image() { 
     return imagenActual
   }
@@ -20,7 +21,7 @@ class Personaje{
   method inmovilizarPor(milisegundos) {
     inmovilizado = true
     self.mostrarDerrota()
-    game.schedule(milisegundos, { inmovilizado = false } )
+    game.schedule(milisegundos, { inmovilizado = false imagenActual = self.spritePasivo() } )
 }
 
   method spritePasivo() 
@@ -56,7 +57,7 @@ class Personaje{
   }
   
   method disparar() {
-    if (puedoDisparar and balas > 0) {
+    if (not inmovilizado and puedoDisparar and balas > 0) {
       self.dispararProyectil()
     } else {
       game.sound("pinpull.mp3").play()
@@ -72,7 +73,7 @@ class Personaje{
     proyectil.moverse()
     balas -= 1
     game.schedule(300, { puedoDisparar = true })
-    game.schedule(200, { imagenActual = self.spritePasivo() })
+    game.schedule(200, { if (not inmovilizado) { imagenActual = self.spritePasivo() } })
   }
 
   method reiniciarVida(){
