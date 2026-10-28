@@ -164,7 +164,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
     }
 
     method darUnPaso(){
-        if (position.x() > 2) {
+        if (position.x() > 0) {
             position = izquierda.siguiente(position)
         }
     }
