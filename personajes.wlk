@@ -18,15 +18,20 @@ class Personaje{
     imagenActual = self.spriteMuerte() 
   }
 
+  method mostrarVictoria() { 
+    imagenActual = self.spriteVictoria() 
+  }
+
   method inmovilizarPor(milisegundos) {
     inmovilizado = true
     self.mostrarDerrota()
     game.schedule(milisegundos, { inmovilizado = false imagenActual = self.spritePasivo() } )
-}
+  }
 
   method spritePasivo() 
   method spriteAtaque()
   method spriteMuerte()
+  method spriteVictoria()
   method imagenCarga()
   method sonidoCarga()
   method crearProyectil()
@@ -73,7 +78,7 @@ class Personaje{
     proyectil.moverse()
     balas -= 1
     game.schedule(300, { puedoDisparar = true })
-    game.schedule(200, { if (not inmovilizado) { imagenActual = self.spritePasivo() } })
+    game.schedule(200, { imagenActual = self.spritePasivo() })
   }
 
   method reiniciarVida(){
@@ -81,7 +86,7 @@ class Personaje{
   }
 
   method mori(){
-    etapaDelJuego.terminarDerrota()
+    etapaDelJuego.perderPartida()
   }
 
   method agarrarCarga(){
@@ -103,6 +108,7 @@ class Terminator inherits Personaje{
   override method spritePasivo() = "terminatorIdle.png" 
   override method spriteAtaque() = "terminatorDispara.png"
   override method spriteMuerte() = "terminatorCaido.png"
+  override method spriteVictoria() = "terminatorVictoria.png"
   override method sonidoCarga() = "cs-Recarga.mp3"
   override method imagenCarga() = "municionPickup.png"
   override method crearProyectil() = new Bala(position = self.position().right(1)) 
@@ -112,6 +118,7 @@ class Spiderman inherits Personaje{
   override method spritePasivo() = "spidermanIdle.png" 
   override method spriteAtaque() = "spidermanDispara.png"
   override method spriteMuerte() = "spidermanCaido.png"
+  override method spriteVictoria() = "spidermanVictoria.png"
   override method sonidoCarga() = "comer.mp3"
   override method imagenCarga() = "pizza.png"
   override method crearProyectil() = new Telaraña(position = self.position().right(1)) 
@@ -121,6 +128,7 @@ class Goku inherits Personaje{
   override method spritePasivo() = "gokuIdle.png" 
   override method spriteAtaque() = "gokuAtaque.png"
   override method spriteMuerte() = "gokuCaido.png"
+  override method spriteVictoria() = "gokuVictoria.png"
   override method sonidoCarga() = "semillaErmitaño.mp3"
   override method imagenCarga() = "semillaErmitaño.png"
   override method crearProyectil() = new Energia(position = self.position().right(1)) 

@@ -54,9 +54,18 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
-    game.addVisual(cartelVictoria)
+    personajePrincipal.mostrarVictoria()
     sonidoDeVictoria.play()
+    game.addVisual(cartelVictoria)
     keyboard.r().onPressDo({ self.reiniciarVictoria() })
+  }
+
+  method perderPartida() { 
+    self.terminar()
+    personajePrincipal.mostrarDerrota()
+    sonidoDeGameOver.play()
+    game.addVisual(cartelGameOver)
+    keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
   }
 
   method generarRobots() {
@@ -94,14 +103,6 @@ object etapaDelJuego {
     game.addVisual(fondo)
     game.addVisual(personajePrincipal)
     fondo.image("FondoFuturo.jpg")
-  }
-
-  method terminarDerrota() { 
-    self.terminar()
-    personajePrincipal.mostrarDerrota()
-    sonidoDeGameOver.play()
-    game.addVisual(cartelGameOver)
-    keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
   }
 
   method reiniciar() {
@@ -150,7 +151,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    //keyboard.a().onPressDo({spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))}) //Tecla debug para probar cosas
+    keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
@@ -167,11 +168,11 @@ object etapaDelJuego {
 
   method llegaALaCasa(enemigo) {
     enemigo.mori()
-    self.terminarDerrota()
+    self.perderPartida()
   }
 }
 
 object fondo { 
-var property image = "menu_personajes_base.png" 
-method position() = game.at(0,0)  
+  var property image = "menu_personajes_base.png"
+  method position() = game.at(0,0)
 }

@@ -39,7 +39,7 @@ class Enemigo{
     }
 
     method mover() {
-        position = izquierda.siguiente(position) 
+        position = position.left(1)
     }
 
     method chocarConPersonaje(personaje) {
@@ -150,7 +150,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
     }
 
     method iniciarPreparacion() {
-        position = izquierda.siguiente(position) 
+        self.mover()
         imagenActual = "robotVelozPreparaAtaque.png"
         etapa = "pausa"
 
@@ -165,7 +165,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
 
     method darUnPaso(){
         if (position.x() > 0) {
-            position = izquierda.siguiente(position)
+            self.mover()
         }
     }
 
@@ -236,5 +236,6 @@ object spawnerRobots {
 
 class Portal {
     var property position
-    method image() = "portalRobots.gif" 
+    method image() = "portalRobots.gif"
+    method teHirieron() {}
 }
