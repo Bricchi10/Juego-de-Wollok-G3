@@ -11,7 +11,7 @@ describe "Pruebas de Peliculas vs Robots" {
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Terminator()
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
-  const telaraña = new CargaTelaraña(position = game.at(1,5))
+  const carga = new Carga(position = game.at(1,5))
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
@@ -128,7 +128,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Cuando spiderman se choca con una carga para sus telarañas este recarga"{
-    telaraña.chocarConPersonaje(spiderman) //agrega 5 telarañas a las que ya tenia spiderman
+    carga.chocarConPersonaje(spiderman) //agrega 5 telarañas a las que ya tenia spiderman
     assert.equals(15, spiderman.balas() ) //La municion de los personajes siempre empieza en 10
   }
 }

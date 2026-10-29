@@ -89,12 +89,6 @@ class Personaje{
     etapaDelJuego.perderPartida()
   }
 
-  method agarrarCarga(){
-    game.colliders(self).forEach({ objeto => 
-        objeto.intentarRecargarA(self) 
-    })
-  }
-
   method recargar(){
     balas += 5
   }

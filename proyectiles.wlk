@@ -66,12 +66,3 @@ class Carga {
         game.sound(personaje.sonidoCarga()).play()
     }
 }
-
-class CargaTelaraña inherits Carga{
-    override method image() = "pizza.png" 
-}
-
-class CargaSemilla inherits Carga{
-    override method image() = "semillaErmitaño.png" 
-    
-} 

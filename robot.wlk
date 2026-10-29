@@ -202,16 +202,20 @@ object spawnerRobots {
 
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
-        new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]
-        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         const nuevoPortal = new Portal(position = posicionInicial)
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()
         game.addVisual(nuevoPortal)
-        game.schedule(600, { self.agregarRobot(nuevoRobot) })
         game.schedule(1200, { game.removeVisual(nuevoPortal) })
+        self.agregarRobotEnPortal(nuevoPortal)
+    }
+
+    method agregarRobotEnPortal(portal) { 
+        const robotsQuePuedenGenerarse = [new Robot(position = portal.position()), new RobotFuerte(position = portal.position()),
+        new RobotExplosivo(position = portal.position()),new RobotVeloz(position = portal.position())]
+        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
+        self.agregarRobot(nuevoRobot)
     }
 
     method agregarRobot(robot) {
