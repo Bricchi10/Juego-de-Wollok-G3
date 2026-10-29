@@ -10,8 +10,6 @@ class Bala {
             self.mover()
         }, false) 
 
-    method esEnemigo() = false
-
     method image() = "proyectilDisparo.png"
 
     method moverse() {
