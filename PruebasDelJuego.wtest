@@ -124,7 +124,7 @@ describe "Pruebas de Peliculas vs Robots" {
   test "Cuando spiderman dispara este gasta esa municion"{
     spiderman.dispararProyectil()
     spiderman.dispararProyectil()
-    assert.equals(8, spiderman.balas() )//Devuelve 9 balas en lugar de 8
+    assert.equals(8, spiderman.balas() )
   }
 
   test "Cuando spiderman se choca con una carga para sus telarañas este recarga"{
