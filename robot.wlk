@@ -151,12 +151,12 @@ class RobotVeloz inherits Enemigo(vida = 60) {
 
     method iniciarPreparacion() {
         position = izquierda.siguiente(position) 
-        imagenActual = "robotVelozSePrepara.png"
+        imagenActual = "robotVelozPreparaAtaque.png"
         etapa = "pausa"
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
         game.schedule(1000, {
-            imagenActual = "robotVelozGolpea.png"
+            imagenActual = "robotVelozAtaque.png"
             etapa = "corriendo"
             moverRobot.stop()
             tickAlCorrer.start()
@@ -199,14 +199,25 @@ object spawnerRobots {
     method robotsActivos(){
         return robotsActivos
     }
+
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
         new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
-        robotsActivos.add(nuevoRobot) 
-        game.addVisual(nuevoRobot) 
-        nuevoRobot.avanzar()
+        const nuevoPortal = new Portal(position = posicionInicial)
+        const sonidoDePortal = game.sound("portalSonido.wav")
+        sonidoDePortal.volume(0.5)
+        sonidoDePortal.play()
+        game.addVisual(nuevoPortal)
+        game.schedule(600, { self.agregarRobot(nuevoRobot) })
+        game.schedule(1200, { game.removeVisual(nuevoPortal) })
+    }
+
+    method agregarRobot(robot) {
+        robotsActivos.add(robot) 
+        game.addVisual(robot)
+        robot.avanzar()
     }
 
     method generarJefe(jefe){
@@ -221,4 +232,9 @@ object spawnerRobots {
       method limpiarRobots(){
         robotsActivos.clear()
     }
+}
+
+class Portal {
+    var property position
+    method image() = "portalRobots.gif" 
 }
