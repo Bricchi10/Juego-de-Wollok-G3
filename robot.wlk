@@ -7,7 +7,7 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
-    method image() = "robotBasico.png" 
+    var property image = "robotBasico.png" 
     const moverRobot = game.tick(1500, { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
 
@@ -55,11 +55,9 @@ class Enemigo{
         moverRobot.stop()
     }
 }
-class Robot inherits Enemigo(vida = 50) { 
-    override method image() = "robotBasico.png" 
+class Robot inherits Enemigo(vida = 50, image = "robotBasico.png" ) { 
 } 
-class RobotFuerte inherits Enemigo(vida = 100){
-    override method image() = "robotFuerteCamina.png"
+class RobotFuerte inherits Enemigo(vida = 100, image = "robotFuerteCamina.png"){
 } 
 class RobotJefe inherits Enemigo(vida = 400) {
     override method chocarConPersonaje(personaje){
@@ -69,10 +67,8 @@ class RobotJefe inherits Enemigo(vida = 400) {
 
     method activarHabilidad()
 }
-class RobotEscudero inherits RobotJefe{
+class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     var property esInmune = false
-    
-    override method image() = "robotEscudoCamina1.png"
     method aumentaDefensaDeRobots(){
         self.detenerse()
         self.esInmune(true) //Se detiene y se vuelve inmune al daño
@@ -103,8 +99,7 @@ class RobotEscudero inherits RobotJefe{
         self.esInmune(false)
     }
 }
-class RobotExplosivo inherits Enemigo(vida = 100) {
-    override method image() = "robotExplosivoCamina3.png" 
+class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3.png" ) {
     override method chocarConPersonaje(personaje) {
         game.sound("explosion.mp3").play() 
         personaje.teHirieron()
@@ -115,12 +110,9 @@ class RobotExplosivo inherits Enemigo(vida = 100) {
         self.mori()
     }
 }
-class RobotVeloz inherits Enemigo(vida = 60) {
+class RobotVeloz inherits Enemigo(vida = 60, image = etapa.imagen() ) {
     var property etapa = camina
-    var property imagenActual = etapa.image()
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
-
-    override method image() = imagenActual
 
     override method mover() {
         etapa.movimiento(self)
@@ -147,7 +139,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
     method ejecutarSalto() {
         const personaje = etapaDelJuego.personajePrincipal()
         position = game.at(1, position.y())
-        imagenActual = "robotVelozCamina.png"
+        image = "robotVelozCamina.png"
         self.darUnPaso()
         game.sound("robotSprint.mp3").play()
         tickAlCorrer.stop() 
@@ -171,7 +163,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
 
 object camina{
     
-    method image() = "robotVelozCamina.png"
+    method imagen() = "robotVelozCamina.png"
 
     method movimiento(robotVeloz){
         if (robotVeloz.position().x() == 6) {
@@ -185,7 +177,7 @@ object camina{
 
 object corre{
 
-    method image() = "robotVelozGolpea.png"
+    method imagen() = "robotVelozGolpea.png"
 
     method movimiento(robotVeloz){
         if (robotVeloz.position().x() <= 3) {
@@ -198,7 +190,7 @@ object corre{
 
 object pausa{
 
-    method image() = "robotVelozSePrepara.png"
+    method imagen() = "robotVelozSePrepara.png"
 
     method movimiento(robotVeloz){
         //no se mueve en esta etapa

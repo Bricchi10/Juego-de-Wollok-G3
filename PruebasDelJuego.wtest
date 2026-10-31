@@ -95,19 +95,19 @@ describe "Pruebas de Peliculas vs Robots" {
   test "Robot Veloz al cambiar su etapa a caminar tambien cambia su imagen"{
     robotVeloz.etapa(camina) 
     assert.equals(camina,robotVeloz.etapa())
-    assert.equals("robotVelozCamina.png", robotVeloz.imagenActual() )
+    assert.equals("robotVelozCamina.png", robotVeloz.image() )
   }
 
   test "Robot Veloz al cambiar su etapa a correr tambien cambia su imagen"{
     robotVeloz.etapa(corre) 
     assert.equals(corre,robotVeloz.etapa())
-    assert.equals("robotVelozGolpea.png", robotVeloz.imagenActual() )
+    assert.equals("robotVelozGolpea.png", robotVeloz.image() )
   }
 
   test "Robot Veloz al cambiar su etapa a pausa tambien cambia su imagen"{
     robotVeloz.etapa(pausa) 
     assert.equals(pausa,robotVeloz.etapa())
-    assert.equals("robotVelozSePrepara.png", robotVeloz.imagenActual() )
+    assert.equals("robotVelozSePrepara.png", robotVeloz.image() )
   }
   //Pruebas con personajes
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
