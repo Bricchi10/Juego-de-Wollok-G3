@@ -150,7 +150,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
     }
 
     method iniciarPreparacion() {
-        self.mover()
+        position = position.left(1)
         imagenActual = "robotVelozPreparaAtaque.png"
         etapa = "pausa"
 
@@ -165,7 +165,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
 
     method darUnPaso(){
         if (position.x() > 0) {
-            self.mover()
+            position = position.left(1)
         }
     }
 
@@ -202,20 +202,17 @@ object spawnerRobots {
 
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
+        /*const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
+        new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]*/
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
+        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         const nuevoPortal = new Portal(position = posicionInicial)
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()
         game.addVisual(nuevoPortal)
-        game.schedule(1200, { game.removeVisual(nuevoPortal) })
-        self.agregarRobotEnPortal(nuevoPortal)
-    }
-
-    method agregarRobotEnPortal(portal) { 
-        const robotsQuePuedenGenerarse = [new Robot(position = portal.position()), new RobotFuerte(position = portal.position()),
-        new RobotExplosivo(position = portal.position()),new RobotVeloz(position = portal.position())]
-        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
-        self.agregarRobot(nuevoRobot)
+        nuevoPortal.empezaAnimacion()
+        game.schedule(600, { self.agregarRobot(nuevoRobot) })
     }
 
     method agregarRobot(robot) {
@@ -240,6 +237,18 @@ object spawnerRobots {
 
 class Portal {
     var property position
-    method image() = "portalRobots.gif"
+    var frameActual = 1
+    const animacion = game.tick(100, { self.avanzaFrame() }, false)
+    method image() = "portalRobots_" + frameActual + ".png"
     method teHirieron() {}
+    method empezaAnimacion() {
+        animacion.start()
+    }
+    method avanzaFrame() {
+        if (frameActual == 12) {
+            animacion.stop()
+            game.removeVisual(self)
+        }
+        frameActual += 1
+    }
 }
