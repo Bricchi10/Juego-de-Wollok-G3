@@ -12,6 +12,7 @@ describe "Pruebas de Peliculas vs Robots" {
   const personaje = new Terminator()
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
   const telaraña = new CargaTelaraña(position = game.at(1,5))
+  const robotVeloz = new RobotVeloz(position = game.at(4,5) )
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
@@ -89,6 +90,24 @@ describe "Pruebas de Peliculas vs Robots" {
     spawnerRobots.generarRobot()
     spawnerRobots.limpiarRobots()
     assert.equals([], spawnerRobots.robotsActivos() )
+  }
+
+  test "Robot Veloz al cambiar su etapa a caminar tambien cambia su imagen"{
+    robotVeloz.etapa(camina) 
+    assert.equals(camina,robotVeloz.etapa())
+    assert.equals("robotVelozCamina.png", robotVeloz.image() )
+  }
+
+  test "Robot Veloz al cambiar su etapa a correr tambien cambia su imagen"{
+    robotVeloz.etapa(corre) 
+    assert.equals(corre,robotVeloz.etapa())
+    assert.equals("robotVelozGolpea.png", robotVeloz.image() )
+  }
+
+  test "Robot Veloz al cambiar su etapa a pausa tambien cambia su imagen"{
+    robotVeloz.etapa(pausa) 
+    assert.equals(pausa,robotVeloz.etapa())
+    assert.equals("robotVelozSePrepara.png", robotVeloz.image() )
   }
   //Pruebas con personajes
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
