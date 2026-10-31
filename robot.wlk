@@ -116,48 +116,23 @@ class RobotExplosivo inherits Enemigo(vida = 100) {
     }
 }
 class RobotVeloz inherits Enemigo(vida = 60) {
-    var etapa = "caminando"
-    var imagenActual = "robotVelozCamina.png"
+    var property etapa = camina
+    var property imagenActual = etapa.image()
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
 
     override method image() = imagenActual
 
     override method mover() {
-        if (etapa == "caminando") {
-            self.moverCaminando()
-        } else if (etapa == "corriendo") {
-            self.moverCorriendo()
-        } else if (etapa == "reposo") {
-            self.darUnPaso()
-        }
-        // Si etapa == "pausa", no entra a ningún if y se queda congelado durante el segundo de preparación
-    }
-
-    method moverCaminando() {
-        if (position.x() == 6) {
-            self.iniciarPreparacion()
-        } else {
-            self.darUnPaso()
-        }
-    }
-
-    method moverCorriendo() {
-        if (position.x() <= 3) {
-            self.ejecutarSalto()
-        } else {
-            self.darUnPaso()
-        }
+        etapa.movimiento(self)
     }
 
     method iniciarPreparacion() {
         position = izquierda.siguiente(position) 
-        imagenActual = "robotVelozSePrepara.png"
-        etapa = "pausa"
+        etapa = pausa
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
         game.schedule(1000, {
-            imagenActual = "robotVelozGolpea.png"
-            etapa = "corriendo"
+            etapa = corre
             moverRobot.stop()
             tickAlCorrer.start()
         })
@@ -173,7 +148,7 @@ class RobotVeloz inherits Enemigo(vida = 60) {
         const personaje = etapaDelJuego.personajePrincipal()
         position = game.at(1, position.y())
         imagenActual = "robotVelozCamina.png"
-        etapa = "reposo"
+        self.darUnPaso()
         game.sound("robotSprint.mp3").play()
         tickAlCorrer.stop() 
         moverRobot.start()
@@ -192,6 +167,42 @@ class RobotVeloz inherits Enemigo(vida = 60) {
         tickAlCorrer.stop() 
         super() 
         }
+}
+
+object camina{
+    
+    method image() = "robotVelozCamina.png"
+
+    method movimiento(robotVeloz){
+        if (robotVeloz.position().x() == 6) {
+            robotVeloz.iniciarPreparacion()
+        } else {
+            robotVeloz.darUnPaso()
+        }
+    
+    }
+}
+
+object corre{
+
+    method image() = "robotVelozGolpea.png"
+
+    method movimiento(robotVeloz){
+        if (robotVeloz.position().x() <= 3) {
+            robotVeloz.ejecutarSalto()
+        } else {
+            robotVeloz.darUnPaso()
+        }
+    }
+}
+
+object pausa{
+
+    method image() = "robotVelozSePrepara.png"
+
+    method movimiento(robotVeloz){
+        //no se mueve en esta etapa
+    }
 }
 object spawnerRobots { 
     const robotsActivos = []
