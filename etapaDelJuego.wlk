@@ -141,7 +141,6 @@ object etapaDelJuego {
     (1 .. game.height() -2).forEach({ y =>
       const activadorProyectiles = new Activador(position = game.at(game.width() -1,y))
       game.addVisual(activadorProyectiles)
-      self.proyectilMuereAlColisionarCon(activadorProyectiles)
     })
 
     personajePrincipal.reiniciarVida()
@@ -160,7 +159,7 @@ object etapaDelJuego {
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
 
     //Eventos en relacion al tiempo
-    //aparecenRobots.start()
+    aparecenRobots.start()
     apareceMunicion.start()
     ganarJuego.start()
     aumentoProgreso.start()
@@ -175,12 +174,6 @@ object etapaDelJuego {
   method llegaALaCasa(enemigo) {
     enemigo.mori()
     self.perderPartida()
-  }
-
-  method proyectilMuereAlColisionarCon(activador) {
-    game.onCollideDo(activador, { proyectil =>
-      proyectil.mori()
-    })
   }
 }
 

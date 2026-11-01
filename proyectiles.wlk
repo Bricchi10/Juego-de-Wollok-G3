@@ -6,12 +6,18 @@ import generadorAleatorio.*
 
 class Bala {
     var property position
-    const movimiento = game.tick(100, { position = position.right(1) }, false) 
+    const movimiento = game.tick(100, { self.mover() }, false) 
 
     method image() = "proyectilDisparo.png"
 
     method moverse() {
         movimiento.start()
+    }
+
+    method mover() {
+        position = position.right(1)
+        const colisionadores = game.colliders(self)
+        colisionadores.forEach({ elemento => self.herirA(elemento) })
     }
 
     method mori() {
