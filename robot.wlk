@@ -110,13 +110,14 @@ class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3
         self.mori()
     }
 }
-class RobotVeloz inherits Enemigo(vida = 60, image = etapa.imagen() ) {
+class RobotVeloz inherits Enemigo(vida = 60 ) {
     var property etapa = camina
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
 
     override method mover() {
         etapa.movimiento(self)
     }
+    override method image() = etapa.imagen()
 
     method iniciarPreparacion() {
         position = izquierda.siguiente(position) 
@@ -137,17 +138,11 @@ class RobotVeloz inherits Enemigo(vida = 60, image = etapa.imagen() ) {
     }
 
     method ejecutarSalto() {
-        const personaje = etapaDelJuego.personajePrincipal()
         position = game.at(1, position.y())
-        image = "robotVelozCamina.png"
-        self.darUnPaso()
+        etapa = camina
         game.sound("robotSprint.mp3").play()
         tickAlCorrer.stop() 
         moverRobot.start()
-
-        if (position == personaje.position()) {
-            self.chocarConPersonaje(personaje)
-        }
     }
     
     override method mori() { 
