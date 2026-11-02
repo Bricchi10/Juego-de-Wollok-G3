@@ -16,8 +16,7 @@ class Bala {
 
     method mover() {
         position = position.right(1)
-        const colisionadores = game.colliders(self)
-        colisionadores.forEach({ elemento => self.herirA(elemento) })
+        self.verificarSiEstaFueraDelTablero()
     }
 
     method mori() {
@@ -28,6 +27,12 @@ class Bala {
     method herirA(elemento) {
         elemento.teHirieron()
         self.mori() // Si impacta a un enemigo, se destruye
+    }
+
+    method verificarSiEstaFueraDelTablero() {
+        if (not tablero.dentro(self.position())) {
+            self.mori() // Si sale de la pantalla, se destruye
+        }
     }
 
     method teHirieron() { }

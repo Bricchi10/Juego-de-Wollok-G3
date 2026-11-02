@@ -40,6 +40,13 @@ class Enemigo{
 
     method mover() {
         position = position.left(1)
+        self.verificarSiLlegoALaCasa()
+    }
+
+    method verificarSiLlegoALaCasa() {
+        if (position.x() == 0) {
+            etapaDelJuego.llegaALaCasa(self)
+        }
     }
 
     method chocarConPersonaje(personaje) {

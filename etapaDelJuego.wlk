@@ -2,7 +2,6 @@ import wollok.game.*
 import robot.*
 import personajes.*
 import proyectiles.*
-import activador.*
 import interfaz.*
 import generadorAleatorio.*
 
@@ -132,17 +131,6 @@ object etapaDelJuego {
     game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
 
-    (1 .. game.height() -2).forEach({ y =>
-      const activadorCasa = new Activador(position = game.at(0,y))
-      game.addVisual(activadorCasa)
-      self.perderAlRobotColisionarCon(activadorCasa)
-    })
-
-    (1 .. game.height() -2).forEach({ y =>
-      const activadorProyectiles = new Activador(position = game.at(game.width() -1,y))
-      game.addVisual(activadorProyectiles)
-    })
-
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
     musicaDeFondo.volume(0.5)
@@ -163,12 +151,6 @@ object etapaDelJuego {
     apareceMunicion.start()
     ganarJuego.start()
     aumentoProgreso.start()
-  }
-
-  method perderAlRobotColisionarCon(activador) {
-    game.onCollideDo(activador, { robot =>
-      self.llegaALaCasa(robot)
-    })
   }
 
   method llegaALaCasa(enemigo) {
