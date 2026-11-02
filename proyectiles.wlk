@@ -1,3 +1,4 @@
+import interfaz.*
 import robot.*
 import wollok.game.*
 import direcciones.*
@@ -40,10 +41,24 @@ class Bala {
 
 class Telaraña inherits Bala{
     override method image() = "proyectilTelaraña.png"
+
+    override method herirA(elemento) {
+      elemento.teHirieron()
+    if (elemento.vida() > 0){
+        elemento.inmovilizarPor(2000)
+    }
+    self.mori()
+    }
 }
 
 class Energia inherits Bala{
     override method image() = "bolaEnergiaAzul.png"
+    override method herirA(elemento) {
+      elemento.teHirieron()
+    if (elemento.vida() > 0){
+        self.mori()
+    }
+    }
 }
 
 object spawnerMunicion {

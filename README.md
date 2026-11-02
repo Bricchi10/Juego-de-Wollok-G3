@@ -5,7 +5,14 @@
 - **Terminator**
     
     Dispara balas que reduciran la vida de los enemigos rapidamente, sin embargo no sera suficiente contra enemigos fuertes
-	
+
+- **Spiderman**
+    
+    Dispara telarañas que reduciran la vida de los enemigos rapidamente s, sin embargo no sera suficiente contra enemigos fuertes, aunque cada telaraña lanzada inmoviliza por 2 segundos a su enemigo
+
+- **Goku**
+    
+    Dispara ondas de ki que reduciran la vida de los enemigos rapidamente, sin embargo no sera suficiente contra enemigos fuertes, aunque cadaonda de ki lanzada atraviesa a enemigos debiles al matarlos
 
 ## Enemigos
 

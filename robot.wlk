@@ -8,6 +8,8 @@ class Enemigo{
     var property position = game.at(9, 0) 
     var property vida = 100
     var property image = "robotBasico.png" 
+    var inmovilizado = false
+    var iconoTelaraña = null
     const moverRobot = game.tick(1500, { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
 
@@ -36,6 +38,10 @@ class Enemigo{
         game.removeVisual(self)
         game.removeVisual(iconoDefensa)
         spawnerRobots.eliminarRobot(self)
+        if (iconoTelaraña != null and game.hasVisual(iconoTelaraña)) { 
+            game.removeVisual(iconoTelaraña) 
+            iconoTelaraña = null 
+        }
     }
 
     method mover() {
@@ -53,6 +59,16 @@ class Enemigo{
 
     method detenerse(){
         moverRobot.stop()
+    }
+    method inmovilizarPor(milisegundos) {
+    inmovilizado = true
+    moverRobot.stop()
+    iconoTelaraña = new TelarañaArriba(robotAsignado = self)
+    game.addVisual(iconoTelaraña)
+    game.schedule(milisegundos, { 
+        if (game.hasVisual(self)) { moverRobot.start() inmovilizado = false } 
+        if (game.hasVisual(iconoTelaraña)) { game.removeVisual(iconoTelaraña) }
+        })
     }
 }
 class Robot inherits Enemigo(vida = 50, image = "robotBasico.png" ) { 
