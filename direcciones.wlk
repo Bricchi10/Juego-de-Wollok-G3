@@ -30,20 +30,3 @@ object abajo {
         return nueva
     }
 }
-
-object derecha {
-    method siguiente(position) {
-        const nueva = position.right(1) 
-        tablero.validarDentro(nueva)
-        return nueva
-    }
-
-}
-object izquierda{
-    method siguiente(position) {
-        const nueva = position.left(1) 
-        tablero.validarDentro(nueva)
-        return nueva
-    }
-
-}

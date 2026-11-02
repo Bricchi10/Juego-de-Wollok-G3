@@ -5,41 +5,49 @@ import direcciones.*
 import etapaDelJuego.*
 import generadorAleatorio.*
 
-class Bala {
-    var property position
-    const movimiento = game.tick(130, { // game.tick devuelve un objeto Tick que responde a .start() y .stop()
-            self.mover()
-        }, false) 
 
-    method image() = "proyectilDisparo.png"
+class Proyectil {
+    var property position = game.at(game.width(), game.height() -1)
+    const movimiento = game.tick(100, { self.mover() }, false)
+    const property disparador
 
-    method moverse() {
+    method image()
+
+    method disparate() {
+        position = disparador.position().right(1)
         movimiento.start()
-        game.onCollideDo(self, { elemento =>
-            self.herirA(elemento)
-        })
     }
 
     method mover() {
-        if (tablero.dentro(self.position())) {
-            position = position.right(1)
-        } else {
-            self.mori() // Si sale de la pantalla, se destruye
-        }
+        position = position.right(1)
+        self.verificarSiEstaFueraDelTablero()
     }
 
     method mori() {
-        movimiento.stop() // Detiene directamente este temporizador
+        movimiento.stop()
         game.removeVisual(self)
+        disparador.agregarProyectilDisponible(self)
     }
 
     method herirA(elemento) {
         elemento.teHirieron()
         self.mori() // Si impacta a un enemigo, se destruye
     }
+
+    method verificarSiEstaFueraDelTablero() {
+        if (not tablero.dentro(self.position())) {
+            self.mori() // Si sale de la pantalla, se destruye
+        }
+    }
+
+    method teHirieron() { }
 }
 
-class Telaraña inherits Bala{
+class Bala inherits Proyectil {
+    override method image() = "proyectilDisparo.png"
+}
+
+class Telaraña inherits Proyectil {
     override method image() = "proyectilTelaraña.png"
 
     override method herirA(elemento) {
@@ -51,7 +59,7 @@ class Telaraña inherits Bala{
     }
 }
 
-class Energia inherits Bala{
+class Energia inherits Proyectil {
     override method image() = "bolaEnergiaAzul.png"
     override method herirA(elemento) {
       elemento.teHirieron()
@@ -64,7 +72,7 @@ class Energia inherits Bala{
 object spawnerMunicion {
     method generarMunicion() { 
         const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
-        const nuevaMunicion = new Carga(position=posicionInicial)
+        const nuevaMunicion = new Carga(position = posicionInicial)
         game.addVisual(nuevaMunicion) 
         game.schedule(4000, { game.removeVisual(nuevaMunicion) }) //elimina la municion si no se agarro
     }
@@ -80,12 +88,3 @@ class Carga {
         game.sound(personaje.sonidoCarga()).play()
     }
 }
-
-class CargaTelaraña inherits Carga{
-    override method image() = "pizza.png" 
-}
-
-class CargaSemilla inherits Carga{
-    override method image() = "semillaErmitaño.png" 
-    
-} 

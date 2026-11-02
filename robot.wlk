@@ -45,7 +45,14 @@ class Enemigo{
     }
 
     method mover() {
-        position = izquierda.siguiente(position) 
+        position = position.left(1)
+        self.verificarSiLlegoALaCasa()
+    }
+
+    method verificarSiLlegoALaCasa() {
+        if (position.x() == 0) {
+            etapaDelJuego.llegaALaCasa(self)
+        }
     }
 
     method chocarConPersonaje(personaje) {
@@ -136,12 +143,14 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     override method image() = etapa.imagen()
 
     method iniciarPreparacion() {
-        position = izquierda.siguiente(position) 
-        etapa = pausa
+        position = position.left(1)
+        imagenActual = "robotVelozPreparaAtaque.png"
+        etapa = "pausa"
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
         game.schedule(1000, {
-            etapa = corre
+            imagenActual = "robotVelozAtaque.png"
+            etapa = "corriendo"
             moverRobot.stop()
             tickAlCorrer.start()
         })
@@ -149,7 +158,7 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
 
     method darUnPaso(){
         if (position.x() > 0) {
-            position = izquierda.siguiente(position)
+            position = position.left(1)
         }
     }
 
@@ -213,14 +222,25 @@ object spawnerRobots {
     method robotsActivos(){
         return robotsActivos
     }
+
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
-        new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
+        new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
-        robotsActivos.add(nuevoRobot) 
-        game.addVisual(nuevoRobot) 
-        nuevoRobot.avanzar()
+        const nuevoPortal = new Portal(position = posicionInicial)
+        const sonidoDePortal = game.sound("portalSonido.wav")
+        sonidoDePortal.volume(0.5)
+        sonidoDePortal.play()
+        game.addVisual(nuevoPortal)
+        nuevoPortal.empezaAnimacion()
+        game.schedule(600, { self.agregarRobot(nuevoRobot) })
+    }
+
+    method agregarRobot(robot) {
+        robotsActivos.add(robot) 
+        game.addVisual(robot)
+        robot.avanzar()
     }
 
     method generarJefe(jefe){
@@ -234,5 +254,23 @@ object spawnerRobots {
     }
       method limpiarRobots(){
         robotsActivos.clear()
+    }
+}
+
+class Portal {
+    var property position
+    var frameActual = 1
+    const animacion = game.tick(100, { self.avanzaFrame() }, false)
+    method image() = "portalRobots_" + frameActual + ".png"
+    method teHirieron() {}
+    method empezaAnimacion() {
+        animacion.start()
+    }
+    method avanzaFrame() {
+        if (frameActual == 12) {
+            animacion.stop()
+            game.removeVisual(self)
+        }
+        frameActual += 1
     }
 }

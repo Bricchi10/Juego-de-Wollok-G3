@@ -2,7 +2,6 @@ import wollok.game.*
 import robot.*
 import personajes.*
 import proyectiles.*
-import activador.*
 import interfaz.*
 import generadorAleatorio.*
 
@@ -54,9 +53,18 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
-    game.addVisual(cartelVictoria)
+    personajePrincipal.mostrarVictoria()
     sonidoDeVictoria.play()
+    game.addVisual(cartelVictoria)
     keyboard.r().onPressDo({ self.reiniciarVictoria() })
+  }
+
+  method perderPartida() { 
+    self.terminar()
+    personajePrincipal.mostrarDerrota()
+    sonidoDeGameOver.play()
+    game.addVisual(cartelGameOver)
+    keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
   }
 
   method generarRobots() {
@@ -96,14 +104,6 @@ object etapaDelJuego {
     fondo.image("FondoFuturo.jpg")
   }
 
-  method terminarDerrota() { 
-    self.terminar()
-    personajePrincipal.mostrarDerrota()
-    sonidoDeGameOver.play()
-    game.addVisual(cartelGameOver)
-    keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
-  }
-
   method reiniciar() {
     game.clear()
     self.menuInicio()
@@ -131,12 +131,6 @@ object etapaDelJuego {
     game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
 
-    (1 .. game.height() -2).forEach({ y =>
-      const activador = new Activador(position = game.at(0,y))
-      game.addVisual(activador)
-      self.perderAlRobotColisionarCon(activador)
-    })
-
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
     musicaDeFondo.volume(0.5)
@@ -146,11 +140,15 @@ object etapaDelJuego {
       elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
 
+    personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
+      game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
+    })
+
     //Teclas
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
-    //keyboard.a().onPressDo({spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))}) //Tecla debug para probar cosas
+    keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
 
     //Eventos en relacion al tiempo
     aparecenRobots.start()
@@ -159,19 +157,13 @@ object etapaDelJuego {
     aumentoProgreso.start()
   }
 
-  method perderAlRobotColisionarCon(activador) {
-    game.onCollideDo(activador, { robot =>
-      self.llegaALaCasa(robot)
-    })
-  }
-
   method llegaALaCasa(enemigo) {
     enemigo.mori()
-    self.terminarDerrota()
+    self.perderPartida()
   }
 }
 
 object fondo { 
-var property image = "menu_personajes_base.png" 
-method position() = game.at(0,0)  
+  var property image = "menu_personajes_base.png"
+  method position() = game.at(0,0)
 }
