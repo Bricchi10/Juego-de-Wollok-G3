@@ -51,6 +51,7 @@ object spawnerMunicion {
         const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
         const nuevaMunicion = new Carga(position=posicionInicial)
         game.addVisual(nuevaMunicion) 
+        game.schedule(4000, { game.removeVisual(nuevaMunicion) }) //elimina la municion si no se agarro
     }
 }
 
