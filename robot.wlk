@@ -209,9 +209,8 @@ object spawnerRobots {
 
     method generarRobot() { 
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        /*const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial),
-        new RobotExplosivo(position = posicionInicial),new RobotVeloz(position = posicionInicial)]*/
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial)]
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
+        new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
         const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
         const nuevoPortal = new Portal(position = posicionInicial)
         const sonidoDePortal = game.sound("portalSonido.wav")

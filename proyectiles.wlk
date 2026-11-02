@@ -6,7 +6,7 @@ import generadorAleatorio.*
 
 
 class Proyectil {
-    var property position = game.origin()
+    var property position = game.at(game.width(), game.height() -1)
     const movimiento = game.tick(100, { self.mover() }, false)
     const property disparador
 
