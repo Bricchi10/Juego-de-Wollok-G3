@@ -4,13 +4,16 @@ import direcciones.*
 import etapaDelJuego.*
 import generadorAleatorio.*
 
-class Bala {
-    var property position
-    const movimiento = game.tick(100, { self.mover() }, false) 
 
-    method image() = "proyectilDisparo.png"
+class Proyectil {
+    var property position = game.origin()
+    const movimiento = game.tick(100, { self.mover() }, false)
+    const property disparador
 
-    method moverse() {
+    method image()
+
+    method disparate() {
+        position = disparador.position().right(1)
         movimiento.start()
     }
 
@@ -22,6 +25,7 @@ class Bala {
     method mori() {
         movimiento.stop()
         game.removeVisual(self)
+        disparador.agregarProyectilDisponible(self)
     }
 
     method herirA(elemento) {
@@ -38,11 +42,15 @@ class Bala {
     method teHirieron() { }
 }
 
-class Telaraña inherits Bala{
+class Bala inherits Proyectil {
+    override method image() = "proyectilDisparo.png"
+}
+
+class Telaraña inherits Proyectil {
     override method image() = "proyectilTelaraña.png"
 }
 
-class Energia inherits Bala{
+class Energia inherits Proyectil {
     override method image() = "bolaEnergiaAzul.png"
 }
 

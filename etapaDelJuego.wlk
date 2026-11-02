@@ -140,6 +140,10 @@ object etapaDelJuego {
       elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
 
+    personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
+      game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
+    })
+
     //Teclas
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})

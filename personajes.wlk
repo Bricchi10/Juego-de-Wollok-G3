@@ -1,14 +1,14 @@
 import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
-class Personaje{
+class Personaje {
   var property position = game.at(1,1)
   var property vida = 100
   var puedoDisparar = true
   var property balas = 10
   var inmovilizado = false
   var imagenActual = self.spritePasivo() 
-
+  const property proyectilesDisponibles = [self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil()]
 
   method image() { 
     return imagenActual
@@ -72,13 +72,22 @@ class Personaje{
   method dispararProyectil() {
     puedoDisparar = false
     imagenActual = self.spriteAtaque() //sprite de ataque
-    const proyectil = self.crearProyectil()
     game.sound(self.sonidoDisparo()).play()
-    game.addVisual(proyectil)
-    proyectil.moverse()
     balas -= 1
+    self.generaProyectil()
     game.schedule(300, { puedoDisparar = true })
     game.schedule(200, { imagenActual = self.spritePasivo() })
+  }
+
+  method generaProyectil() {
+    const proyectil = proyectilesDisponibles.first()
+    game.addVisual(proyectil)
+    proyectil.disparate()
+    proyectilesDisponibles.remove(proyectil)
+  }
+
+  method agregarProyectilDisponible(proyectil) {
+    proyectilesDisponibles.add(proyectil)
   }
 
   method reiniciarVida(){
@@ -105,7 +114,7 @@ class Terminator inherits Personaje{
   override method spriteVictoria() = "terminatorVictoria.png"
   override method sonidoCarga() = "cs-Recarga.mp3"
   override method imagenCarga() = "municionPickup.png"
-  override method crearProyectil() = new Bala(position = self.position().right(1)) 
+  override method crearProyectil() = new Bala(disparador = self) 
   override method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
 class Spiderman inherits Personaje{
@@ -115,7 +124,7 @@ class Spiderman inherits Personaje{
   override method spriteVictoria() = "spidermanVictoria.png"
   override method sonidoCarga() = "comer.mp3"
   override method imagenCarga() = "pizza.png"
-  override method crearProyectil() = new Telaraña(position = self.position().right(1)) 
+  override method crearProyectil() = new Telaraña(disparador = self) 
   override method sonidoDisparo() = "spider-web.mp3"
 }
 class Goku inherits Personaje{
@@ -125,6 +134,6 @@ class Goku inherits Personaje{
   override method spriteVictoria() = "gokuVictoria.png"
   override method sonidoCarga() = "semillaErmitaño.mp3"
   override method imagenCarga() = "semillaErmitaño.png"
-  override method crearProyectil() = new Energia(position = self.position().right(1)) 
+  override method crearProyectil() = new Energia(disparador = self) 
   override method sonidoDisparo() = "ki_blast.wav"
 }
