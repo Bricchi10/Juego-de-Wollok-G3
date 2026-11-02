@@ -43,6 +43,12 @@ class DefensaArriba {
   method image() = "defensaArriba.png"
   method chocarConPersonaje(personaje) {}
 }
+class TelarañaArriba {
+  const property robotAsignado
+  method position() = robotAsignado.position()
+  method image() = "telarana_arriba.png"
+  method chocarConPersonaje(personaje) {}
+}
 
 class Explosion { 
   var property position 

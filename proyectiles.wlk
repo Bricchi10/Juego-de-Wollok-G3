@@ -1,3 +1,4 @@
+import interfaz.*
 import robot.*
 import wollok.game.*
 import direcciones.*
@@ -48,10 +49,24 @@ class Bala inherits Proyectil {
 
 class Telaraña inherits Proyectil {
     override method image() = "proyectilTelaraña.png"
+
+    override method herirA(elemento) {
+      elemento.teHirieron()
+    if (elemento.vida() > 0){
+        elemento.inmovilizarPor(2000)
+    }
+    self.mori()
+    }
 }
 
 class Energia inherits Proyectil {
     override method image() = "bolaEnergiaAzul.png"
+    override method herirA(elemento) {
+      elemento.teHirieron()
+    if (elemento.vida() > 0){
+        self.mori()
+    }
+    }
 }
 
 object spawnerMunicion {
@@ -59,6 +74,7 @@ object spawnerMunicion {
         const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
         const nuevaMunicion = new Carga(position = posicionInicial)
         game.addVisual(nuevaMunicion) 
+        game.schedule(4000, { game.removeVisual(nuevaMunicion) }) //elimina la municion si no se agarro
     }
 }
 
