@@ -157,6 +157,7 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     method darUnPaso(){
         if (position.x() > 0) {
             position = position.left(1)
+            self.verificarSiLlegoALaCasa()
         }
     }
 
@@ -195,7 +196,7 @@ object camina{
 
 object corre{
 
-    method imagen() = "robotVelozGolpea.png"
+    method imagen() = "robotVelozAtaque.png"
 
     method movimiento(robotVeloz){
         if (robotVeloz.position().x() <= 3) {
@@ -208,7 +209,7 @@ object corre{
 
 object pausa{
 
-    method imagen() = "robotVelozSePrepara.png"
+    method imagen() = "robotVelozPreparaAtaque.png"
 
     method movimiento(robotVeloz){
         //no se mueve en esta etapa
@@ -223,7 +224,7 @@ object spawnerRobots {
 
     method generarRobot() {
         const nuevoRobot = self.robotAleatorio()
-        const nuevoPortal = new Portal(position = posicionInicial)
+        const nuevoPortal = new Portal(position = nuevoRobot.position())
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()
