@@ -6,12 +6,14 @@ import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
   const spiderman = new Spiderman()
-  const bala = new Bala(position = game.at(4,5))
+  const bala = new Bala(disparador = spiderman)
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Terminator()
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
+  const robotVeloz = new RobotVeloz(position = game.at(4,5) )
   const carga = new Carga(position = game.at(1,5))
+  const robotRandom = spawnerRobots.robotAleatorio()
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
@@ -61,8 +63,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "El robot escudero aumenta la defensa del resto de robots"{
-    spawnerRobots.generarRobot()
-    const robotRandom = spawnerRobots.robotsActivos().first()
+    spawnerRobots.agregarRobot(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
     spawnerRobots.generarJefe(robotEscudero)
     robotEscudero.activarHabilidad()
@@ -71,8 +72,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Un robot random recibe daño al ser herido"{
-    spawnerRobots.generarRobot()
-    const robotRandom = spawnerRobots.robotsActivos().first()
+    spawnerRobots.agregarRobot(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
     robotRandom.teHirieron()
     assert.notEquals(vidaInicialDelRobotRandom, robotRandom.vida())
@@ -86,7 +86,7 @@ describe "Pruebas de Peliculas vs Robots" {
 
   test "Limpiar robots elimina a todos los robots de la lista robots activos"{
     spawnerRobots.generarJefe(robotEscudero)
-    spawnerRobots.generarRobot()
+    spawnerRobots.agregarRobot(robotRandom)
     spawnerRobots.limpiarRobots()
     assert.equals([], spawnerRobots.robotsActivos() )
   }

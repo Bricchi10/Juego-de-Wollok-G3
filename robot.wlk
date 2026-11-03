@@ -7,7 +7,7 @@ import etapaDelJuego.*
 class Enemigo{ 
     var property position = game.at(9, 0) 
     var property vida = 100
-    var property image = "robotBasico.png" 
+    var property image = "robotBasico.png"
     var inmovilizado = false
     var iconoTelaraña = null
     const moverRobot = game.tick(1500, { self.mover() }, false)
@@ -144,13 +144,11 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
 
     method iniciarPreparacion() {
         position = position.left(1)
-        imagenActual = "robotVelozPreparaAtaque.png"
-        etapa = "pausa"
+        etapa = pausa
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
         game.schedule(1000, {
-            imagenActual = "robotVelozAtaque.png"
-            etapa = "corriendo"
+            etapa = corre
             moverRobot.stop()
             tickAlCorrer.start()
         })
@@ -223,11 +221,8 @@ object spawnerRobots {
         return robotsActivos
     }
 
-    method generarRobot() { 
-        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
-        new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
-        const nuevoRobot = robotsQuePuedenGenerarse.anyOne()
+    method generarRobot() {
+        const nuevoRobot = self.robotAleatorio()
         const nuevoPortal = new Portal(position = posicionInicial)
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
@@ -235,6 +230,13 @@ object spawnerRobots {
         game.addVisual(nuevoPortal)
         nuevoPortal.empezaAnimacion()
         game.schedule(600, { self.agregarRobot(nuevoRobot) })
+    }
+
+    method robotAleatorio() {
+        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
+        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
+        new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
+        return robotsQuePuedenGenerarse.anyOne()
     }
 
     method agregarRobot(robot) {
