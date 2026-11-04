@@ -12,20 +12,10 @@ object tablero {
     }
 }
 
-object arriba {
+object moverEnDireccion {
 
-    method siguiente(position) {
-        const nueva = position.up(1) 
-        tablero.validarDentro(nueva)
-        return nueva
-    }
-}
-
-
-object abajo {
-    
-    method siguiente(position) {
-        const nueva = position.down(1) 
+    method siguiente(positionAMover) {
+        const nueva = positionAMover
         tablero.validarDentro(nueva)
         return nueva
     }

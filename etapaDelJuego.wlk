@@ -121,8 +121,15 @@ object etapaDelJuego {
 
   method iniciarPartida(){
     self.prepararPrimeraPantalla()
+    self.prepararPersonaje()
+    self.prepararMusica()
+    self.prepararColisiones()
+    self.prepararControles()
+    self.prepararEventosDeTiempo()    
+  }
+
+  method prepararPersonaje() {
     personajePrincipal.position(game.at(1,1))
-    musicaFondoInicio.stop()
     barraVida.personaje(personajePrincipal)
     game.addVisual(barraVida)
     etiquetaDeBalas.personaje(personajePrincipal)
@@ -130,12 +137,17 @@ object etapaDelJuego {
     etiquetaVida.personaje(personajePrincipal)
     game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
-
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
+  }
+
+  method prepararMusica() {
+    musicaFondoInicio.stop()
     musicaDeFondo.volume(0.5)
     musicaDeFondo.play()
+  }
 
+  method prepararColisiones() {
     game.onCollideDo(personajePrincipal, { elemento =>
       elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
     })
@@ -143,14 +155,16 @@ object etapaDelJuego {
     personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
       game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
     })
+  }
 
-    //Teclas
+  method prepararControles() {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
+  }
 
-    //Eventos en relacion al tiempo
+  method prepararEventosDeTiempo() {
     aparecenRobots.start()
     apareceMunicion.start()
     ganarJuego.start()

@@ -25,7 +25,12 @@ class Personaje {
   method inmovilizarPor(milisegundos) {
     inmovilizado = true
     self.mostrarDerrota()
-    game.schedule(milisegundos, { inmovilizado = false imagenActual = self.spritePasivo() } )
+    game.schedule(milisegundos, { self.levantate() } )
+  }
+
+  method levantate() {
+    inmovilizado = false
+    imagenActual = self.spritePasivo()
   }
 
   method spritePasivo() 
@@ -52,12 +57,12 @@ class Personaje {
 
   method subir() {
     if(not inmovilizado){
-       position = arriba.siguiente(position)
+       position = moverEnDireccion.siguiente(position.up(1))
     }
   }
   method bajar() {
      if(not inmovilizado){
-        position = abajo.siguiente(position)
+        position = moverEnDireccion.siguiente(position.down(1))
     }
   }
   

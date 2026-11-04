@@ -9,9 +9,9 @@ class Enemigo{
     var property vida = 100
     var property image = "robotBasico.png"
     var inmovilizado = false
-    var iconoTelaraña = null
     const moverRobot = game.tick(1500, { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
+    const iconoTelaraña = new TelarañaArriba(robotAsignado = self)
 
     method avanzar() {
         moverRobot.start()
@@ -37,11 +37,8 @@ class Enemigo{
         moverRobot.stop()
         game.removeVisual(self)
         game.removeVisual(iconoDefensa)
+        game.removeVisual(iconoTelaraña)
         spawnerRobots.eliminarRobot(self)
-        if (iconoTelaraña != null and game.hasVisual(iconoTelaraña)) { 
-            game.removeVisual(iconoTelaraña) 
-            iconoTelaraña = null 
-        }
     }
 
     method mover() {
@@ -70,12 +67,15 @@ class Enemigo{
     method inmovilizarPor(milisegundos) {
     inmovilizado = true
     moverRobot.stop()
-    iconoTelaraña = new TelarañaArriba(robotAsignado = self)
     game.addVisual(iconoTelaraña)
-    game.schedule(milisegundos, { 
-        if (game.hasVisual(self)) { moverRobot.start() inmovilizado = false } 
-        if (game.hasVisual(iconoTelaraña)) { game.removeVisual(iconoTelaraña) }
-        })
+    game.schedule(milisegundos, { self.liberate() })
+    }
+    method liberate() {
+        if (game.hasVisual(self)) {
+            moverRobot.start()
+            inmovilizado = false
+            game.removeVisual(iconoTelaraña)
+        }
     }
 }
 class Robot inherits Enemigo(vida = 50, image = "robotBasico.png" ) { 
@@ -147,11 +147,13 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         etapa = pausa
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
-        game.schedule(1000, {
-            etapa = corre
-            moverRobot.stop()
-            tickAlCorrer.start()
-        })
+        game.schedule(1000, { self.correr() })
+    }
+
+    method correr() {
+        etapa = corre
+        moverRobot.stop()
+        tickAlCorrer.start()
     }
 
     method darUnPaso(){
@@ -250,7 +252,7 @@ object spawnerRobots {
         robotsActivos.add(jefe) 
         game.addVisual(jefe) 
         jefe.avanzar()
-        game.schedule(6000,{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
+        game.schedule(6000, { jefe.activarHabilidad() } ) //En lugar de aumentar defensa activar habilidad
     }
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot)
