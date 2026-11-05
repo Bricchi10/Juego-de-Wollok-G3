@@ -51,11 +51,9 @@ class Telaraña inherits Proyectil {
     override method image() = "proyectilTelaraña.png"
 
     override method herirA(elemento) {
-      elemento.teHirieron()
-    if (elemento.vida() > 0){
+        elemento.teHirieron()
         elemento.inmovilizarPor(2000)
-    }
-    self.mori()
+        self.mori()
     }
 }
 
