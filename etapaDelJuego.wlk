@@ -13,12 +13,11 @@ object etapaDelJuego {
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(10000, { self.generarMunicionDePersonaje() }, false)
-  const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
-  const aumentoProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
+  const ganarJuego = game.tick(70000,  { self.ganarPartida() }, false)
+  const aumentoProgreso = game.tick(10000,  { self.incrementarProgreso() }, false)
   var property progresoActual = 0
   method menuInicio(){
-      game.clear()
-      game.addVisual(fondo)
+      self.agregarFondo()
       self.selTerminator()
       musicaFondoInicio.shouldLoop(true)
       musicaFondoInicio.volume(0.8)
@@ -77,11 +76,11 @@ object etapaDelJuego {
 
   method incrementarProgreso() {
     progresoActual += 1
-    if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
+    if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
-    if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
-      aumentoProgreso.stop()
+    if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparecer
+      self.detenerProgreso()
     }
   }
 
@@ -90,18 +89,26 @@ object etapaDelJuego {
     spawnerRobots.limpiarRobots()
     game.addVisual(cartelReiniciar)
     progresoActual = 0
-    aparecenRobots.stop()
+    self.detenerProgreso()
     apareceMunicion.stop()
     ganarJuego.stop()
     musicaDeFondo.stop()
+  }
+
+  method detenerProgreso() {
     aumentoProgreso.stop()
+    aparecenRobots.stop()
   }
 
   method prepararPrimeraPantalla() {
-    game.clear()
-    game.addVisual(fondo)
+    self.agregarFondo()
     game.addVisual(personajePrincipal)
     fondo.image("FondoFuturo.jpg")
+  }
+
+  method agregarFondo() {
+    game.clear()
+    game.addVisual(fondo)
   }
 
   method reiniciar() {
@@ -121,22 +128,22 @@ object etapaDelJuego {
 
   method iniciarPartida(){
     self.prepararPrimeraPantalla()
+    game.addVisual(barraProgreso)
     self.prepararPersonaje()
     self.prepararMusica()
     self.prepararColisiones()
     self.prepararControles()
-    self.prepararEventosDeTiempo()    
+    self.prepararEventosDeTiempo()
   }
 
   method prepararPersonaje() {
     personajePrincipal.position(game.at(1,1))
     barraVida.personaje(personajePrincipal)
-    game.addVisual(barraVida)
     etiquetaDeBalas.personaje(personajePrincipal)
-    game.addVisual(etiquetaDeBalas)
     etiquetaVida.personaje(personajePrincipal)
+    game.addVisual(barraVida)
+    game.addVisual(etiquetaDeBalas)
     game.addVisual(etiquetaVida)
-    game.addVisual(barraProgreso)
     personajePrincipal.reiniciarVida()
     personajePrincipal.reiniciarBalas()
   }
@@ -153,8 +160,12 @@ object etapaDelJuego {
     })
 
     personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
-      game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
+      self.enemigoEsHeridoAlChocarCon(proyectil)
     })
+  }
+
+  method enemigoEsHeridoAlChocarCon(proyectil) {
+    game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
   }
 
   method prepararControles() {
