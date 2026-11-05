@@ -276,4 +276,6 @@ class Portal {
         }
         frameActual += 1
     }
+
+    method inmovilizarPor(milisegundos){}
 }
