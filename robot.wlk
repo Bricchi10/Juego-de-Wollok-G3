@@ -89,6 +89,7 @@ class RobotJefe inherits Enemigo(vida = 400) {
     }
 
     method activarHabilidad()
+    method tiempoEsperaInicial() 
 }
 class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     var property esInmune = false
@@ -104,6 +105,7 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     }
 
     override method aumentaDefensa() {}
+    override method tiempoEsperaInicial() = 6000
 
     override method teHirieron(){
         if (esInmune) {
@@ -127,10 +129,12 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
     override method position() = game.at(9, 3)
 
     override method avanzar() {}
-
+    
     method spritePasivo() = "robotInvocadorPasivo.png"
 
     method spriteActivo() = "robotInvocadorActivo.png"
+
+    override method tiempoEsperaInicial() = 4000
 
     override method mori() {
       super()
@@ -296,7 +300,7 @@ object spawnerRobots {
         robotsActivos.add(jefe) 
         game.addVisual(jefe) 
         jefe.avanzar()
-        game.schedule(6000,{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
+        game.schedule(jefe.tiempoEsperaInicial(),{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
     }
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot)
