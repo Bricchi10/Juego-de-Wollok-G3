@@ -65,10 +65,12 @@ class Enemigo{
         moverRobot.stop()
     }
     method inmovilizarPor(milisegundos) {
-    inmovilizado = true
-    moverRobot.stop()
-    game.addVisual(iconoTelaraña)
-    game.schedule(milisegundos, { self.liberate() })
+        if (!inmovilizado) {
+            inmovilizado = true
+            moverRobot.stop()
+            game.addVisual(iconoTelaraña)
+            game.schedule(milisegundos, { self.liberate() })
+        }
     }
     method liberate() {
         if (game.hasVisual(self)) {

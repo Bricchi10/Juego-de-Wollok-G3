@@ -6,7 +6,7 @@ import interfaz.*
 import generadorAleatorio.*
 
 object etapaDelJuego { 
-  var property personajePrincipal = new Terminator()
+  var property protagonista = new Personaje(personajeActual = terminator)
   const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
   const musicaDeFondo = game.sound("musicaNivel.mp3")
   const sonidoDeGameOver = game.sound("game-over.mp3")
@@ -31,17 +31,17 @@ object etapaDelJuego {
   }
 
   method selTerminator()  {
-    personajePrincipal = new Terminator()
+    protagonista.cambiarPersonajeA(terminator)
     fondo.image("menu_personajes_1_terminator.png")
   }
 
   method selSpiderman(){
-    personajePrincipal = new Spiderman()
+    protagonista.cambiarPersonajeA(spiderman)
     fondo.image("menu_personajes_2_spiderman.png")
   }
 
   method selGoku(){
-    personajePrincipal = new Goku()
+    protagonista.cambiarPersonajeA(goku)
     fondo.image("menu_personajes_3_goku.png")
   }
 
@@ -53,7 +53,7 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
-    personajePrincipal.mostrarVictoria()
+    protagonista.mostrarVictoria()
     sonidoDeVictoria.play()
     game.addVisual(cartelVictoria)
     keyboard.r().onPressDo({ self.reiniciarVictoria() })
@@ -61,7 +61,7 @@ object etapaDelJuego {
 
   method perderPartida() { 
     self.terminar()
-    personajePrincipal.mostrarDerrota()
+    protagonista.mostrarDerrota()
     sonidoDeGameOver.play()
     game.addVisual(cartelGameOver)
     keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
@@ -100,11 +100,12 @@ object etapaDelJuego {
   method prepararPrimeraPantalla() {
     game.clear()
     game.addVisual(fondo)
-    game.addVisual(personajePrincipal)
+    game.addVisual(protagonista)
     fondo.image("FondoFuturo.jpg")
   }
 
   method reiniciar() {
+    protagonista.levantate()
     game.clear()
     self.menuInicio()
   }
@@ -129,16 +130,16 @@ object etapaDelJuego {
   }
 
   method prepararPersonaje() {
-    personajePrincipal.position(game.at(1,1))
-    barraVida.personaje(personajePrincipal)
+    protagonista.position(game.at(1,1))
+    barraVida.personaje(protagonista)
     game.addVisual(barraVida)
-    etiquetaDeBalas.personaje(personajePrincipal)
+    etiquetaDeBalas.personaje(protagonista)
     game.addVisual(etiquetaDeBalas)
-    etiquetaVida.personaje(personajePrincipal)
+    etiquetaVida.personaje(protagonista)
     game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
-    personajePrincipal.reiniciarVida()
-    personajePrincipal.reiniciarBalas()
+    protagonista.reiniciarVida()
+    protagonista.reiniciarBalas()
   }
 
   method prepararMusica() {
@@ -148,20 +149,22 @@ object etapaDelJuego {
   }
 
   method prepararColisiones() {
-    game.onCollideDo(personajePrincipal, { elemento =>
-      elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
+    game.onCollideDo(protagonista, { elemento =>
+      elemento.chocarConPersonaje(protagonista)  // en vez de self.protagonistaRecibeDañoDe(enemigo) 
     })
 
-    personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
+    protagonista.proyectilesDisponibles().forEach({ proyectil =>
       game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
     })
   }
 
   method prepararControles() {
-    keyboard.up().onPressDo({personajePrincipal.subir()})
-    keyboard.down().onPressDo({personajePrincipal.bajar()})
-    keyboard.d().onPressDo({personajePrincipal.disparar()})
+    keyboard.up().onPressDo({ protagonista.subir() })
+    keyboard.down().onPressDo({ protagonista.bajar() })
+    keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
+    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
+    keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
   }
 
   method prepararEventosDeTiempo() {

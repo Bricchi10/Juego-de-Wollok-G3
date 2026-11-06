@@ -48,6 +48,8 @@ class TelarañaArriba {
   method position() = robotAsignado.position()
   method image() = "telarana_arriba.png"
   method chocarConPersonaje(personaje) {}
+  method teHirieron() {}
+  method inmovilizarPor(cantidad) {}
 }
 
 class Explosion { 
