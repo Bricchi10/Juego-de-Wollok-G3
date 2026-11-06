@@ -55,18 +55,19 @@ class Personaje {
   }
 
   method subir() {
-    if(not inmovilizado){
+    if(not inmovilizado and not pausaPartida.estaPausado()){
        position = moverEnDireccion.siguiente(position.up(1))
     }
   }
   method bajar() {
-     if(not inmovilizado){
+     if(not inmovilizado and not pausaPartida.estaPausado()){
         position = moverEnDireccion.siguiente(position.down(1))
     }
   }
   
   method disparar() {
-    if (not inmovilizado and puedoDisparar and balas > 0) {
+    if (not pausaPartida.estaPausado() and not inmovilizado and 
+        puedoDisparar and balas > 0){
       self.dispararProyectil()
     } else {
       game.sound("pinpull.mp3").play()

@@ -67,11 +67,15 @@ object etapaDelJuego {
   }
 
   method generarRobots() {
-    spawnerRobots.generarRobot()
+    if (not pausaPartida.estaPausado()) { 
+      spawnerRobots.generarRobot() 
+    }
   }
 
   method generarMunicionDePersonaje() {
-    spawnerMunicion.generarMunicion()
+    if (not pausaPartida.estaPausado()) { 
+      spawnerMunicion.generarMunicion() 
+    }
   }
 
   method incrementarProgreso() {
@@ -79,10 +83,12 @@ object etapaDelJuego {
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
+    if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
+       spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
+    }
     if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparecer
       self.detenerProgreso()
     }
-  }
 
   method terminar() { 
     self.prepararPrimeraPantalla()
@@ -173,6 +179,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({ protagonista.subir() })
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
+    keyboard.p().onPressDo({ pausaPartida.alternar() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
     keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
@@ -189,6 +196,32 @@ object etapaDelJuego {
     enemigo.mori()
     self.perderPartida()
   }
+
+}
+
+object pausaPartida { 
+  var property estaPausado = false 
+  method alternar() { 
+    if (estaPausado) { 
+      self.reanudar() 
+    } 
+    else { 
+      self.pausar() 
+    } 
+  } 
+  
+  method pausar() { 
+    estaPausado = true 
+    game.addVisual(cartelPausa)
+    game.sound("sonidoPausa.mp3").play() 
+    } 
+    method reanudar() { 
+      estaPausado = false
+      game.sound("sonidoPausa.mp3").play()  
+      if (game.hasVisual(cartelPausa)) { 
+        game.removeVisual(cartelPausa) 
+        } 
+      } 
 }
 
 object fondo { 

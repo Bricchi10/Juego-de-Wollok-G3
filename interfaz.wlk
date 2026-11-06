@@ -45,6 +45,7 @@ class DefensaArriba {
 }
 class TelarañaArriba {
   const property robotAsignado
+
   method position() = robotAsignado.position()
   method image() = "telarana_arriba.png"
   method chocarConPersonaje(personaje) {}
@@ -70,4 +71,8 @@ object cartelGameOver{
 object cartelVictoria{
   method position() = game.at(3,2)
   method image()="cartel_victoria.png"
+}
+object cartelPausa {  
+  method image() = "cartelPausa.png"    
+  method position() = game.at(4,1)
 }
