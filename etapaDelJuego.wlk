@@ -13,20 +13,20 @@ object etapaDelJuego {
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(10000, { self.generarMunicionDePersonaje() }, false)
-  const ganarJuego = game.tick(70000,  { self.ganarPartida() }, false)
-  const aumentoProgreso = game.tick(10000,  { self.incrementarProgreso() }, false)
+  const ganarJuego = game.tick(140000,  { self.ganarPartida() }, false)
+  const aumentoProgreso = game.tick(20000,  { self.incrementarProgreso() }, false)
   var property progresoActual = 0
   method menuInicio(){
-      self.agregarFondo()
-      self.selTerminator()
-      musicaFondoInicio.shouldLoop(true)
-      musicaFondoInicio.volume(0.8)
-      musicaFondoInicio.play()
-      keyboard.space().onPressDo({self.iniciarPartida()})
-      keyboard.i().onPressDo({self.menuIstrucciones()})
-      keyboard.num1().onPressDo({self.selTerminator()})
-      keyboard.num2().onPressDo({self.selSpiderman()})
-      keyboard.num3().onPressDo({self.selGoku()})
+    self.agregarFondo()
+    self.selTerminator()
+    musicaFondoInicio.shouldLoop(true)
+    musicaFondoInicio.volume(0.8)
+    musicaFondoInicio.play()
+    keyboard.space().onPressDo({self.iniciarPartida()})
+    keyboard.i().onPressDo({self.menuIstrucciones()})
+    keyboard.num1().onPressDo({self.selTerminator()})
+    keyboard.num2().onPressDo({self.selSpiderman()})
+    keyboard.num3().onPressDo({self.selGoku()})
   }
 
   method selTerminator()  {
@@ -86,9 +86,10 @@ object etapaDelJuego {
     if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
        spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
     }
-    if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparecer
+    if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparece
       self.detenerProgreso()
     }
+  }
 
   method terminar() { 
     self.prepararPrimeraPantalla()
@@ -201,6 +202,7 @@ object etapaDelJuego {
 
 object pausaPartida { 
   var property estaPausado = false 
+
   method alternar() { 
     if (estaPausado) { 
       self.reanudar() 
@@ -208,20 +210,21 @@ object pausaPartida {
     else { 
       self.pausar() 
     } 
-  } 
+  }
   
   method pausar() { 
     estaPausado = true 
     game.addVisual(cartelPausa)
     game.sound("sonidoPausa.mp3").play() 
+  }
+
+  method reanudar() { 
+  estaPausado = false
+  game.sound("sonidoPausa.mp3").play()  
+  if (game.hasVisual(cartelPausa)) { 
+    game.removeVisual(cartelPausa) 
     } 
-    method reanudar() { 
-      estaPausado = false
-      game.sound("sonidoPausa.mp3").play()  
-      if (game.hasVisual(cartelPausa)) { 
-        game.removeVisual(cartelPausa) 
-        } 
-      } 
+  }
 }
 
 object fondo { 

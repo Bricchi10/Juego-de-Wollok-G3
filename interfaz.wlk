@@ -42,15 +42,11 @@ class DefensaArriba {
   method position() = robotAsignado.position()
   method image() = "defensaArriba.png"
   method chocarConPersonaje(personaje) {}
-}
-class TelarañaArriba {
-  const property robotAsignado
-
-  method position() = robotAsignado.position()
-  method image() = "telarana_arriba.png"
-  method chocarConPersonaje(personaje) {}
   method teHirieron() {}
   method inmovilizarPor(cantidad) {}
+}
+class TelarañaArriba inherits DefensaArriba {
+  override method image() = "telarana_arriba.png"
 }
 
 class Explosion { 
