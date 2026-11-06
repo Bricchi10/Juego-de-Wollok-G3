@@ -48,5 +48,7 @@ C para cambiar de Personaje (no implementado todavia)
 
 R para reiniciar la partida(una vez perdida o ganada)
 
+P para pausar el juego o reanudarlo
+
 
 

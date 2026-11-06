@@ -44,15 +44,17 @@ class DefensaArriba {
   method chocarConPersonaje(personaje) {}
 }
 class TelarañaArriba {
+  const property robotAsignado
+
+  method position() = robotAsignado.position()
+  method image() = "telarana_arriba.png"
+  method chocarConPersonaje(personaje) {}
   method teHirieron() {
     if (game.hasVisual(self)) { 
       game.removeVisual(self)
     }
   }
-  const property robotAsignado
-  method position() = robotAsignado.position()
-  method image() = "telarana_arriba.png"
-  method chocarConPersonaje(personaje) {}
+  method inmovilizarPor(tiempo){}
 }
 
 class Explosion { 
@@ -73,4 +75,8 @@ object cartelGameOver{
 object cartelVictoria{
   method position() = game.at(3,2)
   method image()="cartel_victoria.png"
+}
+object cartelPausa {  
+  method image() = "cartelPausa.png"    
+  method position() = game.at(4,1)
 }

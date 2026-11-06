@@ -45,8 +45,10 @@ class Enemigo{
     }
 
     method mover() {
+        if (not pausaPartida.estaPausado()) {
         position = position.left(1)
         self.verificarSiLlegoALaCasa()
+        }
     }
 
     method verificarSiLlegoALaCasa() {
@@ -116,12 +118,24 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     }
 
     override method activarHabilidad(){
+      if (not pausaPartida.estaPausado()){
         self.aumentaDefensaDeRobots()
+      }
+      else { 
+        game.schedule(1000, { self.activarHabilidad() }) 
+      }
     }
 
     method dejaDeCubrirse() {
+     if (not pausaPartida.estaPausado()) {
         self.avanzar()
         self.esInmune(false)
+     } 
+     else {
+        game.schedule(1000, {
+            self.dejaDeCubrirse()
+        })
+     }
     }
 }
 class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasivo.png") {
@@ -142,6 +156,7 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
     }
 
     override method activarHabilidad() {
+      if (not pausaPartida.estaPausado()){
         image = self.spriteActivo()
 
         self.invocarEn(self.position().up(1))
@@ -161,6 +176,10 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
                 self.activarHabilidad()
             }
         })
+      }
+      else { 
+        game.schedule(1000, { self.activarHabilidad() }) 
+      }
     }
 
     method invocarEn(posicionDestino) {
@@ -183,8 +202,10 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     var property etapa = camina
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
 
-    override method mover() {
-        etapa.movimiento(self)
+    override method mover() { 
+        if (not pausaPartida.estaPausado()) { 
+            etapa.movimiento(self) 
+        } 
     }
     
     override method image() = etapa.imagen()

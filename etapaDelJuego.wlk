@@ -68,24 +68,30 @@ object etapaDelJuego {
   }
 
   method generarRobots() {
-    spawnerRobots.generarRobot()
+    if (not pausaPartida.estaPausado()) { 
+      spawnerRobots.generarRobot() 
+    }
   }
 
   method generarMunicionDePersonaje() {
-    spawnerMunicion.generarMunicion()
+    if (not pausaPartida.estaPausado()) { 
+      spawnerMunicion.generarMunicion() 
+    }
   }
 
-  method incrementarProgreso() {
-    progresoActual += 1
-    if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
-      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
-    }
-    if(progresoActual == 2){ 
-      spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
-    }
-    if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
-      aumentoProgreso.stop()
-    }
+ method incrementarProgreso() {
+    if (not pausaPartida.estaPausado()) { 
+       progresoActual += 1
+     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
+       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
+     }
+     if(progresoActual == 2){ 
+       spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
+     }
+     if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
+       aumentoProgreso.stop()
+     }
+   }
   }
 
   method terminar() { 
@@ -151,6 +157,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({personajePrincipal.subir()})
     keyboard.down().onPressDo({personajePrincipal.bajar()})
     keyboard.d().onPressDo({personajePrincipal.disparar()})
+    keyboard.p().onPressDo({pausaPartida.alternar()})
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
 
     //Eventos en relacion al tiempo
@@ -165,6 +172,31 @@ object etapaDelJuego {
     self.perderPartida()
   }
 
+}
+
+object pausaPartida { 
+  var property estaPausado = false 
+  method alternar() { 
+    if (estaPausado) { 
+      self.reanudar() 
+    } 
+    else { 
+      self.pausar() 
+    } 
+  } 
+  
+  method pausar() { 
+    estaPausado = true 
+    game.addVisual(cartelPausa)
+    game.sound("sonidoPausa.mp3").play() 
+    } 
+    method reanudar() { 
+      estaPausado = false
+      game.sound("sonidoPausa.mp3").play()  
+      if (game.hasVisual(cartelPausa)) { 
+        game.removeVisual(cartelPausa) 
+        } 
+      } 
 }
 
 object fondo { 
