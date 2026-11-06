@@ -44,6 +44,11 @@ class DefensaArriba {
   method chocarConPersonaje(personaje) {}
 }
 class TelarañaArriba {
+  method teHirieron() {
+    if (game.hasVisual(self)) { 
+      game.removeVisual(self)
+    }
+  }
   const property robotAsignado
   method position() = robotAsignado.position()
   method image() = "telarana_arriba.png"

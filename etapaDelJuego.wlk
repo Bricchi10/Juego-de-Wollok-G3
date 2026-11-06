@@ -80,6 +80,9 @@ object etapaDelJuego {
     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
+    if(progresoActual == 2){ 
+      spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
+    }
     if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
       aumentoProgreso.stop()
     }
@@ -161,6 +164,7 @@ object etapaDelJuego {
     enemigo.mori()
     self.perderPartida()
   }
+
 }
 
 object fondo { 

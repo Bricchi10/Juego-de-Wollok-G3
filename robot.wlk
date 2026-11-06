@@ -122,6 +122,48 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
         self.esInmune(false)
     }
 }
+class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasivo.png") {
+
+    override method position() = game.at(9, 3)
+
+    override method avanzar() {}
+
+    method spritePasivo() = "robotInvocadorPasivo.png"
+
+    method spriteActivo() = "robotInvocadorActivo.png"
+
+    override method mori() {
+      super()
+      game.sound("muerteInvocador.mp3").play()
+    }
+
+    override method activarHabilidad() {
+        image = self.spriteActivo()
+
+        self.invocarEn(self.position().up(1))
+        self.invocarEn(self.position().down(1))
+        self.invocarEn(self.position().left(1))
+
+        game.sound("Invocacion.mp3").play()
+
+        game.schedule(1500, {
+            if (vida > 0) {
+                image = self.spritePasivo()
+            }
+        })
+
+        game.schedule(7000, {
+            if (vida > 0) {
+                self.activarHabilidad()
+            }
+        })
+    }
+
+    method invocarEn(posicionDestino) {
+        const esbirro = new Robot(position = posicionDestino)
+        spawnerRobots.agregarRobot(esbirro)
+    }
+}
 class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3.png" ) {
     override method chocarConPersonaje(personaje) {
         game.sound("explosion.mp3").play() 
@@ -140,7 +182,19 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     override method mover() {
         etapa.movimiento(self)
     }
+    
     override method image() = etapa.imagen()
+
+    override method mori(){ 
+        tickAlCorrer.stop() 
+        super() 
+    } 
+    
+    override method detenerse() { 
+        tickAlCorrer.stop() 
+        super() 
+    }
+    
 
     method iniciarPreparacion() {
         position = position.left(1)
@@ -148,9 +202,10 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
         game.schedule(1000, {
-            etapa = corre
-            moverRobot.stop()
-            tickAlCorrer.start()
+            if (game.hasVisual(self)) { 
+                etapa = corre 
+                moverRobot.stop() 
+                tickAlCorrer.start() }
         })
     }
 
@@ -169,15 +224,6 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         moverRobot.start()
     }
     
-    override method mori() { 
-        tickAlCorrer.stop() 
-        super() 
-    } 
-    
-    override method detenerse() { 
-        tickAlCorrer.stop() 
-        super() 
-        }
 }
 
 object camina{
@@ -261,6 +307,7 @@ object spawnerRobots {
 }
 
 class Portal {
+    method vida() = 999 //para que entienda el mensaje vida cuando una bala le pegue
     var property position
     var frameActual = 1
     const animacion = game.tick(100, { self.avanzaFrame() }, false)
