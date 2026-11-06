@@ -7,35 +7,39 @@ class Personaje {
   var puedoDisparar = true
   var property balas = 10
   var inmovilizado = false
-  var imagenActual = self.spritePasivo() 
-  const property proyectilesDisponibles = [self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil(), self.crearProyectil()]
+  var imagenActual = personajeActual.spritePasivo()
+  var property proyectilesDisponibles = self.proyectilesAReutilizar()
+  var property personajeActual
 
   method image() { 
     return imagenActual
   }
 
   method mostrarDerrota() { 
-    imagenActual = self.spriteMuerte() 
+    imagenActual = personajeActual.spriteMuerte() 
   }
 
   method mostrarVictoria() { 
-    imagenActual = self.spriteVictoria() 
+    imagenActual = personajeActual.spriteVictoria() 
+  }
+
+  method mostrarPasivo() { 
+    imagenActual = personajeActual.spritePasivo() 
   }
 
   method inmovilizarPor(milisegundos) {
     inmovilizado = true
     self.mostrarDerrota()
-    game.schedule(milisegundos, { inmovilizado = false imagenActual = self.spritePasivo() } )
+    game.schedule(milisegundos, { self.levantate() } )
   }
 
-  method spritePasivo() 
-  method spriteAtaque()
-  method spriteMuerte()
-  method spriteVictoria()
-  method imagenCarga()
-  method sonidoCarga()
-  method crearProyectil()
-  method sonidoDisparo()
+  method levantate() {
+    inmovilizado = false
+    self.mostrarPasivo()
+  }
+
+  method imagenCarga() = personajeActual.imagenCarga()
+  method sonidoCarga() = personajeActual.sonidoCarga()
   
   method mover(direccion) {
     const nuevaPosition = direccion.siguiente(position)
@@ -52,12 +56,12 @@ class Personaje {
 
   method subir() {
     if(not inmovilizado and not pausaPartida.estaPausado()){
-       position = arriba.siguiente(position)
+       position = moverEnDireccion.siguiente(position.up(1))
     }
   }
   method bajar() {
      if(not inmovilizado and not pausaPartida.estaPausado()){
-        position = abajo.siguiente(position)
+        position = moverEnDireccion.siguiente(position.down(1))
     }
   }
   
@@ -72,12 +76,12 @@ class Personaje {
 
   method dispararProyectil() {
     puedoDisparar = false
-    imagenActual = self.spriteAtaque() //sprite de ataque
-    game.sound(self.sonidoDisparo()).play()
+    imagenActual = personajeActual.spriteAtaque() //sprite de ataque
+    game.sound(personajeActual.sonidoDisparo()).play()
     balas -= 1
     self.generaProyectil()
     game.schedule(300, { puedoDisparar = true })
-    game.schedule(200, { imagenActual = self.spritePasivo() })
+    game.schedule(200, { self.mostrarPasivo() })
   }
 
   method generaProyectil() {
@@ -106,35 +110,44 @@ class Personaje {
   method reiniciarBalas(){
     balas= 10
   }
+
+  method proyectilesAReutilizar() = [personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil()]
+
+  method cambiarPersonajeA(personajeNuevo){
+    personajeActual = personajeNuevo
+    proyectilesDisponibles.clear()
+    proyectilesDisponibles.addAll(self.proyectilesAReutilizar())
+    self.mostrarPasivo()
+  }
 }
 
-class Terminator inherits Personaje{
-  override method spritePasivo() = "terminatorIdle.png" 
-  override method spriteAtaque() = "terminatorDispara.png"
-  override method spriteMuerte() = "terminatorCaido.png"
-  override method spriteVictoria() = "terminatorVictoria.png"
-  override method sonidoCarga() = "cs-Recarga.mp3"
-  override method imagenCarga() = "municionPickup.png"
-  override method crearProyectil() = new Bala(disparador = self) 
-  override method sonidoDisparo() = "desert-eagle-cs.mp3"
+object terminator {
+  method spritePasivo() = "terminatorIdle.png" 
+  method spriteAtaque() = "terminatorDispara.png"
+  method spriteMuerte() = "terminatorCaido.png"
+  method spriteVictoria() = "terminatorVictoria.png"
+  method sonidoCarga() = "cs-Recarga.mp3"
+  method imagenCarga() = "municionPickup.png"
+  method crearProyectil() = new Bala(disparador = etapaDelJuego.protagonista()) 
+  method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
-class Spiderman inherits Personaje{
-  override method spritePasivo() = "spidermanIdle.png" 
-  override method spriteAtaque() = "spidermanDispara.png"
-  override method spriteMuerte() = "spidermanCaido.png"
-  override method spriteVictoria() = "spidermanVictoria.png"
-  override method sonidoCarga() = "comer.mp3"
-  override method imagenCarga() = "pizza.png"
-  override method crearProyectil() = new Telaraña(disparador = self) 
-  override method sonidoDisparo() = "spider-web.mp3"
+object spiderman {
+  method spritePasivo() = "spidermanIdle.png" 
+  method spriteAtaque() = "spidermanDispara.png"
+  method spriteMuerte() = "spidermanCaido.png"
+  method spriteVictoria() = "spidermanVictoria.png"
+  method sonidoCarga() = "comer.mp3"
+  method imagenCarga() = "pizza.png"
+  method crearProyectil() = new Telaraña(disparador = etapaDelJuego.protagonista()) 
+  method sonidoDisparo() = "spider-web.mp3"
 }
-class Goku inherits Personaje{
-  override method spritePasivo() = "gokuIdle.png" 
-  override method spriteAtaque() = "gokuAtaque.png"
-  override method spriteMuerte() = "gokuCaido.png"
-  override method spriteVictoria() = "gokuVictoria.png"
-  override method sonidoCarga() = "semillaErmitaño.mp3"
-  override method imagenCarga() = "semillaErmitaño.png"
-  override method crearProyectil() = new Energia(disparador = self) 
-  override method sonidoDisparo() = "ki_blast.wav"
+object goku {
+  method spritePasivo() = "gokuIdle.png" 
+  method spriteAtaque() = "gokuAtaque.png"
+  method spriteMuerte() = "gokuCaido.png"
+  method spriteVictoria() = "gokuVictoria.png"
+  method sonidoCarga() = "semillaErmitaño.mp3"
+  method imagenCarga() = "semillaErmitaño.png"
+  method crearProyectil() = new Energia(disparador = etapaDelJuego.protagonista()) 
+  method sonidoDisparo() = "ki_blast.wav"
 }

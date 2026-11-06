@@ -49,12 +49,8 @@ class TelarañaArriba {
   method position() = robotAsignado.position()
   method image() = "telarana_arriba.png"
   method chocarConPersonaje(personaje) {}
-  method teHirieron() {
-    if (game.hasVisual(self)) { 
-      game.removeVisual(self)
-    }
-  }
-  method inmovilizarPor(tiempo){}
+  method teHirieron() {}
+  method inmovilizarPor(cantidad) {}
 }
 
 class Explosion { 

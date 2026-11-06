@@ -51,19 +51,17 @@ class Telaraña inherits Proyectil {
     override method image() = "proyectilTelaraña.png"
 
     override method herirA(elemento) {
-        elemento.teHirieron()
         elemento.inmovilizarPor(2000)
+        elemento.teHirieron()
         self.mori()
     }
 }
 
 class Energia inherits Proyectil {
     override method image() = "bolaEnergiaAzul.png"
+
     override method herirA(elemento) {
-      elemento.teHirieron()
-    if (elemento.vida() > 0){
-        self.mori()
-    }
+        elemento.teHirieron()
     }
 }
 
@@ -78,7 +76,7 @@ object spawnerMunicion {
 
 class Carga {
     var property position
-    method image() = etapaDelJuego.personajePrincipal().imagenCarga()
+    method image() = etapaDelJuego.protagonista().imagenCarga()
     
     method chocarConPersonaje(personaje) {
         personaje.recargar()

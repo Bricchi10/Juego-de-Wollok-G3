@@ -6,19 +6,18 @@ import interfaz.*
 import generadorAleatorio.*
 
 object etapaDelJuego { 
-  var property personajePrincipal = new Terminator()
+  var property protagonista = new Personaje(personajeActual = terminator)
   const musicaFondoInicio = game.sound("cs-1-6-music-lobbys.mp3")
   const musicaDeFondo = game.sound("musicaNivel.mp3")
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(10000, { self.generarMunicionDePersonaje() }, false)
-  const ganarJuego = game.tick(180000,  { self.ganarPartida() }, false)
-  const aumentoProgreso = game.tick(30000,  { self.incrementarProgreso() }, false)
+  const ganarJuego = game.tick(70000,  { self.ganarPartida() }, false)
+  const aumentoProgreso = game.tick(10000,  { self.incrementarProgreso() }, false)
   var property progresoActual = 0
   method menuInicio(){
-      game.clear()
-      game.addVisual(fondo)
+      self.agregarFondo()
       self.selTerminator()
       musicaFondoInicio.shouldLoop(true)
       musicaFondoInicio.volume(0.8)
@@ -31,17 +30,17 @@ object etapaDelJuego {
   }
 
   method selTerminator()  {
-    personajePrincipal = new Terminator()
+    protagonista.cambiarPersonajeA(terminator)
     fondo.image("menu_personajes_1_terminator.png")
   }
 
   method selSpiderman(){
-    personajePrincipal = new Spiderman()
+    protagonista.cambiarPersonajeA(spiderman)
     fondo.image("menu_personajes_2_spiderman.png")
   }
 
   method selGoku(){
-    personajePrincipal = new Goku()
+    protagonista.cambiarPersonajeA(goku)
     fondo.image("menu_personajes_3_goku.png")
   }
 
@@ -53,7 +52,7 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
-    personajePrincipal.mostrarVictoria()
+    protagonista.mostrarVictoria()
     sonidoDeVictoria.play()
     game.addVisual(cartelVictoria)
     keyboard.r().onPressDo({ self.reiniciarVictoria() })
@@ -61,7 +60,7 @@ object etapaDelJuego {
 
   method perderPartida() { 
     self.terminar()
-    personajePrincipal.mostrarDerrota()
+    protagonista.mostrarDerrota()
     sonidoDeGameOver.play()
     game.addVisual(cartelGameOver)
     keyboard.r().onPressDo({ self.reiniciarDerrota() }) 
@@ -79,41 +78,47 @@ object etapaDelJuego {
     }
   }
 
- method incrementarProgreso() {
-    if (not pausaPartida.estaPausado()) { 
-       progresoActual += 1
-     if(progresoActual == 3){ //Por ahora solo aparece uno, por que si no, no es posible ganar con la cantidad de balas actuales
-       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
-     }
-     if(progresoActual == 2){ 
+  method incrementarProgreso() {
+    progresoActual += 1
+    if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
+      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
+    }
+    if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
        spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
-     }
-     if(progresoActual == 6){ //Cuando se llega a la ultima etapa de progreso del nivel para de aumentar
-       aumentoProgreso.stop()
-     }
-   }
-  }
+    }
+    if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparecer
+      self.detenerProgreso()
+    }
 
   method terminar() { 
     self.prepararPrimeraPantalla()
     spawnerRobots.limpiarRobots()
     game.addVisual(cartelReiniciar)
     progresoActual = 0
-    aparecenRobots.stop()
+    self.detenerProgreso()
     apareceMunicion.stop()
     ganarJuego.stop()
     musicaDeFondo.stop()
+  }
+
+  method detenerProgreso() {
     aumentoProgreso.stop()
+    aparecenRobots.stop()
   }
 
   method prepararPrimeraPantalla() {
-    game.clear()
-    game.addVisual(fondo)
-    game.addVisual(personajePrincipal)
+    self.agregarFondo()
+    game.addVisual(protagonista)
     fondo.image("FondoFuturo.jpg")
   }
 
+  method agregarFondo() {
+    game.clear()
+    game.addVisual(fondo)
+  }
+
   method reiniciar() {
+    protagonista.levantate()
     game.clear()
     self.menuInicio()
   }
@@ -130,37 +135,57 @@ object etapaDelJuego {
 
   method iniciarPartida(){
     self.prepararPrimeraPantalla()
-    personajePrincipal.position(game.at(1,1))
-    musicaFondoInicio.stop()
-    barraVida.personaje(personajePrincipal)
-    game.addVisual(barraVida)
-    etiquetaDeBalas.personaje(personajePrincipal)
-    game.addVisual(etiquetaDeBalas)
-    etiquetaVida.personaje(personajePrincipal)
-    game.addVisual(etiquetaVida)
     game.addVisual(barraProgreso)
+    self.prepararPersonaje()
+    self.prepararMusica()
+    self.prepararColisiones()
+    self.prepararControles()
+    self.prepararEventosDeTiempo()
+  }
 
-    personajePrincipal.reiniciarVida()
-    personajePrincipal.reiniciarBalas()
+  method prepararPersonaje() {
+    protagonista.position(game.at(1,1))
+    barraVida.personaje(protagonista)
+    game.addVisual(barraVida)
+    etiquetaDeBalas.personaje(protagonista)
+    game.addVisual(etiquetaDeBalas)
+    etiquetaVida.personaje(protagonista)
+    game.addVisual(etiquetaVida)
+    protagonista.reiniciarVida()
+    protagonista.reiniciarBalas()
+  }
+
+  method prepararMusica() {
+    musicaFondoInicio.stop()
     musicaDeFondo.volume(0.5)
     musicaDeFondo.play()
+  }
 
-    game.onCollideDo(personajePrincipal, { elemento =>
-      elemento.chocarConPersonaje(personajePrincipal)  // en vez de self.personajePrincipalRecibeDañoDe(enemigo) 
+  method prepararColisiones() {
+    game.onCollideDo(protagonista, { elemento =>
+      elemento.chocarConPersonaje(protagonista)  // en vez de self.protagonistaRecibeDañoDe(enemigo) 
     })
 
-    personajePrincipal.proyectilesDisponibles().forEach({ proyectil =>
-      game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
+    protagonista.proyectilesDisponibles().forEach({ proyectil =>
+      self.enemigoEsHeridoAlChocarCon(proyectil)
     })
+  }
 
-    //Teclas
-    keyboard.up().onPressDo({personajePrincipal.subir()})
-    keyboard.down().onPressDo({personajePrincipal.bajar()})
-    keyboard.d().onPressDo({personajePrincipal.disparar()})
-    keyboard.p().onPressDo({pausaPartida.alternar()})
+  method enemigoEsHeridoAlChocarCon(proyectil) {
+    game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
+  }
+
+  method prepararControles() {
+    keyboard.up().onPressDo({ protagonista.subir() })
+    keyboard.down().onPressDo({ protagonista.bajar() })
+    keyboard.d().onPressDo({ protagonista.disparar() })
+    keyboard.p().onPressDo({ pausaPartida.alternar() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
+    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
+    keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
+  }
 
-    //Eventos en relacion al tiempo
+  method prepararEventosDeTiempo() {
     aparecenRobots.start()
     apareceMunicion.start()
     ganarJuego.start()

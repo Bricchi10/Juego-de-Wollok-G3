@@ -5,11 +5,10 @@ import direcciones.*
 import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
-  const spiderman = new Spiderman()
-  const bala = new Bala(disparador = spiderman)
+  const bala = new Bala(disparador = personaje)
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
-  const personaje = new Terminator()
+  const personaje = new Personaje(personajeActual = terminator)
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
   const robotVeloz = new RobotVeloz(position = game.at(4,5) )
   const carga = new Carga(position = game.at(1,5))
@@ -120,18 +119,18 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(100, personaje.vida())
   }
 
-  test "Al reiniciar la vida de un personaje esta vuelve a 100 aun si fue dañado antes del reinicio"{
-    spiderman.teHirieron()
-    spiderman.teHirieron()
-    spiderman.reiniciarVida()
-    assert.equals(100, spiderman.vida() )
+  test "Al reiniciar la vida de el protagonista esta vuelve a 100 aun si fue dañado antes del reinicio"{
+    personaje.teHirieron()
+    personaje.teHirieron()
+    personaje.reiniciarVida()
+    assert.equals(100, personaje.vida() )
   }
 
-  test "Al reiniciar la municion de un personaje esta vuelve a 10 aun si gasto antes del reinicio"{
-    spiderman.dispararProyectil()
-    spiderman.dispararProyectil()
-    spiderman.reiniciarBalas()
-    assert.equals(10, spiderman.balas() )
+  test "Al reiniciar la municion de el protagonista esta vuelve a 10 aun si gasto antes del reinicio"{
+    personaje.dispararProyectil()
+    personaje.dispararProyectil()
+    personaje.reiniciarBalas()
+    assert.equals(10, personaje.balas() )
   }
   //Pruebas con proyectiles
   test "Bala baja la vida de robot al chocar con este " {
@@ -139,14 +138,14 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.equals(50, robotFuerte.vida())
   }
 
-  test "Cuando spiderman dispara este gasta esa municion"{
-    spiderman.dispararProyectil()
-    spiderman.dispararProyectil()
-    assert.equals(8, spiderman.balas() )
+  test "Cuando el protagonista dispara este gasta esa municion"{
+    personaje.dispararProyectil()
+    personaje.dispararProyectil()
+    assert.equals(8, personaje.balas() )
   }
 
-  test "Cuando spiderman se choca con una carga para sus telarañas este recarga"{
-    carga.chocarConPersonaje(spiderman) //agrega 5 telarañas a las que ya tenia spiderman
-    assert.equals(15, spiderman.balas() ) //La municion de los personajes siempre empieza en 10
+  test "Cuando el protagonista se choca con una carga este recarga"{
+    carga.chocarConPersonaje(personaje) //agrega 5 municones a las que ya tenia el protagonista
+    assert.equals(15, personaje.balas() ) //la municion del protagonista siempre empieza en 10
   }
 }
