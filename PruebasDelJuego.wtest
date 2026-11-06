@@ -5,7 +5,7 @@ import direcciones.*
 import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
-  const bala = new Bala(disparador = personaje)
+  const bala = new Proyectil(disparador = personaje, tipoDeProyectil =new Bala())
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Personaje(personajeActual = terminator)
