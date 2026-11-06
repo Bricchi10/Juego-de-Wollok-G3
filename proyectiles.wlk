@@ -10,8 +10,9 @@ class Proyectil {
     var property position = game.at(game.width(), game.height() -1)
     const movimiento = game.tick(100, { self.mover() }, false)
     const property disparador
+    var property tipoDeProyectil
 
-    method image()
+    method image() = tipoDeProyectil.image()
 
     method disparate() {
         position = disparador.position().right(1)
@@ -30,8 +31,9 @@ class Proyectil {
     }
 
     method herirA(elemento) {
+        tipoDeProyectil.aplicarEfectoA(elemento)
         elemento.teHirieron()
-        self.mori() // Si impacta a un enemigo, se destruye
+        tipoDeProyectil.efectoAlImpactar(self) // Si impacta a un enemigo, se destruye
     }
 
     method verificarSiEstaFueraDelTablero() {
@@ -43,26 +45,26 @@ class Proyectil {
     method teHirieron() { }
 }
 
-class Bala inherits Proyectil {
-    override method image() = "proyectilDisparo.png"
+class Bala {
+    method image() = "proyectilDisparo.png"
+    method aplicarEfectoA(elemento) {}
+    method efectoAlImpactar(proyectil) {
+        proyectil.mori()
+    }
 }
 
-class Telaraña inherits Proyectil {
+class Telaraña inherits Bala {
     override method image() = "proyectilTelaraña.png"
 
-    override method herirA(elemento) {
+    override method aplicarEfectoA(elemento) {
         elemento.inmovilizarPor(2000)
-        elemento.teHirieron()
-        self.mori()
     }
 }
 
-class Energia inherits Proyectil {
-    override method image() = "bolaEnergiaAzul.png"
-
-    override method herirA(elemento) {
-        elemento.teHirieron()
-    }
+object energia {
+    method image() = "bolaEnergiaAzul.png"
+    method aplicarEfectoA(elemento) {}
+    method efectoAlImpactar(proyectil) {}
 }
 
 object spawnerMunicion {
