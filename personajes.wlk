@@ -8,7 +8,7 @@ class Personaje {
   var property balas = 10
   var inmovilizado = false
   var imagenActual = personajeActual.spritePasivo()
-  var property proyectilesDisponibles = []
+  var property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
 
   method image() { 
