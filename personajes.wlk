@@ -8,7 +8,7 @@ class Personaje {
   var property balas = 10
   var inmovilizado = false
   var imagenActual = personajeActual.spritePasivo()
-  var property proyectilesDisponibles = self.proyectilesAReutilizar()
+  const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
 
   method image() { 
@@ -111,13 +111,20 @@ class Personaje {
     balas= 10
   }
 
-  method proyectilesAReutilizar() = [personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil(), personajeActual.crearProyectil()]
+  method proyectilesAReutilizar() {
+    const proyectilesAlMomento = []
+    (1..5).forEach({ numero =>
+      proyectilesAlMomento.add(new Proyectil(disparador = self, tipoDeProyectil = personajeActual.proyectilAsignado()))
+    })
+    return proyectilesAlMomento
+  }
 
   method cambiarPersonajeA(personajeNuevo){
     personajeActual = personajeNuevo
-    proyectilesDisponibles.clear()
-    proyectilesDisponibles.addAll(self.proyectilesAReutilizar())
     self.mostrarPasivo()
+    proyectilesDisponibles.forEach({ proyectil =>
+      proyectil.tipoDeProyectil(personajeActual.proyectilAsignado())
+    })
   }
 }
 
@@ -128,7 +135,7 @@ object terminator {
   method spriteVictoria() = "terminatorVictoria.png"
   method sonidoCarga() = "cs-Recarga.mp3"
   method imagenCarga() = "municionPickup.png"
-  method crearProyectil() = new Bala(disparador = etapaDelJuego.protagonista()) 
+  method proyectilAsignado() = new Bala() 
   method sonidoDisparo() = "desert-eagle-cs.mp3"
 }
 object spiderman {
@@ -138,7 +145,7 @@ object spiderman {
   method spriteVictoria() = "spidermanVictoria.png"
   method sonidoCarga() = "comer.mp3"
   method imagenCarga() = "pizza.png"
-  method crearProyectil() = new Telaraña(disparador = etapaDelJuego.protagonista()) 
+  method proyectilAsignado() = new Telaraña() 
   method sonidoDisparo() = "spider-web.mp3"
 }
 object goku {
@@ -148,6 +155,6 @@ object goku {
   method spriteVictoria() = "gokuVictoria.png"
   method sonidoCarga() = "semillaErmitaño.mp3"
   method imagenCarga() = "semillaErmitaño.png"
-  method crearProyectil() = new Energia(disparador = etapaDelJuego.protagonista()) 
+  method proyectilAsignado() = energia
   method sonidoDisparo() = "ki_blast.wav"
 }
