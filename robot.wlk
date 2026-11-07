@@ -42,10 +42,8 @@ class Enemigo{
     }
 
     method mover() {
-        if (not pausaPartida.estaPausado()) {
         position = position.left(1)
         self.verificarSiLlegoALaCasa()
-        }
     }
 
     method verificarSiLlegoALaCasa() {
@@ -120,24 +118,12 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     }
 
     override method activarHabilidad(){
-      if (not pausaPartida.estaPausado()){
-        self.aumentaDefensaDeRobots()
-      }
-      else { 
-        game.schedule(1000, { self.activarHabilidad() }) 
-      }
+      self.aumentaDefensaDeRobots()
     }
 
     method dejaDeCubrirse() {
-     if (not pausaPartida.estaPausado()) {
-        self.avanzar()
-        self.esInmune(false)
-     } 
-     else {
-        game.schedule(1000, {
-            self.dejaDeCubrirse()
-        })
-     }
+     self.avanzar()
+     self.esInmune(false)
     }
 }
 class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasivo.png") {
@@ -158,7 +144,6 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
     }
 
     override method activarHabilidad() {
-      if (not pausaPartida.estaPausado()){
         image = self.spriteActivo()
 
         self.invocarEn(self.position().up(1))
@@ -178,10 +163,6 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
                 self.activarHabilidad()
             }
         })
-      }
-      else { 
-        game.schedule(1000, { self.activarHabilidad() }) 
-      }
     }
 
     method invocarEn(posicionDestino) {
@@ -196,7 +177,7 @@ class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3
         const efectoExplosion = new Explosion(position = personaje.position().right(1)) 
         game.addVisual(efectoExplosion)
         game.schedule(1000, { game.removeVisual(efectoExplosion) })
-        personaje.inmovilizarPor(3000) // Inmoviliza al jugador durante 3000 ms
+        personaje.inmovilizar() // Inmoviliza al jugador durante 3000 ms
         self.mori()
     }
 }
@@ -205,21 +186,19 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
 
     override method mover() { 
-        if (not pausaPartida.estaPausado()) { 
-            etapa.movimiento(self) 
-        } 
+        etapa.movimiento(self)
     }
     
     override method image() = etapa.imagen()
 
     override method mori(){ 
-        tickAlCorrer.stop() 
-        super() 
+        super()
+        tickAlCorrer.stop()
     } 
     
     override method detenerse() { 
-        tickAlCorrer.stop() 
-        super() 
+        super()
+        tickAlCorrer.stop()
     }
     
 
@@ -232,9 +211,11 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     }
 
     method correr() {
-        etapa = corre
-        moverRobot.stop()
-        tickAlCorrer.start()
+        if (game.hasVisual(self)) {
+            etapa = corre
+            moverRobot.stop()
+            tickAlCorrer.start()
+        }
     }
 
     method darUnPaso(){
@@ -291,20 +272,20 @@ object pausa{
 }
 object spawnerRobots { 
     const robotsActivos = []
+    const portalesActivos = []
 
     method robotsActivos(){
         return robotsActivos
     }
 
     method generarRobot() {
-        const nuevoRobot = self.robotAleatorio()
-        const nuevoPortal = new Portal(position = nuevoRobot.position())
+        const nuevoPortal = new Portal(robotASpawnear = self.robotAleatorio())
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()
         game.addVisual(nuevoPortal)
+        portalesActivos.add(nuevoPortal) 
         nuevoPortal.empezaAnimacion()
-        game.schedule(600, { self.agregarRobot(nuevoRobot) })
     }
 
     method robotAleatorio() {
@@ -329,14 +310,24 @@ object spawnerRobots {
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot)
     }
-      method limpiarRobots(){
+    method limpiarRobots(){
         robotsActivos.clear()
+    }
+    method moverRobots() { //llamado al despausar el juego
+        robotsActivos.forEach({ robot => robot.avanzar() })
+    }
+    method eliminarPortal(portal) { 
+        portalesActivos.remove(portal)
+    }
+    method animarPortales() { //llamado al despausar el juego
+        portalesActivos.forEach({ portal => portal.empezaAnimacion() })
     }
 }
 
 class Portal {
     method vida() = 999 //para que entienda el mensaje vida cuando una bala le pegue
-    var property position
+    const property robotASpawnear 
+    const property position = robotASpawnear.position()
     var frameActual = 1
     const animacion = game.tick(100, { self.avanzaFrame() }, false)
     method image() = "portalRobots_" + frameActual + ".png"
@@ -345,9 +336,13 @@ class Portal {
         animacion.start()
     }
     method avanzaFrame() {
+        if (frameActual == 6) {
+            spawnerRobots.agregarRobot(robotASpawnear)
+        }
         if (frameActual == 12) {
             animacion.stop()
             game.removeVisual(self)
+            spawnerRobots.eliminarPortal(self)
         }
         frameActual += 1
     }

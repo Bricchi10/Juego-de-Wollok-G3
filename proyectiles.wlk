@@ -16,6 +16,10 @@ class Proyectil {
 
     method disparate() {
         position = disparador.position().right(1)
+        self.avanzar()
+    }
+
+    method avanzar() {
         movimiento.start()
     }
 
@@ -28,6 +32,7 @@ class Proyectil {
         movimiento.stop()
         game.removeVisual(self)
         disparador.agregarProyectilDisponible(self)
+        spawnerProyectiles.eliminarProyectil(self)
     }
 
     method herirA(elemento) {
@@ -65,6 +70,21 @@ object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
     method efectoAlImpactar(proyectil) {}
+}
+
+object spawnerProyectiles {
+    const property proyectilesActivos = []
+    method generarProyectil(proyectil) {
+        proyectilesActivos.add(proyectil)
+        game.addVisual(proyectil)
+        proyectil.disparate()
+    }
+    method eliminarProyectil(proyectil) {
+        proyectilesActivos.remove(proyectil)
+    }
+    method moverProyectiles() { //llamado al despausar el juego
+        proyectilesActivos.forEach({ proyectil => proyectil.avanzar() })
+    }
 }
 
 object spawnerMunicion {

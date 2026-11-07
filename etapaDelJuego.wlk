@@ -67,15 +67,11 @@ object etapaDelJuego {
   }
 
   method generarRobots() {
-    if (not pausaPartida.estaPausado()) { 
-      spawnerRobots.generarRobot() 
-    }
+    spawnerRobots.generarRobot()
   }
 
   method generarMunicionDePersonaje() {
-    if (not pausaPartida.estaPausado()) { 
-      spawnerMunicion.generarMunicion() 
-    }
+    spawnerMunicion.generarMunicion()
   }
 
   method incrementarProgreso() {
@@ -170,6 +166,10 @@ object etapaDelJuego {
     protagonista.proyectilesDisponibles().forEach({ proyectil =>
       self.enemigoEsHeridoAlChocarCon(proyectil)
     })
+
+    spawnerProyectiles.proyectilesActivos().forEach({ proyectil =>
+      self.enemigoEsHeridoAlChocarCon(proyectil)
+    })
   }
 
   method enemigoEsHeridoAlChocarCon(proyectil) {
@@ -180,7 +180,7 @@ object etapaDelJuego {
     keyboard.up().onPressDo({ protagonista.subir() })
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
-    keyboard.p().onPressDo({ pausaPartida.alternar() })
+    keyboard.p().onPressDo({ self.pausarPartida() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
     keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
@@ -198,32 +198,49 @@ object etapaDelJuego {
     self.perderPartida()
   }
 
+  method reanudarPausa() {
+    self.prepararColisiones()
+    self.prepararControles()
+    self.prepararEventosDeTiempo()
+    musicaDeFondo.resume()
+  }
+
+  method detenerEventosDeTiempo() {
+    aparecenRobots.stop()
+    apareceMunicion.stop()
+    ganarJuego.stop()
+    aumentoProgreso.stop()
+  }
+
+  method continuarAnimacionesProtagonista() {
+    protagonista.continuarAnimaciones()
+  }
+
+  method pausarPartida() {
+    pausaPartida.pausar()
+    musicaDeFondo.pause()
+  }
 }
 
 object pausaPartida { 
   var property estaPausado = false 
 
-  method alternar() { 
-    if (estaPausado) { 
-      self.reanudar() 
-    } 
-    else { 
-      self.pausar() 
-    } 
-  }
-  
   method pausar() { 
-    estaPausado = true 
     game.addVisual(cartelPausa)
     game.sound("sonidoPausa.mp3").play() 
+    io.clear()
+    keyboard.p().onPressDo({ self.reanudar() })
   }
 
   method reanudar() { 
-  estaPausado = false
-  game.sound("sonidoPausa.mp3").play()  
-  if (game.hasVisual(cartelPausa)) { 
-    game.removeVisual(cartelPausa) 
-    } 
+    estaPausado = false
+    game.sound("sonidoPausa.mp3").play()  
+    game.removeVisual(cartelPausa)
+    etapaDelJuego.reanudarPausa()
+    spawnerRobots.moverRobots()
+    spawnerRobots.animarPortales()
+    spawnerProyectiles.moverProyectiles()
+    etapaDelJuego.continuarAnimacionesProtagonista()
   }
 }
 
