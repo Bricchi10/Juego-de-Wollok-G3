@@ -22,14 +22,18 @@ object etiquetaVida {
   method textColor() = "FFFFFFFF"
 }
 
+object barraDeBalas {
+    method position() = game.at(0, 6) 
+    method image() = "cartelDeBalas.png"
+}
 object etiquetaDeBalas {
-    var personaje = null 
+  var personaje = null 
     method personaje(personaje_) { 
       personaje = personaje_ 
-    }  
-    method position() = game.at(0, 6) 
-    method text() = "Balas: " + personaje.balas() 
-    method textColor() = "FFFFFFFF" // Blanco 
+    }
+  method position() = game.at(1, 6)   
+  method text() = "" + personaje.balas()
+  method textColor() = "FFFFFFFF"
 }
 
 object barraProgreso {

@@ -76,6 +76,7 @@ object etapaDelJuego {
   }
 
   method incrementarProgreso() {
+   if(not pausaPartida.estaPausado()){ 
     progresoActual += 1
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
       spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
@@ -87,7 +88,7 @@ object etapaDelJuego {
       self.detenerProgreso()
     }
   }
-
+  }
   method terminar() { 
     self.prepararPrimeraPantalla()
     spawnerRobots.limpiarRobots()
@@ -145,8 +146,9 @@ object etapaDelJuego {
     protagonista.position(game.at(1,1))
     barraVida.personaje(protagonista)
     game.addVisual(barraVida)
-    etiquetaDeBalas.personaje(protagonista)
+    game.addVisual(barraDeBalas)
     game.addVisual(etiquetaDeBalas)
+    etiquetaDeBalas.personaje(protagonista)
     etiquetaVida.personaje(protagonista)
     game.addVisual(etiquetaVida)
     protagonista.reiniciarVida()
