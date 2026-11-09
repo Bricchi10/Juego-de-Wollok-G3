@@ -13,7 +13,7 @@ object etapaDelJuego {
   const sonidoDeGameOver = game.sound("game-over.mp3")
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
-  const apareceMunicion = game.tick(10000, { self.generarMunicionDePersonaje() }, false)
+  const apareceMunicion = game.tick(9000, { self.generarMunicionDePersonaje() }, false)
   const ganarJuego = game.tick(140000,  { self.ganarPartida() }, false)
   const aumentoProgreso = game.tick(20000,  { self.incrementarProgreso() }, false)
   var property progresoActual = 0
@@ -155,6 +155,7 @@ object etapaDelJuego {
 
   method prepararMusica() {
     musicaFondoInicio.stop()
+    musicaDeFondo.shouldLoop(true)
     musicaDeFondo.volume(0.5)
     musicaDeFondo.play()
   }

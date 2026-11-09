@@ -27,6 +27,7 @@ class Proyectil {
     method mover() {
         position = position.right(1)
         self.verificarSiEstaFueraDelTablero()
+        self.dañarEnemigosDetras() //daña a un enemigo que haya detras en caso que justo este se haya movido adelante y "esquive" el proyectil
     }
 
     method mori() {
@@ -35,6 +36,16 @@ class Proyectil {
         disparador.agregarProyectilDisponible(self)
         spawnerProyectiles.eliminarProyectil(self)
     }
+
+    method dañarEnemigosDetras() {
+        if (position.x() > 3) {
+            self.enemigosDetras().forEach({ enemigo =>
+                self.herirA(enemigo)
+            })
+        }
+    }
+
+    method enemigosDetras() = game.getObjectsIn(position.left(2))
 
     method herirA(elemento) {
         tipoDeProyectil.aplicarEfectoA(elemento)

@@ -10,7 +10,7 @@ class Enemigo{
     var property vida = 100
     var property image = "robotBasico.png"
     var inmovilizado = false
-    const moverRobot = game.tick(1500, { self.mover() }, false)
+    const moverRobot = game.tick(self.velocidad(), { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
     const iconoTelaraña = new TelarañaArriba(robotAsignado = self)
     const liberarRobot = game.tick(1000, { self.liberate() }, false)
@@ -86,6 +86,7 @@ class Enemigo{
             liberarRobot.stop()
         }
     }
+    method velocidad() = 1500 //cada cuantos ms da un paso
 }
 class Robot inherits Enemigo(vida = 50, image = "robotBasico.png" ) { 
 } 
@@ -147,8 +148,10 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png") {
             self.activarHabilidad()
         }
     }
+
+    override method velocidad() = 3000
 }
-class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasivo.png") {
+class RobotInvocador inherits RobotJefe(vida = 300, image = "robotInvocadorPasivo.png") {
     override method position() = game.at(9, 3)
 
     override method avanzar() {

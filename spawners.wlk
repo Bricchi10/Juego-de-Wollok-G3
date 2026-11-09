@@ -70,7 +70,7 @@ object spawnerProyectiles {
 }
 
 object spawnerMunicion {
-    const municionDespawnea = game.tick(4000, { self.eliminarMunicion() }, false)
+    const municionDespawnea = game.tick(4500, { self.eliminarMunicion() }, false)
     var property municionActual = null
 
     method generarMunicion() {

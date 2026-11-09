@@ -51,7 +51,9 @@ class TelarañaArriba inherits DefensaArriba {
 
 class Explosion { 
   var property position 
-  method image() = "explosion_pequeña.png" 
+  method image() = "explosion_pequeña.png"
+  method teHirieron() {}
+  method inmovilizarPor(cantidad) {}
 }
 
 object cartelReiniciar { 
