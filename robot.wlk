@@ -1,3 +1,4 @@
+import spawners.*
 import interfaz.*
 import generadorAleatorio.*
 import direcciones.*
@@ -9,12 +10,17 @@ class Enemigo{
     var property vida = 100
     var property image = "robotBasico.png"
     var inmovilizado = false
-    const moverRobot = game.tick(1500, { self.mover() }, false)
+    const moverRobot = game.tick(self.velocidad(), { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
     const iconoTelaraña = new TelarañaArriba(robotAsignado = self)
+    const liberarRobot = game.tick(1000, { self.liberate() }, false)
 
     method avanzar() {
-        moverRobot.start()
+        if (!inmovilizado) {
+            moverRobot.start()
+        } else {
+            liberarRobot.start()
+        }
     }
 
     method teHirieron(){
@@ -42,10 +48,8 @@ class Enemigo{
     }
 
     method mover() {
-        if (not pausaPartida.estaPausado()) {
         position = position.left(1)
         self.verificarSiLlegoALaCasa()
-        }
     }
 
     method verificarSiLlegoALaCasa() {
@@ -66,21 +70,23 @@ class Enemigo{
     method detenerse(){
         moverRobot.stop()
     }
-    method inmovilizarPor(milisegundos) {
+    method inmovilizar() {
         if (!inmovilizado) {
             inmovilizado = true
-            moverRobot.stop()
             game.addVisual(iconoTelaraña)
-            game.schedule(milisegundos, { self.liberate() })
+            liberarRobot.start()
         }
+        moverRobot.stop()
     }
     method liberate() {
         if (game.hasVisual(self)) {
             moverRobot.start()
             inmovilizado = false
             game.removeVisual(iconoTelaraña)
+            liberarRobot.stop()
         }
     }
+    method velocidad() = 1500 //cada cuantos ms da un paso
 }
 class Robot inherits Enemigo(vida = 50, image = "robotBasico.png" ) { 
 } 
@@ -93,23 +99,27 @@ class RobotJefe inherits Enemigo(vida = 400) {
     }
 
     method activarHabilidad()
-    method tiempoEsperaInicial() 
 }
-class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
-    var property esInmune = false
+class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png") {
+    const detenerCobertura = game.tick(4000, { self.dejaDeCubrirse() }, false)
+    const aumentoDefensa = game.tick(6000, { self.aumentaDefensaDeRobots() }, false)
+    var esInmune = false
+    var habilidadActivada = false
+    
     method aumentaDefensaDeRobots(){
         self.detenerse()
-        self.esInmune(true) //Se detiene y se vuelve inmune al daño
+        esInmune = true //Se detiene y se vuelve inmune al daño
         spawnerRobots.robotsActivos().forEach({robot => 
             robot.aumentaDefensa()
         })
         game.sound("armaduraInvocada.wav").play()
-        game.schedule(4000, { self.dejaDeCubrirse() }  ) //Vuelve a moverse despues de 4 segundos
+        habilidadActivada = true
+        detenerCobertura.start() //Vuelve a moverse despues de 4 segundos
         etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
+        aumentoDefensa.stop()
     }
 
-    override method aumentaDefensa() {}
-    override method tiempoEsperaInicial() = 6000
+    override method aumentaDefensa(){}
 
     override method teHirieron(){
         if (esInmune) {
@@ -120,37 +130,37 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png"){
     }
 
     override method activarHabilidad(){
-      if (not pausaPartida.estaPausado()){
-        self.aumentaDefensaDeRobots()
-      }
-      else { 
-        game.schedule(1000, { self.activarHabilidad() }) 
-      }
+      aumentoDefensa.start()
     }
 
-    method dejaDeCubrirse() {
-     if (not pausaPartida.estaPausado()) {
+    method dejaDeCubrirse(){
+        detenerCobertura.stop()
+        esInmune = false
         self.avanzar()
-        self.esInmune(false)
-     } 
-     else {
-        game.schedule(1000, {
-            self.dejaDeCubrirse()
-        })
-     }
     }
-}
-class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasivo.png") {
 
+    override method avanzar(){
+        super()
+        if (esInmune) {
+            detenerCobertura.start()
+        }
+        if (!habilidadActivada) {
+            self.activarHabilidad()
+        }
+    }
+
+    override method velocidad() = 3000
+}
+class RobotInvocador inherits RobotJefe(vida = 300, image = "robotInvocadorPasivo.png") {
     override method position() = game.at(9, 3)
 
-    override method avanzar() {}
+    override method avanzar() {
+        game.schedule(6000, {self.activarHabilidad()})
+    }
     
     method spritePasivo() = "robotInvocadorPasivo.png"
 
     method spriteActivo() = "robotInvocadorActivo.png"
-
-    override method tiempoEsperaInicial() = 4000
 
     override method mori() {
       super()
@@ -158,7 +168,6 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
     }
 
     override method activarHabilidad() {
-      if (not pausaPartida.estaPausado()){
         image = self.spriteActivo()
 
         self.invocarEn(self.position().up(1))
@@ -178,10 +187,6 @@ class RobotInvocador inherits RobotJefe(vida = 400, image = "robotInvocadorPasiv
                 self.activarHabilidad()
             }
         })
-      }
-      else { 
-        game.schedule(1000, { self.activarHabilidad() }) 
-      }
     }
 
     method invocarEn(posicionDestino) {
@@ -196,30 +201,29 @@ class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3
         const efectoExplosion = new Explosion(position = personaje.position().right(1)) 
         game.addVisual(efectoExplosion)
         game.schedule(1000, { game.removeVisual(efectoExplosion) })
-        personaje.inmovilizarPor(3000) // Inmoviliza al jugador durante 3000 ms
+        personaje.inmovilizar() // Inmoviliza al jugador durante 3000 ms
         self.mori()
     }
 }
 class RobotVeloz inherits Enemigo(vida = 60 ) {
     var property etapa = camina
     const tickAlCorrer = game.tick(400, { self.mover() }, false)
+    const preparacionAtaque = game.tick(1000, { self.correr() }, false)
 
     override method mover() { 
-        if (not pausaPartida.estaPausado()) { 
-            etapa.movimiento(self) 
-        } 
+        etapa.movimiento(self)
     }
     
     override method image() = etapa.imagen()
 
     override method mori(){ 
-        tickAlCorrer.stop() 
-        super() 
+        super()
+        tickAlCorrer.stop()
     } 
     
     override method detenerse() { 
-        tickAlCorrer.stop() 
-        super() 
+        super()
+        tickAlCorrer.stop()
     }
     
 
@@ -228,13 +232,16 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         etapa = pausa
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
-        game.schedule(1000, { self.correr() })
+        preparacionAtaque.start()
     }
 
     method correr() {
-        etapa = corre
-        moverRobot.stop()
-        tickAlCorrer.start()
+        if (game.hasVisual(self)) {
+            etapa = corre
+            moverRobot.stop()
+            tickAlCorrer.start()
+        }
+        preparacionAtaque.stop()
     }
 
     method darUnPaso(){
@@ -289,54 +296,11 @@ object pausa{
         //no se mueve en esta etapa
     }
 }
-object spawnerRobots { 
-    const robotsActivos = []
-
-    method robotsActivos(){
-        return robotsActivos
-    }
-
-    method generarRobot() {
-        const nuevoRobot = self.robotAleatorio()
-        const nuevoPortal = new Portal(position = nuevoRobot.position())
-        const sonidoDePortal = game.sound("portalSonido.wav")
-        sonidoDePortal.volume(0.5)
-        sonidoDePortal.play()
-        game.addVisual(nuevoPortal)
-        nuevoPortal.empezaAnimacion()
-        game.schedule(600, { self.agregarRobot(nuevoRobot) })
-    }
-
-    method robotAleatorio() {
-        const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
-        const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
-        new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
-        return robotsQuePuedenGenerarse.anyOne()
-    }
-
-    method agregarRobot(robot) {
-        robotsActivos.add(robot) 
-        game.addVisual(robot)
-        robot.avanzar()
-    }
-
-    method generarJefe(jefe){
-        robotsActivos.add(jefe) 
-        game.addVisual(jefe) 
-        jefe.avanzar()
-        game.schedule(jefe.tiempoEsperaInicial(),{jefe.activarHabilidad()} ) //En lugar de aumentar defensa activar habilidad
-    }
-    method eliminarRobot(robot) { 
-        robotsActivos.remove(robot)
-    }
-      method limpiarRobots(){
-        robotsActivos.clear()
-    }
-}
 
 class Portal {
     method vida() = 999 //para que entienda el mensaje vida cuando una bala le pegue
-    var property position
+    const property robotASpawnear 
+    const property position = robotASpawnear.position()
     var frameActual = 1
     const animacion = game.tick(100, { self.avanzaFrame() }, false)
     method image() = "portalRobots_" + frameActual + ".png"
@@ -345,12 +309,16 @@ class Portal {
         animacion.start()
     }
     method avanzaFrame() {
+        if (frameActual == 6) {
+            spawnerRobots.agregarRobot(robotASpawnear)
+        }
         if (frameActual == 12) {
             animacion.stop()
             game.removeVisual(self)
+            spawnerRobots.eliminarPortal(self)
         }
         frameActual += 1
     }
 
-    method inmovilizarPor(milisegundos){}
+    method inmovilizar() {}
 }

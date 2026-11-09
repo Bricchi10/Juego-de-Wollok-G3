@@ -1,3 +1,4 @@
+import spawners.*
 import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
@@ -10,6 +11,8 @@ class Personaje {
   var imagenActual = personajeActual.spritePasivo()
   const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
+  const levantarse = game.tick(3000, { self.levantate() }, false)
+  const terminarDisparo = game.tick(300, { self.terminaAnimacionDisparo() }, false)
 
   method image() { 
     return imagenActual
@@ -27,14 +30,15 @@ class Personaje {
     imagenActual = personajeActual.spritePasivo() 
   }
 
-  method inmovilizarPor(milisegundos) {
+  method inmovilizar() {
     inmovilizado = true
     self.mostrarDerrota()
-    game.schedule(milisegundos, { self.levantate() } )
+    levantarse.start()
   }
 
   method levantate() {
     inmovilizado = false
+    levantarse.stop()
     self.mostrarPasivo()
   }
 
@@ -55,19 +59,18 @@ class Personaje {
   }
 
   method subir() {
-    if(not inmovilizado and not pausaPartida.estaPausado()){
+    if(not inmovilizado){
        position = moverEnDireccion.siguiente(position.up(1))
     }
   }
   method bajar() {
-     if(not inmovilizado and not pausaPartida.estaPausado()){
+     if(not inmovilizado){
         position = moverEnDireccion.siguiente(position.down(1))
     }
   }
   
   method disparar() {
-    if (not pausaPartida.estaPausado() and not inmovilizado and 
-        puedoDisparar and balas > 0){
+    if (puedoDisparar and balas > 0){
       self.dispararProyectil()
     } else {
       game.sound("pinpull.mp3").play()
@@ -79,16 +82,25 @@ class Personaje {
     imagenActual = personajeActual.spriteAtaque() //sprite de ataque
     game.sound(personajeActual.sonidoDisparo()).play()
     balas -= 1
-    self.generaProyectil()
-    game.schedule(300, { puedoDisparar = true })
-    game.schedule(200, { self.mostrarPasivo() })
+    const proyectil = proyectilesDisponibles.first()
+    spawnerProyectiles.generarProyectil(proyectil)
+    proyectilesDisponibles.remove(proyectil)
+    terminarDisparo.start()
   }
 
-  method generaProyectil() {
-    const proyectil = proyectilesDisponibles.first()
-    game.addVisual(proyectil)
-    proyectil.disparate()
-    proyectilesDisponibles.remove(proyectil)
+  method terminaAnimacionDisparo() {
+    self.mostrarPasivo()
+    puedoDisparar = true
+    terminarDisparo.stop()
+  }
+
+  method continuarAnimaciones() {
+    if (inmovilizado) {
+      levantarse.start()
+    }
+    if (!puedoDisparar) {
+      terminarDisparo.start()
+    }
   }
 
   method agregarProyectilDisponible(proyectil) {

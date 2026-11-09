@@ -1,3 +1,4 @@
+import spawners.*
 import interfaz.*
 import robot.*
 import wollok.game.*
@@ -16,19 +17,35 @@ class Proyectil {
 
     method disparate() {
         position = disparador.position().right(1)
+        self.avanzar()
+    }
+
+    method avanzar() {
         movimiento.start()
     }
 
     method mover() {
         position = position.right(1)
         self.verificarSiEstaFueraDelTablero()
+        self.dañarEnemigosDetras() //daña a un enemigo que haya detras en caso que justo este se haya movido adelante y "esquive" el proyectil
     }
 
     method mori() {
         movimiento.stop()
         game.removeVisual(self)
         disparador.agregarProyectilDisponible(self)
+        spawnerProyectiles.eliminarProyectil(self)
     }
+
+    method dañarEnemigosDetras() {
+        if (position.x() > 3) {
+            self.enemigosDetras().forEach({ enemigo =>
+                self.herirA(enemigo)
+            })
+        }
+    }
+
+    method enemigosDetras() = game.getObjectsIn(position.left(2))
 
     method herirA(elemento) {
         tipoDeProyectil.aplicarEfectoA(elemento)
@@ -57,7 +74,7 @@ class Telaraña inherits Bala {
     override method image() = "proyectilTelaraña.png"
 
     override method aplicarEfectoA(elemento) {
-        elemento.inmovilizarPor(2000)
+        elemento.inmovilizar()
     }
 }
 
@@ -65,15 +82,6 @@ object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
     method efectoAlImpactar(proyectil) {}
-}
-
-object spawnerMunicion {
-    method generarMunicion() { 
-        const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
-        const nuevaMunicion = new Carga(position = posicionInicial)
-        game.addVisual(nuevaMunicion) 
-        game.schedule(4000, { game.removeVisual(nuevaMunicion) }) //elimina la municion si no se agarro
-    }
 }
 
 class Carga {
