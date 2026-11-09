@@ -1,3 +1,4 @@
+import spawners.*
 import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
@@ -11,6 +12,7 @@ class Personaje {
   const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
   const levantarse = game.tick(3000, { self.levantate() }, false)
+  const terminarDisparo = game.tick(300, { self.terminaAnimacionDisparo() }, false)
 
   method image() { 
     return imagenActual
@@ -83,19 +85,22 @@ class Personaje {
     const proyectil = proyectilesDisponibles.first()
     spawnerProyectiles.generarProyectil(proyectil)
     proyectilesDisponibles.remove(proyectil)
-    game.schedule(300, { self.terminaAnimacionDisparo() })
+    terminarDisparo.start()
   }
 
   method terminaAnimacionDisparo() {
     self.mostrarPasivo()
     puedoDisparar = true
+    terminarDisparo.stop()
   }
 
   method continuarAnimaciones() {
     if (inmovilizado) {
       levantarse.start()
     }
-    self.terminaAnimacionDisparo()
+    if (!puedoDisparar) {
+      terminarDisparo.start()
+    }
   }
 
   method agregarProyectilDisponible(proyectil) {

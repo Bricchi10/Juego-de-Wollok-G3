@@ -1,3 +1,4 @@
+import spawners.*
 import wollok.game.*
 import robot.*
 import personajes.*
@@ -203,6 +204,7 @@ object etapaDelJuego {
     self.prepararControles()
     self.prepararEventosDeTiempo()
     musicaDeFondo.resume()
+    protagonista.continuarAnimaciones()
   }
 
   method detenerEventosDeTiempo() {
@@ -210,10 +212,6 @@ object etapaDelJuego {
     apareceMunicion.stop()
     ganarJuego.stop()
     aumentoProgreso.stop()
-  }
-
-  method continuarAnimacionesProtagonista() {
-    protagonista.continuarAnimaciones()
   }
 
   method pausarPartida() {
@@ -240,7 +238,7 @@ object pausaPartida {
     spawnerRobots.moverRobots()
     spawnerRobots.animarPortales()
     spawnerProyectiles.moverProyectiles()
-    etapaDelJuego.continuarAnimacionesProtagonista()
+    spawnerMunicion.despawnearMunicion()
   }
 }
 

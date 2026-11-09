@@ -1,3 +1,4 @@
+import spawners.*
 import interfaz.*
 import robot.*
 import wollok.game.*
@@ -62,7 +63,7 @@ class Telaraña inherits Bala {
     override method image() = "proyectilTelaraña.png"
 
     override method aplicarEfectoA(elemento) {
-        elemento.inmovilizarPor(2000)
+        elemento.inmovilizar()
     }
 }
 
@@ -70,30 +71,6 @@ object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
     method efectoAlImpactar(proyectil) {}
-}
-
-object spawnerProyectiles {
-    const property proyectilesActivos = []
-    method generarProyectil(proyectil) {
-        proyectilesActivos.add(proyectil)
-        game.addVisual(proyectil)
-        proyectil.disparate()
-    }
-    method eliminarProyectil(proyectil) {
-        proyectilesActivos.remove(proyectil)
-    }
-    method moverProyectiles() { //llamado al despausar el juego
-        proyectilesActivos.forEach({ proyectil => proyectil.avanzar() })
-    }
-}
-
-object spawnerMunicion {
-    method generarMunicion() { 
-        const posicionInicial = generadorAleatorio.filaAleatoriaVaciaEnX(1)
-        const nuevaMunicion = new Carga(position = posicionInicial)
-        game.addVisual(nuevaMunicion) 
-        game.schedule(4000, { game.removeVisual(nuevaMunicion) }) //elimina la municion si no se agarro
-    }
 }
 
 class Carga {

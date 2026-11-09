@@ -1,3 +1,4 @@
+import spawners.*
 import robot.*
 import personajes.*
 import proyectiles.*
@@ -55,7 +56,7 @@ describe "Pruebas de Peliculas vs Robots" {
 
   test "El robot escudero no se aumenta la defensa a si mismo"{
     spawnerRobots.generarJefe(robotEscudero)
-    robotEscudero.activarHabilidad()
+    robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.dejaDeCubrirse()
     robotEscudero.teHirieron()
     assert.equals(350, robotEscudero.vida())
@@ -65,7 +66,7 @@ describe "Pruebas de Peliculas vs Robots" {
     spawnerRobots.agregarRobot(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
     spawnerRobots.generarJefe(robotEscudero)
-    robotEscudero.activarHabilidad()
+    robotEscudero.aumentaDefensaDeRobots()
     robotRandom.teHirieron()
     assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
@@ -128,6 +129,7 @@ describe "Pruebas de Peliculas vs Robots" {
 
   test "Al reiniciar la municion de el protagonista esta vuelve a 10 aun si gasto antes del reinicio"{
     personaje.dispararProyectil()
+    personaje.terminaAnimacionDisparo()
     personaje.dispararProyectil()
     personaje.reiniciarBalas()
     assert.equals(10, personaje.balas() )
@@ -140,6 +142,7 @@ describe "Pruebas de Peliculas vs Robots" {
 
   test "Cuando el protagonista dispara este gasta esa municion"{
     personaje.dispararProyectil()
+    personaje.terminaAnimacionDisparo()
     personaje.dispararProyectil()
     assert.equals(8, personaje.balas() )
   }
