@@ -9,7 +9,7 @@ class Enemigo{
     var property position = game.at(9, 0) 
     var property vida = 100
     var property image = "robotBasico.png"
-    var inmovilizado = false
+    var property inmovilizado = false
     const moverRobot = game.tick(self.velocidad(), { self.mover() }, false)
     const iconoDefensa = new DefensaArriba(robotAsignado = self)
     const iconoTelaraña = new TelarañaArriba(robotAsignado = self)

@@ -7,6 +7,7 @@ import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
   const bala = new Proyectil(disparador = personaje, tipoDeProyectil = new Bala())
+  const telaraña = new Proyectil(disparador = personaje, tipoDeProyectil = new Telaraña())
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Personaje(personajeActual = terminator)
@@ -160,5 +161,11 @@ describe "Pruebas de Peliculas vs Robots" {
   test "Cuando el protagonista se choca con una carga este recarga"{
     carga.chocarConPersonaje(personaje) //agrega 5 municones a las que ya tenia el protagonista
     assert.equals(15, personaje.balas() ) //la municion del protagonista siempre empieza en 10
+  }
+
+  test "Cuando un robot es golpeado por una telaraña este queda inmovilizado"{
+    assert.notThat(robotFuerte.inmovilizado())
+    telaraña.herirA(robotFuerte)
+    assert.that(robotFuerte.inmovilizado())
   }
 }
