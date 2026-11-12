@@ -79,10 +79,10 @@ object etapaDelJuego {
    if(not pausaPartida.estaPausado()){ 
     progresoActual += 1
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
-      spawnerRobots.generarJefe(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
+      spawnerRobots.agregarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
     if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
-       spawnerRobots.generarJefe(new RobotInvocador(position = game.at(9, game.center())))
+       spawnerRobots.agregarRobot(new RobotInvocador(position = game.at(9, game.center())))
     }
     if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparece
       self.detenerProgreso()
