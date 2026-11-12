@@ -12,6 +12,7 @@ describe "Pruebas de Peliculas vs Robots" {
   const personaje = new Personaje(personajeActual = terminator)
   const robotEscudero = new RobotEscudero(position = game.at(5,5))
   const robotVeloz = new RobotVeloz(position = game.at(4,5) )
+  const robotInvocador = new RobotInvocador(position = game.at(4,5) )
   const carga = new Carga(position = game.at(1,5))
   const robotRandom = spawnerRobots.robotAleatorio()
 
@@ -107,6 +108,15 @@ describe "Pruebas de Peliculas vs Robots" {
     robotVeloz.etapa(pausa) 
     assert.equals(pausa,robotVeloz.etapa())
     assert.equals("robotVelozPreparaAtaque.png", robotVeloz.image() )
+  }
+
+  test "Robot invocador antes de activar su habilidad tiene una imagen distinta"{
+    assert.equals("robotInvocadorPasivo.png", robotInvocador.image() )
+  }
+
+  test "Robot invocador al activar su habilidad cambia de imagen"{
+    robotInvocador.activarHabilidad()
+    assert.equals("robotInvocadorActivo.png", robotInvocador.image() )
   }
   //Pruebas con personajes
   test "Al ser herido el personaje pierde 20 de vida"{ //tomo en cuenta la clase personaje ya que todos responderan a el daño igual
