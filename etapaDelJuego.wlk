@@ -229,6 +229,7 @@ object pausaPartida {
   method pausar() { 
     game.addVisual(cartelPausa)
     game.sound("sonidoPausa.mp3").play() 
+    fondo.image("FondoFuturoGris.jpg")
     io.clear()
     keyboard.p().onPressDo({ self.reanudar() })
   }
@@ -238,6 +239,7 @@ object pausaPartida {
     game.sound("sonidoPausa.mp3").play()  
     game.removeVisual(cartelPausa)
     etapaDelJuego.reanudarPausa()
+    fondo.image("FondoFuturo.jpg")
     spawnerRobots.moverRobots()
     spawnerRobots.animarPortales()
     spawnerProyectiles.moverProyectiles()

@@ -2,6 +2,7 @@ import spawners.*
 import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
+//Superclase Personaje
 class Personaje {
   var property position = game.at(1,1)
   var property vida = 100
@@ -139,7 +140,7 @@ class Personaje {
     })
   }
 }
-
+//Personajes
 object terminator {
   method spritePasivo() = "terminatorIdle.png" 
   method spriteAtaque() = "terminatorDispara.png"

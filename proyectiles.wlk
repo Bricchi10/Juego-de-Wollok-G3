@@ -6,7 +6,7 @@ import direcciones.*
 import etapaDelJuego.*
 import generadorAleatorio.*
 
-
+//Superclase Proyectil
 class Proyectil {
     var property position = game.at(game.width(), game.height() -1)
     const movimiento = game.tick(100, { self.mover() }, false)
@@ -61,7 +61,7 @@ class Proyectil {
 
     method teHirieron() { }
 }
-
+//(Proyectil Terminator)
 class Bala {
     method image() = "proyectilDisparo.png"
     method aplicarEfectoA(elemento) {}
@@ -69,7 +69,7 @@ class Bala {
         proyectil.mori()
     }
 }
-
+//(Proyectil Spiderman)
 class Telaraña inherits Bala {
     override method image() = "proyectilTelaraña.png"
 
@@ -77,13 +77,13 @@ class Telaraña inherits Bala {
         elemento.inmovilizar()
     }
 }
-
+//(Proyectil Goku)
 object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
     method efectoAlImpactar(proyectil) {}
 }
-
+//Municiones
 class Carga {
     var property position
     method image() = etapaDelJuego.protagonista().imagenCarga()
