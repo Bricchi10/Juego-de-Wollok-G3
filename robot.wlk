@@ -42,6 +42,7 @@ class Enemigo{
 
     method mori(){
         moverRobot.stop()
+        liberarRobot.stop()
         game.removeVisual(self)
         game.removeVisual(iconoDefensa)
         game.removeVisual(iconoTelaraña)
@@ -80,11 +81,11 @@ class Enemigo{
         moverRobot.stop()
     }
     method liberate() {
+        liberarRobot.stop()
         if (game.hasVisual(self)) {
             moverRobot.start()
             inmovilizado = false
             game.removeVisual(iconoTelaraña)
-            liberarRobot.stop()
         }
     }
     method velocidad() = 1500 //cada cuantos ms da un paso

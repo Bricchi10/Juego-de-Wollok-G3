@@ -27,7 +27,7 @@ class Proyectil {
     method mover() {
         position = position.right(1)
         self.verificarSiEstaFueraDelTablero()
-        self.dañarEnemigosDetras() //daña a un enemigo que haya detras en caso que justo este se haya movido adelante y "esquive" el proyectil
+//daña a un enemigo que haya detras en caso que justo este se haya movido adelante y "esquive" el proyectil
     }
 
     method mori() {
@@ -37,20 +37,12 @@ class Proyectil {
         spawnerProyectiles.eliminarProyectil(self)
     }
 
-    method dañarEnemigosDetras() {
-        if (position.x() > 3) {
-            self.enemigosDetras().forEach({ enemigo =>
-                self.herirA(enemigo)
-            })
-        }
-    }
-
     method enemigosDetras() = game.getObjectsIn(position.left(2))
 
     method herirA(elemento) {
         tipoDeProyectil.aplicarEfectoA(elemento)
         elemento.teHirieron()
-        tipoDeProyectil.efectoAlImpactar(self) // Si impacta a un enemigo, se destruye
+        tipoDeProyectil.efectoAlImpactar(self,elemento) // Si impacta a un enemigo, se destruye
     }
 
     method verificarSiEstaFueraDelTablero() {
@@ -65,7 +57,7 @@ class Proyectil {
 class Bala {
     method image() = "proyectilDisparo.png"
     method aplicarEfectoA(elemento) {}
-    method efectoAlImpactar(proyectil) {
+    method efectoAlImpactar(proyectil,elemento) {
         proyectil.mori()
     }
 }
@@ -81,7 +73,11 @@ class Telaraña inherits Bala {
 object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
-    method efectoAlImpactar(proyectil) {}
+    method efectoAlImpactar(proyectil,elemento) {
+        if (elemento.vida() > 0) { 
+            proyectil.mori() 
+    }
+    }
 }
 //Municiones
 class Carga {

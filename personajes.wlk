@@ -139,7 +139,19 @@ class Personaje {
       proyectil.tipoDeProyectil(personajeActual.proyectilAsignado())
     })
   }
+  method reiniciar() {
+    vida = 100
+    balas = 10
+    puedoDisparar = true
+    inmovilizado = false
+    position = game.at(1, 1)
+  proyectilesDisponibles.clear()
+    (1..5).forEach({ 
+      numero => proyectilesDisponibles.add( new Proyectil(disparador = self, 
+                                            tipoDeProyectil = personajeActual.proyectilAsignado()) ) })
 }
+}
+
 //Personajes
 object terminator {
   method spritePasivo() = "terminatorIdle.png" 

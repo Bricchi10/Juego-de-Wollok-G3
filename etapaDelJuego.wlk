@@ -53,6 +53,7 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
+    game.clear()
     protagonista.mostrarVictoria()
     sonidoDeVictoria.play()
     game.addVisual(cartelVictoria)
@@ -133,6 +134,7 @@ object etapaDelJuego {
   }
 
   method iniciarPartida(){
+    protagonista.reiniciar()
     self.prepararPrimeraPantalla()
     game.addVisual(barraProgreso)
     self.prepararPersonaje()
@@ -186,6 +188,8 @@ object etapaDelJuego {
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
+    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
+    keyboard.x().onPressDo({ protagonista.cambiarPersonajeA(terminator) }) //Tecla debug para probar cosas
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
     keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
   }
