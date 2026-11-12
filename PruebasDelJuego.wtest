@@ -7,6 +7,7 @@ import etapaDelJuego.*
 
 describe "Pruebas de Peliculas vs Robots" {
   const bala = new Proyectil(disparador = personaje, tipoDeProyectil = new Bala())
+  const telaraña = new Proyectil(disparador = personaje, tipoDeProyectil = new Telaraña())
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Personaje(personajeActual = terminator)
@@ -56,7 +57,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "El robot escudero no se aumenta la defensa a si mismo"{
-    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.agregarRobot(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.dejaDeCubrirse()
     robotEscudero.teHirieron()
@@ -66,7 +67,7 @@ describe "Pruebas de Peliculas vs Robots" {
   test "El robot escudero aumenta la defensa del resto de robots"{
     spawnerRobots.agregarRobot(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
-    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.agregarRobot(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotRandom.teHirieron()
     assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
@@ -80,13 +81,13 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
-    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.agregarRobot(robotEscudero)
     spawnerRobots.eliminarRobot(robotEscudero)
     assert.equals([robotNormal], spawnerRobots.robotsActivos() + [robotNormal])
   }
 
   test "Limpiar robots elimina a todos los robots de la lista robots activos"{
-    spawnerRobots.generarJefe(robotEscudero)
+    spawnerRobots.agregarRobot(robotEscudero)
     spawnerRobots.agregarRobot(robotRandom)
     spawnerRobots.limpiarRobots()
     assert.equals([], spawnerRobots.robotsActivos() )
@@ -160,5 +161,11 @@ describe "Pruebas de Peliculas vs Robots" {
   test "Cuando el protagonista se choca con una carga este recarga"{
     carga.chocarConPersonaje(personaje) //agrega 5 municones a las que ya tenia el protagonista
     assert.equals(15, personaje.balas() ) //la municion del protagonista siempre empieza en 10
+  }
+
+  test "Cuando un robot es golpeado por una telaraña este queda inmovilizado"{
+    assert.notThat(robotFuerte.inmovilizado())
+    telaraña.herirA(robotFuerte)
+    assert.that(robotFuerte.inmovilizado())
   }
 }

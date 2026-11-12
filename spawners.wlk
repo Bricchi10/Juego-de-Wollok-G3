@@ -26,17 +26,12 @@ object spawnerRobots {
         return robotsQuePuedenGenerarse.anyOne()
     }
 
-    method agregarRobot(robot) {
+    method agregarRobot(robot) { //atraves de este metodo tambien se generan los jefes
         robotsActivos.add(robot) 
         game.addVisual(robot)
         robot.avanzar()
     }
-
-    method generarJefe(jefe){
-        robotsActivos.add(jefe) 
-        game.addVisual(jefe) 
-        jefe.avanzar()
-    }
+    
     method eliminarRobot(robot) { 
         robotsActivos.remove(robot)
     }
