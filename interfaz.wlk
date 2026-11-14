@@ -78,3 +78,23 @@ object cartelPausa {
   method image() = "cartelPausa.png"    
   method position() = game.at(4,1)
 }
+object iluminacion {  
+  var property frameActual = 0
+  method image() = "Iluminacion_" + frameActual + ".png"
+  method position() = game.origin()
+  const animacion = game.tick(500, { self.avanzaFrame() }, false)
+  method teHirieron() {}
+  method avanzaFrame() {
+      if (frameActual == 3) {
+          animacion.stop()
+          game.removeVisual(self)
+      }
+      frameActual += 1
+  }
+  method ilumina() {
+    game.addVisual(self)
+    self.frameActual(0)
+    animacion.start()
+  }
+  method inmovilizar() {}
+}

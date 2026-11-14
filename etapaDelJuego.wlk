@@ -31,17 +31,17 @@ object etapaDelJuego {
   }
 
   method selTerminator()  {
-    protagonista.cambiarPersonajeA(terminator)
+    protagonista.seleccionarPersonaje(terminator)
     fondo.image("menu_personajes_1_terminator.png")
   }
 
   method selSpiderman(){
-    protagonista.cambiarPersonajeA(spiderman)
+    protagonista.seleccionarPersonaje(spiderman)
     fondo.image("menu_personajes_2_spiderman.png")
   }
 
   method selGoku(){
-    protagonista.cambiarPersonajeA(goku)
+    protagonista.seleccionarPersonaje(goku)
     fondo.image("menu_personajes_3_goku.png")
   }
 
@@ -188,10 +188,7 @@ object etapaDelJuego {
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
     keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
-    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
-    keyboard.x().onPressDo({ protagonista.cambiarPersonajeA(terminator) }) //Tecla debug para probar cosas
-    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(spiderman) }) //Tecla debug para probar cosas
-    keyboard.v().onPressDo({ protagonista.cambiarPersonajeA(goku) }) //Tecla debug para probar cosas
+    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
   }
 
   method prepararEventosDeTiempo() {

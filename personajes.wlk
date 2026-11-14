@@ -1,3 +1,4 @@
+import interfaz.*
 import spawners.*
 import proyectiles.*
 import direcciones.*
@@ -46,6 +47,8 @@ class Personaje {
   method imagenCarga() = personajeActual.imagenCarga()
   method sonidoCarga() = personajeActual.sonidoCarga()
   
+  method siguientePersonaje() = personajeActual.siguientePersonaje()
+
   method mover(direccion) {
     const nuevaPosition = direccion.siguiente(position)
     position = nuevaPosition
@@ -133,12 +136,18 @@ class Personaje {
   }
 
   method cambiarPersonajeA(personajeNuevo){
-    personajeActual = personajeNuevo
+    self.seleccionarPersonaje(personajeNuevo)
+    iluminacion.ilumina()
+    game.sound("Transformacion.wav").play()
+  }
+  method seleccionarPersonaje(personajeASeleccionar) {
+    personajeActual = personajeASeleccionar
     self.mostrarPasivo()
     proyectilesDisponibles.forEach({ proyectil =>
       proyectil.tipoDeProyectil(personajeActual.proyectilAsignado())
     })
   }
+
   method reiniciar() {
     vida = 100
     balas = 10
@@ -162,6 +171,7 @@ object terminator {
   method imagenCarga() = "municionPickup.png"
   method proyectilAsignado() = new Bala() 
   method sonidoDisparo() = "desert-eagle-cs.mp3"
+  method siguientePersonaje() = spiderman
 }
 object spiderman {
   method spritePasivo() = "spidermanIdle.png" 
@@ -172,6 +182,7 @@ object spiderman {
   method imagenCarga() = "pizza.png"
   method proyectilAsignado() = new Telaraña() 
   method sonidoDisparo() = "spider-web.mp3"
+  method siguientePersonaje() = goku
 }
 object goku {
   method spritePasivo() = "gokuIdle.png" 
@@ -182,4 +193,5 @@ object goku {
   method imagenCarga() = "semillaErmitaño.png"
   method proyectilAsignado() = energia
   method sonidoDisparo() = "ki_blast.wav"
+  method siguientePersonaje() = terminator
 }

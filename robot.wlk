@@ -207,7 +207,7 @@ class RobotJefe inherits Enemigo(vida = 400) {
 
     method activarHabilidad()
 }
-class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png") {
+class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
     const detenerCobertura = game.tick(4000, { self.dejaDeCubrirse() }, false)
     const aumentoDefensa = game.tick(6000, { self.aumentaDefensaDeRobots() }, false)
     var esInmune = false
@@ -224,6 +224,7 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png") {
         detenerCobertura.start() //Vuelve a moverse despues de 4 segundos
         etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
         aumentoDefensa.stop()
+        image = "robotEscudoDefensa.png"
     }
 
     override method aumentaDefensa(){}
@@ -244,6 +245,7 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina1.png") {
         detenerCobertura.stop()
         esInmune = false
         self.avanzar()
+        image = "robotEscudoCamina.png"
     }
 
     override method avanzar(){

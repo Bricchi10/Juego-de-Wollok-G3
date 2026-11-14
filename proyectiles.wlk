@@ -74,9 +74,9 @@ object energia {
     method image() = "bolaEnergiaAzul.png"
     method aplicarEfectoA(elemento) {}
     method efectoAlImpactar(proyectil,elemento) {
-        if (elemento.vida() > 0) { 
+        if (game.hasVisual(elemento)) { 
             proyectil.mori() 
-    }
+        }
     }
 }
 //Municiones
