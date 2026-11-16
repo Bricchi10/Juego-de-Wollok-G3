@@ -41,7 +41,7 @@ object barraProgreso {
     method image() = "BarraProgreso_" + etapaDelJuego.progresoActual() + ".png"
 }
 
-class DefensaArriba {
+class DefensaArriba {//El aumento de defensa aparece arriba de los afectados
   const property robotAsignado
   method position() = robotAsignado.position()
   method image() = "defensaArriba.png"
@@ -49,7 +49,7 @@ class DefensaArriba {
   method teHirieron() {}
   method inmovilizarPor(cantidad) {}
 }
-class TelarañaArriba inherits DefensaArriba {
+class TelarañaArriba inherits DefensaArriba { //La telaraña aparece arriba de los afectados
   override method image() = "telarana_arriba.png"
 }
 
