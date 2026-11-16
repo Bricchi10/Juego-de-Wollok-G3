@@ -27,11 +27,14 @@ class Enemigo{
     method teHirio(proyectil){
         game.sound("muerteRobot.mp3").play()
         self.bajarVidaOArmadura(proyectil)
+        self.verificarMuerte()
+    }
+
+    method verificarMuerte(){
         if(vida <= 0){
           self.mori()
         }
     }
-
     method bajarVidaOArmadura(proyectil) {
         if (game.hasVisual(iconoDefensa)) {
             game.removeVisual(iconoDefensa)
