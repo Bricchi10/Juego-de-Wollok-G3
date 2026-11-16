@@ -187,7 +187,7 @@ object etapaDelJuego {
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
-    keyboard.a().onPressDo({ self.ganarPartida() }) //Tecla debug para probar cosas
+    keyboard.a().onPressDo({ spawnerRobots.agregarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) }) //Tecla debug para probar cosas
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
   }
 

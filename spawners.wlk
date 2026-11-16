@@ -62,6 +62,10 @@ object spawnerProyectiles {
     method moverProyectiles() { //llamado al despausar el juego
         proyectilesActivos.forEach({ proyectil => proyectil.avanzar() })
     }
+    method limpiarProyectiles(){
+        proyectilesActivos.forEach({ proyectil => proyectil.mori() })
+        proyectilesActivos.clear()
+    }
 }
 
 object spawnerMunicion {

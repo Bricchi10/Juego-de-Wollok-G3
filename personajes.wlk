@@ -136,6 +136,7 @@ class Personaje {
   }
 
   method cambiarPersonajeA(personajeNuevo){
+    spawnerProyectiles.limpiarProyectiles()
     self.seleccionarPersonaje(personajeNuevo)
     iluminacion.ilumina()
     game.sound("Transformacion.wav").play()

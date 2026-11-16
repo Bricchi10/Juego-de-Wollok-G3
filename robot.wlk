@@ -209,22 +209,19 @@ class RobotJefe inherits Enemigo(vida = 400) {
 }
 class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
     const detenerCobertura = game.tick(4000, { self.dejaDeCubrirse() }, false)
-    const aumentoDefensa = game.tick(6000, { self.aumentaDefensaDeRobots() }, false)
+    const aumentoDefensa = game.tick(8000, { self.aumentaDefensaDeRobots() }, false)
     var esInmune = false
     var habilidadActivada = false
     
     method aumentaDefensaDeRobots(){
-        self.detenerse()
-        esInmune = true //Se detiene y se vuelve inmune al daño
+        aumentoDefensa.stop()
         spawnerRobots.robotsActivos().forEach({robot => 
             robot.aumentaDefensa()
         })
         game.sound("armaduraInvocada.wav").play()
         habilidadActivada = true
-        detenerCobertura.start() //Vuelve a moverse despues de 4 segundos
         etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
-        aumentoDefensa.stop()
-        image = "robotEscudoDefensa.png"
+        self.cubrirse()
     }
 
     override method aumentaDefensa(){}
@@ -241,11 +238,18 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
       aumentoDefensa.start()
     }
 
+    method cubrirse(){
+        self.detenerse()
+        image = "robotEscudoDefensa.png"
+        esInmune = true //Se detiene y se vuelve inmune al daño   
+        detenerCobertura.start() //Vuelve a moverse despues de 4 segundos
+    }
+
     method dejaDeCubrirse(){
         detenerCobertura.stop()
         esInmune = false
-        self.avanzar()
         image = "robotEscudoCamina.png"
+        self.avanzar()        
     }
 
     override method avanzar(){
