@@ -28,7 +28,7 @@ Cada personaje tendrá que luchar contra los enemigos, evitando ser herido e imp
 	Habilidad especial: Al chocar con el jugador, este robot perderá la vida, pero el jugador será
 	inmovilizado por 3 segundos
 
--Robots **Veloces**:  
+- Robots **Veloces**:  
 	Tienen 100 de vida, se acercan a una velocidad promedio a la casa hasta la sexta casilla donde toman un tiempo de pausa para luego atacar. Solo pueden atacar al personaje seleccionado si se "chocan" con el.
 	Habilidad especial: Cuando llega a la tercera casilla se teletransporta directamente hacia la primera casilla.
 ## Enemigos Jefes
