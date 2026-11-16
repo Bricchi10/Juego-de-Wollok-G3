@@ -19,40 +19,40 @@ describe "Pruebas de Peliculas vs Robots" {
 
   //Pruebas con robots
   test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
-    robotNormal.teHirieron()
+    robotNormal.teHirio(bala)
     assert.equals(0,robotNormal.vida())
   }
   test "Al ser herido el robot fuerte pierde 50 de vida(tiene 100)"{
-    robotFuerte.teHirieron()
+    robotFuerte.teHirio(bala)
     assert.equals(50,robotFuerte.vida())
   }
   test "Robot normal es protegido de un disparo despues de aumentar su defensa"{
     robotNormal.aumentaDefensa()
-    robotNormal.teHirieron()
+    robotNormal.teHirio(bala)
     assert.equals(50, robotNormal.vida())
   }
 
   test "Robot normal muere de dos disparos despues de aumentar su defensa"{
     robotNormal.aumentaDefensa()
-    robotNormal.teHirieron()
-    robotNormal.teHirieron()
+    robotNormal.teHirio(bala)
+    robotNormal.teHirio(bala)
     assert.equals(0, robotNormal.vida())
   }
 
   test "Robot fuerte es protegido de un disparo despues de aumentar su defensa"{
     robotFuerte.aumentaDefensa()
-    robotFuerte.teHirieron()
+    robotFuerte.teHirio(bala)
     assert.equals(100,robotFuerte.vida())
   }
 
   test "El robot escudero no recibe daño cuando esta detenido"{
     robotEscudero.aumentaDefensaDeRobots()
-    robotEscudero.teHirieron()
+    robotEscudero.teHirio(bala)
     assert.equals(400, robotEscudero.vida() )
   }
 
   test "El robot escudero recibe daño cuando no esta detenido"{
-    robotEscudero.teHirieron()
+    robotEscudero.teHirio(bala)
     assert.equals(350, robotEscudero.vida() )
   }
 
@@ -60,7 +60,7 @@ describe "Pruebas de Peliculas vs Robots" {
     spawnerRobots.agregarRobot(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.dejaDeCubrirse()
-    robotEscudero.teHirieron()
+    robotEscudero.teHirio(bala)
     assert.equals(350, robotEscudero.vida())
   }
 
@@ -69,14 +69,14 @@ describe "Pruebas de Peliculas vs Robots" {
     const vidaInicialDelRobotRandom = robotRandom.vida()
     spawnerRobots.agregarRobot(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
-    robotRandom.teHirieron()
+    robotRandom.teHirio(bala)
     assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
   test "Un robot random recibe daño al ser herido"{
     spawnerRobots.agregarRobot(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
-    robotRandom.teHirieron()
+    robotRandom.teHirio(bala)
     assert.notEquals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
