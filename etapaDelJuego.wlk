@@ -79,16 +79,25 @@ object etapaDelJuego {
   method incrementarProgreso() {
    if(not pausaPartida.estaPausado()){ 
     progresoActual += 1
+    self.apareceRobotEscudero()
+    self.aparecenRobotsInvocadores()
+    self.detieneProgresoAlTerminarPartida()
+  }
+  }
+  method apareceRobotEscudero(){
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
       spawnerRobots.agregarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
+  }
+  method aparecenRobotsInvocadores(){
     if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
        spawnerRobots.agregarRobot(new RobotInvocador(position = game.at(9, game.center())))
     }
+  }
+  method detieneProgresoAlTerminarPartida(){
     if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparece
       self.detenerProgreso()
     }
-  }
   }
   method terminar() { 
     self.prepararPrimeraPantalla()
