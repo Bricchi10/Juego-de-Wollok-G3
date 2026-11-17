@@ -53,7 +53,6 @@ object etapaDelJuego {
 
   method ganarPartida() {
     self.terminar()
-    game.clear()
     protagonista.mostrarVictoria()
     sonidoDeVictoria.play()
     game.addVisual(cartelVictoria)
@@ -188,6 +187,7 @@ object etapaDelJuego {
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
     keyboard.a().onPressDo({ spawnerRobots.agregarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) }) //Tecla debug para probar cosas
+    keyboard.x().onPressDo({ self.ganarPartida() })
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
   }
 

@@ -138,12 +138,11 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     }
 
     method correr() {
+        preparacionAtaque.stop()
         if (game.hasVisual(self)) {
             etapa = corre
-            moverRobot.stop()
-            tickAlCorrer.start()
+            self.empiezaACorrer()
         }
-        preparacionAtaque.stop()
     }
 
     method darUnPaso(){
@@ -160,7 +159,18 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         tickAlCorrer.stop() 
         moverRobot.start()
     }
-    
+
+    override method avanzar(){
+        super()
+        if (etapa.estaAtacando()) {
+            self.empiezaACorrer()
+        }
+    }
+
+    method empiezaACorrer(){
+        moverRobot.stop()
+        tickAlCorrer.start()
+    }
 }
 
 object camina{
@@ -175,6 +185,8 @@ object camina{
         }
     
     }
+
+    method estaAtacando() = false
 }
 
 object corre{
@@ -182,12 +194,14 @@ object corre{
     method imagen() = "robotVelozAtaque.png"
 
     method movimiento(robotVeloz){
-        if (robotVeloz.position().x() <= 3) {
+        if (robotVeloz.position().x() == 3) {
             robotVeloz.ejecutarSalto()
         } else {
             robotVeloz.darUnPaso()
         }
     }
+
+    method estaAtacando() = true
 }
 
 object pausa{
@@ -197,6 +211,8 @@ object pausa{
     method movimiento(robotVeloz){
         //no se mueve en esta etapa
     }
+
+    method estaAtacando() = false
 }
 //Robots Jefes
 class RobotJefe inherits Enemigo(vida = 400) {
@@ -208,13 +224,22 @@ class RobotJefe inherits Enemigo(vida = 400) {
     method activarHabilidad()
 }
 class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
-    const detenerCobertura = game.tick(4000, { self.dejaDeCubrirse() }, false)
-    const aumentoDefensa = game.tick(8000, { self.aumentaDefensaDeRobots() }, false)
+    const detenerCobertura = game.tick(6000, { self.dejaDeCubrirse() }, false)
     var esInmune = false
     var habilidadActivada = false
+
+    override method mover() { 
+        super()
+        self.verificarSiLlegoALaCelda5()
+    }
+
+    method verificarSiLlegoALaCelda5() {
+        if (position.x() == 6) {
+            self.aumentaDefensaDeRobots()
+        }
+    }
     
     method aumentaDefensaDeRobots(){
-        aumentoDefensa.stop()
         spawnerRobots.robotsActivos().forEach({robot => 
             robot.aumentaDefensa()
         })
@@ -235,7 +260,7 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
     }
 
     override method activarHabilidad(){
-      aumentoDefensa.start()
+      
     }
 
     method cubrirse(){
@@ -256,9 +281,6 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
         super()
         if (esInmune) {
             detenerCobertura.start()
-        }
-        if (!habilidadActivada) {
-            self.activarHabilidad()
         }
     }
 
