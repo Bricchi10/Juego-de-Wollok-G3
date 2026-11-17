@@ -134,7 +134,7 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         etapa = pausa
 
         // Pausa de 1 segundo en X = 5 antes de salir corriendo
-        preparacionAtaque.start()
+        self.preparaAtaque()
     }
 
     method correr() {
@@ -160,16 +160,18 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         moverRobot.start()
     }
 
-    override method avanzar(){
+    override method avanzar() {
         super()
-        if (etapa.estaAtacando()) {
-            self.empiezaACorrer()
-        }
+        etapa.despausar(self)
     }
 
-    method empiezaACorrer(){
+    method empiezaACorrer() {
         moverRobot.stop()
         tickAlCorrer.start()
+    }
+
+    method preparaAtaque() {
+        preparacionAtaque.start()
     }
 }
 
@@ -186,7 +188,7 @@ object camina{
     
     }
 
-    method estaAtacando() = false
+    method despausar(robotVeloz) { }
 }
 
 object corre{
@@ -201,7 +203,9 @@ object corre{
         }
     }
 
-    method estaAtacando() = true
+    method despausar(robotVeloz) {
+        robotVeloz.empiezaACorrer()
+    }
 }
 
 object pausa{
@@ -212,7 +216,9 @@ object pausa{
         //no se mueve en esta etapa
     }
 
-    method estaAtacando() = false
+    method despausar(robotVeloz) {
+        robotVeloz.preparaAtaque()
+    }
 }
 //Robots Jefes
 class RobotJefe inherits Enemigo(vida = 400) {
