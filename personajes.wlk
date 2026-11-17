@@ -87,7 +87,7 @@ class Personaje {
     game.sound(personajeActual.sonidoDisparo()).play()
     balas -= 1
     const proyectil = proyectilesDisponibles.first()
-    spawnerProyectiles.generarProyectil(proyectil)
+    spawnerProyectiles.agregar(proyectil)
     proyectilesDisponibles.remove(proyectil)
     terminarDisparo.start()
   }
@@ -136,7 +136,7 @@ class Personaje {
   }
 
   method cambiarPersonajeA(personajeNuevo){
-    spawnerProyectiles.limpiarProyectiles()
+    spawnerProyectiles.limpiarElementos()
     self.seleccionarPersonaje(personajeNuevo)
     iluminacion.ilumina()
     game.sound("Transformacion.wav").play()

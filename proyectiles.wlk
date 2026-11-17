@@ -15,26 +15,21 @@ class Proyectil {
 
     method image() = tipoDeProyectil.image()
 
-    method disparate() {
+    method avanza() {
         position = disparador.position().right(1)
-        self.avanzar()
-    }
-
-    method avanzar() {
         movimiento.start()
     }
 
     method mover() {
         position = position.right(1)
         self.verificarSiEstaFueraDelTablero()
-//daña a un enemigo que haya detras en caso que justo este se haya movido adelante y "esquive" el proyectil
     }
 
     method mori() {
         movimiento.stop()
         game.removeVisual(self)
         disparador.agregarProyectilDisponible(self)
-        spawnerProyectiles.eliminarProyectil(self)
+        spawnerProyectiles.eliminar(self)
     }
 
     method enemigosDetras() = game.getObjectsIn(position.left(2))

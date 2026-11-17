@@ -57,7 +57,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "El robot escudero no se aumenta la defensa a si mismo"{
-    spawnerRobots.agregarRobot(robotEscudero)
+    spawnerRobots.agregar(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.dejaDeCubrirse()
     robotEscudero.teHirieron()
@@ -65,31 +65,31 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "El robot escudero aumenta la defensa del resto de robots"{
-    spawnerRobots.agregarRobot(robotRandom)
+    spawnerRobots.agregar(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
-    spawnerRobots.agregarRobot(robotEscudero)
+    spawnerRobots.agregar(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotRandom.teHirieron()
     assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
   test "Un robot random recibe daño al ser herido"{
-    spawnerRobots.agregarRobot(robotRandom)
+    spawnerRobots.agregar(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
     robotRandom.teHirieron()
     assert.notEquals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
   test "Si en la lista robot activos esta robotEscudero y robotNormal al eliminar al robotEscudero solo queda robotNormal en la lista"{
-    spawnerRobots.agregarRobot(robotEscudero)
-    spawnerRobots.eliminarRobot(robotEscudero)
+    spawnerRobots.agregar(robotEscudero)
+    spawnerRobots.eliminar(robotEscudero)
     assert.equals([robotNormal], spawnerRobots.robotsActivos() + [robotNormal])
   }
 
   test "Limpiar robots elimina a todos los robots de la lista robots activos"{
-    spawnerRobots.agregarRobot(robotEscudero)
-    spawnerRobots.agregarRobot(robotRandom)
-    spawnerRobots.limpiarRobots()
+    spawnerRobots.agregar(robotEscudero)
+    spawnerRobots.agregar(robotRandom)
+    spawnerRobots.limpiarElementos()
     assert.equals([], spawnerRobots.robotsActivos() )
   }
 

@@ -16,7 +16,7 @@ class Enemigo{
     const iconoTelaraña = new TelarañaArriba(robotAsignado = self)
     const liberarRobot = game.tick(1000, { self.liberate() }, false)
 
-    method avanzar() {
+    method avanza() {
         if (!inmovilizado) {
             moverRobot.start()
         } else {
@@ -46,7 +46,7 @@ class Enemigo{
         game.removeVisual(self)
         game.removeVisual(iconoDefensa)
         game.removeVisual(iconoTelaraña)
-        spawnerRobots.eliminarRobot(self)
+        spawnerRobots.eliminar(self)
     }
 
     method mover() {
@@ -160,7 +160,7 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
         moverRobot.start()
     }
 
-    override method avanzar() {
+    override method avanza() {
         super()
         etapa.despausar(self)
     }
@@ -280,10 +280,10 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
         detenerCobertura.stop()
         esInmune = false
         image = "robotEscudoCamina.png"
-        self.avanzar()        
+        self.avanza()        
     }
 
-    override method avanzar(){
+    override method avanza(){
         super()
         if (esInmune) {
             detenerCobertura.start()
@@ -295,7 +295,7 @@ class RobotEscudero inherits RobotJefe(image = "robotEscudoCamina.png") {
 class RobotInvocador inherits RobotJefe(vida = 300, image = "robotInvocadorPasivo.png") {
     override method position() = game.at(9, 3)
 
-    override method avanzar() {
+    override method avanza() {
         game.schedule(6000, {self.activarHabilidad()})
     }
     
@@ -332,7 +332,7 @@ class RobotInvocador inherits RobotJefe(vida = 300, image = "robotInvocadorPasiv
 
     method invocarEn(posicionDestino) {
         const esbirro = new Robot(position = posicionDestino)
-        spawnerRobots.agregarRobot(esbirro)
+        spawnerRobots.agregar(esbirro)
     }
 }
 //Portal de robots
@@ -349,7 +349,7 @@ class Portal {
     }
     method avanzaFrame() {
         if (frameActual == 6) {
-            spawnerRobots.agregarRobot(robotASpawnear)
+            spawnerRobots.agregar(robotASpawnear)
         }
         if (frameActual == 12) {
             animacion.stop()
