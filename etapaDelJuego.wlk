@@ -14,7 +14,6 @@ object etapaDelJuego {
   const sonidoDeVictoria = game.sound("victoria.mp3")
   const aparecenRobots = game.tick(4000, { self.generarRobots() }, false)
   const apareceMunicion = game.tick(9000, { self.generarMunicionDePersonaje() }, false)
-  const ganarJuego = game.tick(140000,  { self.ganarPartida() }, false)
   const aumentoProgreso = game.tick(20000,  { self.incrementarProgreso() }, false)
   var property progresoActual = 0
   method menuInicio(){
@@ -96,7 +95,6 @@ object etapaDelJuego {
     progresoActual = 0
     self.detenerProgreso()
     apareceMunicion.stop()
-    ganarJuego.stop()
     musicaDeFondo.stop()
   }
 
@@ -184,15 +182,13 @@ object etapaDelJuego {
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
-    keyboard.a().onPressDo({ spawnerRobots.agregar(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) }) //Tecla debug para probar cosas
-    keyboard.x().onPressDo({ self.ganarPartida() })
+    //keyboard.a().onPressDo({ progresoActual = 5 })
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
   }
 
   method prepararEventosDeTiempo() {
     aparecenRobots.start()
     apareceMunicion.start()
-    ganarJuego.start()
     aumentoProgreso.start()
   }
 
@@ -212,7 +208,6 @@ object etapaDelJuego {
   method detenerEventosDeTiempo() {
     aparecenRobots.stop()
     apareceMunicion.stop()
-    ganarJuego.stop()
     aumentoProgreso.stop()
   }
 

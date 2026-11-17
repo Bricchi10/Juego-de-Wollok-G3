@@ -1,3 +1,4 @@
+import etapaDelJuego.*
 import robot.*
 import proyectiles.*
 import generadorAleatorio.*
@@ -33,7 +34,15 @@ object spawnerRobots inherits Spawner {
         portalesActivos.add(nuevoPortal) 
         nuevoPortal.empezaAnimacion()
     }
-
+    override method eliminar(elemento) {
+        super(elemento)
+        self.verificarSiYaNoQuedanRobots()
+    }
+    method verificarSiYaNoQuedanRobots() {
+        if (etapaDelJuego.progresoActual() == 6 && elementosActivos.isEmpty()) {
+            etapaDelJuego.ganarPartida()
+        }
+    }
     method robotAleatorio() {
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
