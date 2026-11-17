@@ -14,7 +14,7 @@ class Personaje {
   const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
   const levantarse = game.tick(3000, { self.levantate() }, false)
-  const terminarDisparo = game.tick(300, { self.terminaAnimacionDisparo() }, false)
+  const terminarDisparo = game.tick(400, { self.terminaAnimacionDisparo() }, false)
 
   method image() { 
     return imagenActual
@@ -129,7 +129,7 @@ class Personaje {
 
   method proyectilesAReutilizar() {
     const proyectilesAlMomento = []
-    (1..5).forEach({ numero =>
+    (1..4).forEach({ numero =>
       proyectilesAlMomento.add(new Proyectil(disparador = self, tipoDeProyectil = personajeActual.proyectilAsignado()))
     })
     return proyectilesAlMomento

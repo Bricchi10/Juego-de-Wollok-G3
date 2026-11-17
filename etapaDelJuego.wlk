@@ -168,14 +168,12 @@ object etapaDelJuego {
       elemento.chocarConPersonaje(protagonista)  // en vez de self.protagonistaRecibeDañoDe(enemigo) 
     })
 
-    protagonista.proyectilesDisponibles().forEach({ proyectil =>
-      self.enemigoEsHeridoAlChocarCon(proyectil)
-    })
-
-    spawnerProyectiles.proyectilesActivos().forEach({ proyectil =>
+    self.proyectilesAUsar().forEach({ proyectil =>
       self.enemigoEsHeridoAlChocarCon(proyectil)
     })
   }
+
+  method proyectilesAUsar() = protagonista.proyectilesDisponibles() + spawnerProyectiles.proyectilesActivos()
 
   method enemigoEsHeridoAlChocarCon(proyectil) {
     game.onCollideDo(proyectil, { enemigo => proyectil.herirA(enemigo) })
