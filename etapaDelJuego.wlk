@@ -80,7 +80,6 @@ object etapaDelJuego {
     self.aparecenRobotsInvocadores()
     self.detieneProgresoAlTerminarPartida()
   }
-  }
   method apareceRobotEscudero(){
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
     spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
@@ -248,7 +247,6 @@ object etapaDelJuego {
     musicaDeFondo.pause()
   }
 }
-
 object pausaPartida { 
   method pausar() { 
     game.addVisual(cartelPausa)
