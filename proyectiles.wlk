@@ -60,7 +60,7 @@ class Bala {
         proyectil.mori()
     }
 
-    method daño() = 50
+    method daño() = 60
 }
 //(Proyectil Spiderman)
 class Telaraña inherits Bala {
@@ -70,6 +70,7 @@ class Telaraña inherits Bala {
         elemento.inmovilizar()
     }
 
+    override method daño() = 50
 }
 //(Proyectil Goku)
 object energia {
@@ -81,7 +82,7 @@ object energia {
         }
     }
 
-    method daño() = 25
+    method daño() = 40
 }
 //Municiones
 class Carga {
