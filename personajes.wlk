@@ -14,7 +14,7 @@ class Personaje {
   const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
   const levantarse = game.tick(3000, { self.levantate() }, false)
-  const terminarDisparo = game.tick(300, { self.terminaAnimacionDisparo() }, false)
+  const terminarDisparo = game.tick(400, { self.terminaAnimacionDisparo() }, false)
 
   method image() { 
     return imagenActual
@@ -33,12 +33,22 @@ class Personaje {
   }
 
   method inmovilizar() {
+    self.caete()
     inmovilizado = true
     self.mostrarDerrota()
+  }
+
+  method caete() {
+    self.detenerse()
     levantarse.start()
   }
 
+  method detenerse(){
+    etapaDelJuego.desactivarControlesDelProtagonista()
+  }
+
   method levantate() {
+    etapaDelJuego.prepararControlesDelProtagonista()
     inmovilizado = false
     levantarse.stop()
     self.mostrarPasivo()
@@ -63,14 +73,10 @@ class Personaje {
   }
 
   method subir() {
-    if(not inmovilizado){
-       position = moverEnDireccion.siguiente(position.up(1))
-    }
+    position = moverEnDireccion.siguiente(position.up(1))
   }
   method bajar() {
-     if(not inmovilizado){
-        position = moverEnDireccion.siguiente(position.down(1))
-    }
+    position = moverEnDireccion.siguiente(position.down(1))
   }
   
   method disparar() {
@@ -87,7 +93,7 @@ class Personaje {
     game.sound(personajeActual.sonidoDisparo()).play()
     balas -= 1
     const proyectil = proyectilesDisponibles.first()
-    spawnerProyectiles.generarProyectil(proyectil)
+    spawnerProyectiles.agregar(proyectil)
     proyectilesDisponibles.remove(proyectil)
     terminarDisparo.start()
   }
@@ -100,7 +106,7 @@ class Personaje {
 
   method continuarAnimaciones() {
     if (inmovilizado) {
-      levantarse.start()
+      self.caete()
     }
     if (!puedoDisparar) {
       terminarDisparo.start()
@@ -129,13 +135,14 @@ class Personaje {
 
   method proyectilesAReutilizar() {
     const proyectilesAlMomento = []
-    (1..5).forEach({ numero =>
+    (1..4).forEach({ numero =>
       proyectilesAlMomento.add(new Proyectil(disparador = self, tipoDeProyectil = personajeActual.proyectilAsignado()))
     })
     return proyectilesAlMomento
   }
 
   method cambiarPersonajeA(personajeNuevo){
+    spawnerProyectiles.limpiarElementos()
     self.seleccionarPersonaje(personajeNuevo)
     iluminacion.ilumina()
     game.sound("Transformacion.wav").play()

@@ -1,16 +1,32 @@
+import etapaDelJuego.*
 import robot.*
 import proyectiles.*
 import generadorAleatorio.*
-object spawnerRobots { 
-    const robotsActivos = []
+class Spawner {
+    const property elementosActivos = []
+    method agregar(elemento) {
+        elementosActivos.add(elemento)
+        game.addVisual(elemento)
+        elemento.avanza()
+    }
+    method eliminar(elemento) {
+        elementosActivos.remove(elemento)
+    }
+    method moverElementos() { //llamado al despausar el juego
+        elementosActivos.forEach({ elemento => elemento.avanza() })
+    }
+    method limpiarElementos(){
+        elementosActivos.clear()
+    }
+}
+
+object spawnerRobots inherits Spawner { 
     const portalesActivos = []
 
-    method robotsActivos(){
-        return robotsActivos
-    }
+    method robotsActivos() = elementosActivos
 
-    method generarRobot() {
-        const nuevoPortal = new Portal(robotASpawnear = self.robotAleatorio())
+    method generarRobot(robotAGenerar) {
+        const nuevoPortal = new Portal(robotASpawnear = robotAGenerar)
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()
@@ -18,28 +34,20 @@ object spawnerRobots {
         portalesActivos.add(nuevoPortal) 
         nuevoPortal.empezaAnimacion()
     }
-
+    override method eliminar(elemento) {
+        super(elemento)
+        self.verificarSiYaNoQuedanRobots()
+    }
+    method verificarSiYaNoQuedanRobots() {
+        if (etapaDelJuego.progresoActual() == 6 && elementosActivos.isEmpty()) {
+            etapaDelJuego.ganarPartida()
+        }
+    }
     method robotAleatorio() {
         const posicionInicial = game.at(9, generadorAleatorio.filaAleatoria()) 
         const robotsQuePuedenGenerarse = [new Robot(position = posicionInicial), new RobotFuerte(position = posicionInicial), 
         new RobotExplosivo(position = posicionInicial), new RobotVeloz(position = posicionInicial)]
         return robotsQuePuedenGenerarse.anyOne()
-    }
-
-    method agregarRobot(robot) { //atraves de este metodo tambien se generan los jefes
-        robotsActivos.add(robot) 
-        game.addVisual(robot)
-        robot.avanzar()
-    }
-    
-    method eliminarRobot(robot) { 
-        robotsActivos.remove(robot)
-    }
-    method limpiarRobots(){
-        robotsActivos.clear()
-    }
-    method moverRobots() { //llamado al despausar el juego
-        robotsActivos.forEach({ robot => robot.avanzar() })
     }
     method eliminarPortal(portal) { 
         portalesActivos.remove(portal)
@@ -49,18 +57,12 @@ object spawnerRobots {
     }
 }
 
-object spawnerProyectiles {
-    const property proyectilesActivos = []
-    method generarProyectil(proyectil) {
-        proyectilesActivos.add(proyectil)
-        game.addVisual(proyectil)
-        proyectil.disparate()
-    }
-    method eliminarProyectil(proyectil) {
-        proyectilesActivos.remove(proyectil)
-    }
-    method moverProyectiles() { //llamado al despausar el juego
-        proyectilesActivos.forEach({ proyectil => proyectil.avanzar() })
+object spawnerProyectiles inherits Spawner {
+    method proyectilesActivos() = elementosActivos
+    
+    override method limpiarElementos(){
+        elementosActivos.forEach({ proyectil => proyectil.mori() })
+        super()
     }
 }
 
