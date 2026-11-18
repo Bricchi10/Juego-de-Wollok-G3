@@ -228,7 +228,6 @@ object pausa{
 class RobotEscudero inherits Enemigo(vida = 400, image = "robotEscudoCamina.png") {
     const detenerCobertura = game.tick(6000, { self.dejaDeCubrirse() }, false)
     var esInmune = false
-    var habilidadActivada = false
 
     override method mover() { 
         super()
@@ -243,12 +242,11 @@ class RobotEscudero inherits Enemigo(vida = 400, image = "robotEscudoCamina.png"
     
     method aumentaDefensaDeRobots(){
         game.sound("armaduraInvocada.wav").play()
-        habilidadActivada = true
-        etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
         self.cubrirse()
         spawnerRobots.robotsActivos().forEach({robot => 
             robot.aumentaDefensa()
         })
+        etapaDelJuego.generarMunicionDePersonaje() //Ayuda al jugador dandole municiones
     }
 
     override method chocarConPersonaje(personaje){
