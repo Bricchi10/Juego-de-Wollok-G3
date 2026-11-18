@@ -185,6 +185,21 @@ object etapaDelJuego {
     keyboard.up().onPressDo({ protagonista.subir() })
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
+    self.activarCambioDePersonaje()
+  }
+
+  method desactivarControlesDelProtagonista() {
+    keyboard.up().clean()
+    keyboard.down().clean()
+    keyboard.d().clean()
+    self.desactivarCambioDePersonaje()
+  }
+
+  method desactivarCambioDePersonaje() {
+    keyboard.c().clean()
+  }
+
+  method activarCambioDePersonaje() {
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) })
   }
 
@@ -229,6 +244,7 @@ object pausaPartida {
     game.addVisual(cartelPausa)
     game.sound("sonidoPausa.mp3").play() 
     fondo.image("FondoFuturoGris.jpg")
+    game.removeVisual(iluminacion)
     io.clear()
     keyboard.p().onPressDo({ self.reanudar() })
   }

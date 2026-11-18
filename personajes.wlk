@@ -44,10 +44,7 @@ class Personaje {
   }
 
   method detenerse(){
-    keyboard.up().clean()
-    keyboard.down().clean()
-    keyboard.d().clean()
-    keyboard.c().clean()
+    etapaDelJuego.desactivarControlesDelProtagonista()
   }
 
   method levantate() {

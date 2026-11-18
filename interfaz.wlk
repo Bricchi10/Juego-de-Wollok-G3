@@ -87,18 +87,21 @@ object iluminacion {
   method image() = "Iluminacion_" + frameActual + ".png"
   method position() = game.origin()
   const animacion = game.tick(500, { self.avanzaFrame() }, false)
-  method teHirieron() {}
   method avanzaFrame() {
       if (frameActual == 3) {
           animacion.stop()
           game.removeVisual(self)
+          etapaDelJuego.activarCambioDePersonaje()
       }
       frameActual += 1
   }
   method ilumina() {
     game.addVisual(self)
     self.frameActual(0)
-    animacion.start()
+    self.empezaAnimacion()
   }
-  method inmovilizar() {}
+  method empezaAnimacion() {
+    animacion.start()
+    etapaDelJuego.desactivarCambioDePersonaje()
+  }
 }
