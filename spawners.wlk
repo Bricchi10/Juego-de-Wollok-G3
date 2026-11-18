@@ -25,8 +25,8 @@ object spawnerRobots inherits Spawner {
 
     method robotsActivos() = elementosActivos
 
-    method generarRobot() {
-        const nuevoPortal = new Portal(robotASpawnear = self.robotAleatorio())
+    method generarRobot(robotAGenerar) {
+        const nuevoPortal = new Portal(robotASpawnear = robotAGenerar)
         const sonidoDePortal = game.sound("portalSonido.wav")
         sonidoDePortal.volume(0.5)
         sonidoDePortal.play()

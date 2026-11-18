@@ -116,7 +116,7 @@ describe "Pruebas de Peliculas vs Robots" {
   }
 
   test "Robot invocador al activar su habilidad cambia de imagen"{
-    robotInvocador.activarHabilidad()
+    robotInvocador.invocaEsbirros()
     assert.equals("robotInvocadorActivo.png", robotInvocador.image() )
   }
   //Pruebas con personajes

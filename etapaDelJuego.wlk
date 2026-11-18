@@ -67,7 +67,7 @@ object etapaDelJuego {
   }
 
   method generarRobots() {
-    spawnerRobots.generarRobot()
+    spawnerRobots.generarRobot(spawnerRobots.robotAleatorio())
   }
 
   method generarMunicionDePersonaje() {
@@ -78,10 +78,10 @@ object etapaDelJuego {
    if(not pausaPartida.estaPausado()){ 
     progresoActual += 1
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
-      spawnerRobots.agregar(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
+      spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
     if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
-       spawnerRobots.agregar(new RobotInvocador(position = game.at(9, game.center())))
+      spawnerRobots.generarRobot(new RobotInvocador(position = game.at(9, game.center())))
     }
     if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparece
       self.detenerProgreso()
@@ -182,7 +182,7 @@ object etapaDelJuego {
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
     keyboard.p().onPressDo({ self.pausarPartida() })
-    //keyboard.a().onPressDo({ progresoActual = 5 })
+    //keyboard.a().onPressDo({ spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) })
     keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
   }
 

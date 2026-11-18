@@ -63,12 +63,12 @@ class Personaje {
   }
 
   method subir() {
-    if(not inmovilizado){
+    if(!inmovilizado){
        position = moverEnDireccion.siguiente(position.up(1))
     }
   }
   method bajar() {
-     if(not inmovilizado){
+     if(!inmovilizado){
         position = moverEnDireccion.siguiente(position.down(1))
     }
   }
