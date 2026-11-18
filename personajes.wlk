@@ -33,12 +33,25 @@ class Personaje {
   }
 
   method inmovilizar() {
+    self.caete()
     inmovilizado = true
     self.mostrarDerrota()
+  }
+
+  method caete() {
+    self.detenerse()
     levantarse.start()
   }
 
+  method detenerse(){
+    keyboard.up().clean()
+    keyboard.down().clean()
+    keyboard.d().clean()
+    keyboard.c().clean()
+  }
+
   method levantate() {
+    etapaDelJuego.prepararControlesDelProtagonista()
     inmovilizado = false
     levantarse.stop()
     self.mostrarPasivo()
@@ -63,14 +76,10 @@ class Personaje {
   }
 
   method subir() {
-    if(!inmovilizado){
-       position = moverEnDireccion.siguiente(position.up(1))
-    }
+    position = moverEnDireccion.siguiente(position.up(1))
   }
   method bajar() {
-     if(!inmovilizado){
-        position = moverEnDireccion.siguiente(position.down(1))
-    }
+    position = moverEnDireccion.siguiente(position.down(1))
   }
   
   method disparar() {
@@ -100,7 +109,7 @@ class Personaje {
 
   method continuarAnimaciones() {
     if (inmovilizado) {
-      levantarse.start()
+      self.caete()
     }
     if (!puedoDisparar) {
       terminarDisparo.start()

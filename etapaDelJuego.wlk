@@ -75,18 +75,16 @@ object etapaDelJuego {
   }
 
   method incrementarProgreso() {
-   if(not pausaPartida.estaPausado()){ 
     progresoActual += 1
     if(progresoActual % 3 == 0) { //Si el progreso llega a la mitad o al final (es multiplo de 3) genera un jefe
-      spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
+    spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria())))
     }
     if(progresoActual % 2 == 0){ //Se genera el jefe robot invocador 3 veces (cuando el progreso es multiplo de 2)
-      spawnerRobots.generarRobot(new RobotInvocador(position = game.at(9, game.center())))
+    spawnerRobots.generarRobot(new RobotInvocador(position = game.at(9, game.center())))
     }
     if(progresoActual == 6) { //Cuando se llega a la ultima etapa de progreso este para de aumentar y los robots dejan de aparece
-      self.detenerProgreso()
+    self.detenerProgreso()
     }
-  }
   }
   method terminar() { 
     self.prepararPrimeraPantalla()
@@ -178,12 +176,16 @@ object etapaDelJuego {
   }
 
   method prepararControles() {
+    self.prepararControlesDelProtagonista()
+    keyboard.p().onPressDo({ self.pausarPartida() })
+    //keyboard.a().onPressDo({ spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) })
+  }
+
+  method prepararControlesDelProtagonista() {
     keyboard.up().onPressDo({ protagonista.subir() })
     keyboard.down().onPressDo({ protagonista.bajar() })
     keyboard.d().onPressDo({ protagonista.disparar() })
-    keyboard.p().onPressDo({ self.pausarPartida() })
-    //keyboard.a().onPressDo({ spawnerRobots.generarRobot(new RobotEscudero(position = game.at(9, generadorAleatorio.filaAleatoria()))) })
-    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) }) //Tecla debug para probar cosas
+    keyboard.c().onPressDo({ protagonista.cambiarPersonajeA(protagonista.siguientePersonaje()) })
   }
 
   method prepararEventosDeTiempo() {
@@ -203,6 +205,11 @@ object etapaDelJuego {
     self.prepararEventosDeTiempo()
     musicaDeFondo.resume()
     protagonista.continuarAnimaciones()
+    spawnerRobots.moverElementos()
+    spawnerRobots.animarPortales()
+    spawnerProyectiles.moverElementos()
+    spawnerMunicion.despawnearMunicion()
+    explosion.esfumate()
   }
 
   method detenerEventosDeTiempo() {
@@ -218,8 +225,6 @@ object etapaDelJuego {
 }
 
 object pausaPartida { 
-  var property estaPausado = false 
-
   method pausar() { 
     game.addVisual(cartelPausa)
     game.sound("sonidoPausa.mp3").play() 
@@ -228,16 +233,11 @@ object pausaPartida {
     keyboard.p().onPressDo({ self.reanudar() })
   }
 
-  method reanudar() { 
-    estaPausado = false
+  method reanudar() {
     game.sound("sonidoPausa.mp3").play()  
     game.removeVisual(cartelPausa)
     etapaDelJuego.reanudarPausa()
     fondo.image("FondoFuturo.jpg")
-    spawnerRobots.moverElementos()
-    spawnerRobots.animarPortales()
-    spawnerProyectiles.moverElementos()
-    spawnerMunicion.despawnearMunicion()
   }
 }
 

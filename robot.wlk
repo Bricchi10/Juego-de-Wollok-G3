@@ -100,11 +100,15 @@ class RobotExplosivo inherits Enemigo(vida = 100, image = "robotExplosivoCamina3
     override method chocarConPersonaje(personaje) {
         game.sound("explosion.mp3").play() 
         personaje.teHirieron()
-        const efectoExplosion = new Explosion(position = personaje.position().right(1)) 
-        game.addVisual(efectoExplosion)
-        game.schedule(1000, { game.removeVisual(efectoExplosion) })
+        game.addVisual(explosion)
+        explosion.position(self.position())
+        explosion.esfumate()
         personaje.inmovilizar() // Inmoviliza al jugador durante 3000 ms
         self.mori()
+    }
+
+    method eliminarExplosion() {
+        
     }
 }
 class RobotVeloz inherits Enemigo(vida = 60 ) {

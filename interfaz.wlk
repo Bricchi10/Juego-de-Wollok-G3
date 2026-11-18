@@ -53,11 +53,15 @@ class TelarañaArriba inherits DefensaArriba {
   override method image() = "telarana_arriba.png"
 }
 
-class Explosion { 
-  var property position 
+object explosion { 
+  var property position = game.origin()
   method image() = "explosion_pequeña.png"
   method teHirieron() {}
   method inmovilizarPor(cantidad) {}
+  method esfumate() {
+    game.schedule(1000, { game.removeVisual(self) })
+  }
+  method chocarConPersonaje(personaje) {}
 }
 
 object cartelReiniciar { 
