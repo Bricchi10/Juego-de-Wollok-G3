@@ -64,6 +64,7 @@ class Enemigo{
     }
 
     method chocarConPersonaje(personaje) {
+        personaje.teHirieron()
         self.mori()
     }
 
