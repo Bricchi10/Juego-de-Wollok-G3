@@ -36,7 +36,7 @@ class Proyectil {
 
     method herirA(elemento) {
         tipoDeProyectil.aplicarEfectoA(elemento)
-        elemento.teHirio(self)
+        elemento.teHirieron()
         tipoDeProyectil.efectoAlImpactar(self,elemento) // Si impacta a un enemigo, se destruye
     }
 
@@ -47,10 +47,6 @@ class Proyectil {
     }
 
     method teHirieron() { }
-
-    method daño(){
-        return tipoDeProyectil.daño()
-    }
 }
 //(Proyectil Terminator)
 class Bala {
@@ -59,8 +55,6 @@ class Bala {
     method efectoAlImpactar(proyectil,elemento) {
         proyectil.mori()
     }
-
-    method daño() = 50
 }
 //(Proyectil Spiderman)
 class Telaraña inherits Bala {
@@ -80,8 +74,6 @@ object energia {
             proyectil.mori() 
         }
     }
-
-    method daño() = 25
 }
 //Municiones
 class Carga {

@@ -14,7 +14,7 @@ class Personaje {
   const property proyectilesDisponibles = self.proyectilesAReutilizar()
   var property personajeActual
   const levantarse = game.tick(3000, { self.levantate() }, false)
-  const terminarDisparo = game.tick(400, { self.terminaAnimacionDisparo() }, false)
+  const terminarDisparo = game.tick(personajeActual.cooldownDisparos(), { self.terminaAnimacionDisparo() }, false)
 
   method image() { 
     return imagenActual
@@ -161,10 +161,9 @@ class Personaje {
     puedoDisparar = true
     inmovilizado = false
     position = game.at(1, 1)
-  proyectilesDisponibles.clear()
+    proyectilesDisponibles.clear()
     (1..5).forEach({ 
-      numero => proyectilesDisponibles.add( new Proyectil(disparador = self, 
-                                            tipoDeProyectil = personajeActual.proyectilAsignado()) ) })
+      numero => proyectilesDisponibles.add( new Proyectil(disparador = self, tipoDeProyectil = personajeActual.proyectilAsignado()) ) })
 }
 }
 
@@ -179,6 +178,7 @@ object terminator {
   method proyectilAsignado() = new Bala() 
   method sonidoDisparo() = "desert-eagle-cs.mp3"
   method siguientePersonaje() = spiderman
+  method cooldownDisparos() = 400
 }
 object spiderman {
   method spritePasivo() = "spidermanIdle.png" 
@@ -190,6 +190,7 @@ object spiderman {
   method proyectilAsignado() = new Telaraña() 
   method sonidoDisparo() = "spider-web.mp3"
   method siguientePersonaje() = goku
+  method cooldownDisparos() = 500
 }
 object goku {
   method spritePasivo() = "gokuIdle.png" 
@@ -201,4 +202,5 @@ object goku {
   method proyectilAsignado() = energia
   method sonidoDisparo() = "ki_blast.wav"
   method siguientePersonaje() = terminator
+  method cooldownDisparos() = 600
 }

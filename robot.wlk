@@ -24,9 +24,9 @@ class Enemigo{
         }
     }
 
-    method teHirio(proyectil){
+    method teHirieron(){
         game.sound("muerteRobot.mp3").play()
-        self.bajarVidaOArmadura(proyectil)
+        self.bajarVidaOArmadura()
         self.verificarMuerte()
     }
 
@@ -35,11 +35,11 @@ class Enemigo{
           self.mori()
         }
     }
-    method bajarVidaOArmadura(proyectil) {
+    method bajarVidaOArmadura() {
         if (game.hasVisual(iconoDefensa)) {
             game.removeVisual(iconoDefensa)
         } else {
-            vida -= proyectil.daño()
+            vida -= 50
         }
     }
 
@@ -64,6 +64,7 @@ class Enemigo{
     }
 
     method chocarConPersonaje(personaje) {
+        personaje.teHirieron()
         self.mori()
     }
 
@@ -258,11 +259,11 @@ class RobotEscudero inherits Enemigo(vida = 400, image = "robotEscudoCamina.png"
 
     override method aumentaDefensa(){}
 
-    override method teHirio(proyectil){
+    override method teHirieron(){
         if (esInmune) {
             game.sound("shieldhit.ogg").play()
         } else {
-            super(proyectil)
+            super()
         }
     }
 
