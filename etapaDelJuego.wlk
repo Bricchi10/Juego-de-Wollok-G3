@@ -98,6 +98,7 @@ object etapaDelJuego {
   method terminar() { 
     self.prepararPrimeraPantalla()
     spawnerRobots.limpiarElementos()
+    spawnerProyectiles.limpiarElementos()
     game.addVisual(cartelReiniciar)
     progresoActual = 0
     self.detenerProgreso()

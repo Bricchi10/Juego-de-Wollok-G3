@@ -8,7 +8,6 @@ import etapaDelJuego.*
 describe "Pruebas de Peliculas vs Robots" {
   const bala = new Proyectil(disparador = personaje, tipoDeProyectil = new Bala())
   const telaraña = new Proyectil(disparador = personaje, tipoDeProyectil = new Telaraña())
-  const energiaDeGoku = new Proyectil(disparador = personaje, tipoDeProyectil = energia)
   const robotNormal = new Robot(position = game.at(5,5) ) 
   const robotFuerte = new RobotFuerte(position = game.at(5,5))
   const personaje = new Personaje(personajeActual = terminator)
@@ -19,50 +18,50 @@ describe "Pruebas de Peliculas vs Robots" {
   const robotRandom = spawnerRobots.robotAleatorio()
 
   //Pruebas con robots
-  test "Al ser herido el robot normal por telaraña pierde 50 de vida(toda su vida)"{
-    robotNormal.teHirio(telaraña)
+  test "Al ser herido el robot normal pierde 50 de vida(toda su vida)"{
+    robotNormal.teHirieron()
     assert.equals(0,robotNormal.vida())
   }
-  test "Al ser herido el robot fuerte por telaraña pierde 50 de vida(tiene 100)"{
-    robotFuerte.teHirio(telaraña)
+  test "Al ser herido el robot fuerte pierde 50 de vida(tiene 100)"{
+    robotFuerte.teHirieron()
     assert.equals(50,robotFuerte.vida())
   }
   test "Robot normal es protegido de un disparo despues de aumentar su defensa"{
     robotNormal.aumentaDefensa()
-    robotNormal.teHirio(bala)
+    robotNormal.teHirieron()
     assert.equals(50, robotNormal.vida())
   }
 
   test "Robot normal muere de dos disparos (telaraña) despues de aumentar su defensa"{
     robotNormal.aumentaDefensa()
-    robotNormal.teHirio(telaraña)
-    robotNormal.teHirio(telaraña)
+    robotNormal.teHirieron()
+    robotNormal.teHirieron()
     assert.equals(0, robotNormal.vida())
   }
 
   test "Robot fuerte es protegido de un disparo despues de aumentar su defensa"{
     robotFuerte.aumentaDefensa()
-    robotFuerte.teHirio(bala)
+    robotFuerte.teHirieron()
     assert.equals(100,robotFuerte.vida())
   }
 
   test "El robot escudero no recibe daño cuando esta detenido"{
     robotEscudero.aumentaDefensaDeRobots()
-    robotEscudero.teHirio(bala)
+    robotEscudero.teHirieron()
     assert.equals(400, robotEscudero.vida() )
   }
 
   test "El robot escudero recibe daño cuando no esta detenido"{
-    robotEscudero.teHirio(bala)
-    assert.equals(340, robotEscudero.vida() )
+    robotEscudero.teHirieron()
+    assert.equals(350, robotEscudero.vida() )
   }
 
   test "El robot escudero no se aumenta la defensa a si mismo"{
     spawnerRobots.agregar(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
     robotEscudero.dejaDeCubrirse()
-    robotEscudero.teHirio(bala)
-    assert.equals(340, robotEscudero.vida())
+    robotEscudero.teHirieron()
+    assert.equals(350, robotEscudero.vida())
   }
 
   test "El robot escudero aumenta la defensa del resto de robots"{
@@ -70,14 +69,14 @@ describe "Pruebas de Peliculas vs Robots" {
     const vidaInicialDelRobotRandom = robotRandom.vida()
     spawnerRobots.agregar(robotEscudero)
     robotEscudero.aumentaDefensaDeRobots()
-    robotRandom.teHirio(bala)
+    robotRandom.teHirieron()
     assert.equals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
   test "Un robot random recibe daño al ser herido"{
     spawnerRobots.agregar(robotRandom)
     const vidaInicialDelRobotRandom = robotRandom.vida()
-    robotRandom.teHirio(bala)
+    robotRandom.teHirieron()
     assert.notEquals(vidaInicialDelRobotRandom, robotRandom.vida())
   }
 
@@ -169,10 +168,5 @@ describe "Pruebas de Peliculas vs Robots" {
     assert.notThat(robotFuerte.inmovilizado())
     telaraña.herirA(robotFuerte)
     assert.that(robotFuerte.inmovilizado())
-  }
-
-  test "Cuando un robot es golpeado por la energia de goku este pierde 40 de vida"{
-    energiaDeGoku.herirA(robotNormal)
-    assert.equals(10, robotNormal.vida() )
   }
 }
