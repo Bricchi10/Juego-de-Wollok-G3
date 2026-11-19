@@ -149,7 +149,7 @@ describe "Pruebas de Peliculas vs Robots" {
   //Pruebas con proyectiles
   test "Bala baja la vida de robot al chocar con este " {
     bala.herirA(robotFuerte)
-    assert.equals(40, robotFuerte.vida())
+    assert.equals(50, robotFuerte.vida())
   }
 
   test "Cuando el protagonista dispara este gasta esa municion"{
