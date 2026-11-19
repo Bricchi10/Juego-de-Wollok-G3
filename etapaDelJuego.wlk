@@ -1,3 +1,4 @@
+import animaciones.*
 import spawners.*
 import wollok.game.*
 import robot.*
@@ -150,12 +151,15 @@ object etapaDelJuego {
   }
 
   method prepararPersonaje() {
+    const barraVida = new BarraVida(personaje = protagonista)
+    const etiquetaVida = new EtiquetaVida(personaje = protagonista)
+    const etiquetaBalas = new EtiquetaBalas(personaje = protagonista)
     protagonista.position(game.at(1,1))
     barraVida.personaje(protagonista)
     game.addVisual(barraVida)
     game.addVisual(barraDeBalas)
-    game.addVisual(etiquetaDeBalas)
-    etiquetaDeBalas.personaje(protagonista)
+    game.addVisual(etiquetaBalas)
+    etiquetaBalas.personaje(protagonista)
     etiquetaVida.personaje(protagonista)
     game.addVisual(etiquetaVida)
     protagonista.reiniciarVida()

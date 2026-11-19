@@ -34,9 +34,8 @@ class Proyectil {
     method enemigosDetras() = game.getObjectsIn(position.left(2))
 
     method herirA(elemento) {
-        tipoDeProyectil.aplicarEfectoA(elemento)
         elemento.teHirieron()
-        tipoDeProyectil.efectoAlImpactar(self,elemento) // Si impacta a un enemigo, se destruye
+        tipoDeProyectil.efectoAlImpactar(self, elemento)
     }
 
     method verificarSiEstaFueraDelTablero() {
@@ -50,8 +49,7 @@ class Proyectil {
 //(Proyectil Terminator)
 class Bala {
     method image() = "proyectilDisparo.png"
-    method aplicarEfectoA(elemento) {}
-    method efectoAlImpactar(proyectil,elemento) {
+    method efectoAlImpactar(proyectil, elemento) {
         proyectil.mori()
     }
 }
@@ -59,19 +57,19 @@ class Bala {
 class Telaraña inherits Bala {
     override method image() = "proyectilTelaraña.png"
 
-    override method aplicarEfectoA(elemento) {
-        elemento.inmovilizar()
+    override method efectoAlImpactar(proyectil, elemento) {
+        if (game.hasVisual(elemento)) {
+            elemento.inmovilizar()
+        }
+        super(proyectil, elemento)
     }
-
-    override method daño() = 50
 }
 //(Proyectil Goku)
-object energia {
-    method image() = "bolaEnergiaAzul.png"
-    method aplicarEfectoA(elemento) {}
-    method efectoAlImpactar(proyectil,elemento) {
-        if (game.hasVisual(elemento)) { 
-            proyectil.mori() 
+class Energia inherits Bala {
+    override method image() = "bolaEnergiaAzul.png"
+    override method efectoAlImpactar(proyectil,elemento) {
+        if (game.hasVisual(elemento)) { //el proyectil solo se destruye si el robot aguantó el daño, si no lo atraviesa
+            super(proyectil, elemento)
         }
     }
 }

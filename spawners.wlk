@@ -2,6 +2,7 @@ import etapaDelJuego.*
 import robot.*
 import proyectiles.*
 import generadorAleatorio.*
+import animaciones.*
 class Spawner {
     const property elementosActivos = []
     method agregar(elemento) {
