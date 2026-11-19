@@ -166,6 +166,7 @@ describe "Pruebas de Peliculas vs Robots" {
 
   test "Cuando un robot es golpeado por una telaraña este queda inmovilizado"{
     assert.notThat(robotFuerte.inmovilizado())
+    game.addVisual(robotFuerte)
     telaraña.herirA(robotFuerte)
     assert.that(robotFuerte.inmovilizado())
   }
