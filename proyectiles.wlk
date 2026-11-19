@@ -16,7 +16,6 @@ class Proyectil {
     method image() = tipoDeProyectil.image()
 
     method avanza() {
-        position = disparador.position().right(1)
         movimiento.start()
     }
 

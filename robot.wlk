@@ -182,41 +182,45 @@ class RobotVeloz inherits Enemigo(vida = 60 ) {
     }
 }
 
-object camina{
-    
-    method imagen() = "robotVelozCamina.png"
+class Etapa{
+    method imagen()
 
     method movimiento(robotVeloz){
-        if (robotVeloz.position().x() == 6) {
-            robotVeloz.iniciarPreparacion()
+        if (robotVeloz.position().x() == self.celdaActivadora()) {
+            self.accionCon(robotVeloz)
         } else {
             robotVeloz.darUnPaso()
         }
-    
     }
+
+    method celdaActivadora()
+
+    method accionCon(robot)
 
     method despausar(robotVeloz) { }
 }
 
-object corre{
+object camina inherits Etapa{
+    override method imagen() = "robotVelozCamina.png"
 
-    method imagen() = "robotVelozAtaque.png"
+    override method celdaActivadora() = 6
 
-    method movimiento(robotVeloz){
-        if (robotVeloz.position().x() == 3) {
-            robotVeloz.ejecutarSalto()
-        } else {
-            robotVeloz.darUnPaso()
-        }
-    }
+    override method accionCon(robot) = robot.iniciarPreparacion()
+}
 
-    method despausar(robotVeloz) {
+object corre inherits Etapa{
+    override method imagen() = "robotVelozAtaque.png"
+
+    override method celdaActivadora() = 3
+
+    override method accionCon(robot) = robot.ejecutarSalto()
+
+    override method despausar(robotVeloz) {
         robotVeloz.empiezaACorrer()
     }
 }
 
-object pausa{
-
+object pausa {
     method imagen() = "robotVelozPreparaAtaque.png"
 
     method movimiento(robotVeloz){

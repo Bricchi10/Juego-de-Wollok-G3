@@ -93,6 +93,7 @@ class Personaje {
     game.sound(personajeActual.sonidoDisparo()).play()
     balas -= 1
     const proyectil = proyectilesDisponibles.first()
+    proyectil.position(self.position().right(1))
     spawnerProyectiles.agregar(proyectil)
     proyectilesDisponibles.remove(proyectil)
     terminarDisparo.start()
