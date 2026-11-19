@@ -63,6 +63,7 @@ class Telaraña inherits Bala {
         elemento.inmovilizar()
     }
 
+    override method daño() = 50
 }
 //(Proyectil Goku)
 object energia {

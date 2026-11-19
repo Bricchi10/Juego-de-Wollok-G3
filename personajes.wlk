@@ -67,7 +67,11 @@ class Personaje {
   method teHirieron(){
     vida = (vida - 20).max(0)
     game.sound("steveDolor.mp3").play()
-    if (vida == 0) {
+    self.verificarMuerte()
+  }
+
+  method verificarMuerte(){
+    if (vida <= 0) { 
       self.mori()
     }
   }

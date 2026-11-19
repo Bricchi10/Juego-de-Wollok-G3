@@ -344,7 +344,7 @@ class Portal {
     var frameActual = 1
     const animacion = game.tick(100, { self.avanzaFrame() }, false)
     method image() = "portalRobots_" + frameActual + ".png"
-    method teHirieron() {}
+    method teHirio(proyectil) {}
     method empezaAnimacion() {
         animacion.start()
     }
