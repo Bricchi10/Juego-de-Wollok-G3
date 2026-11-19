@@ -1,44 +1,38 @@
+import spawners.*
 import etapaDelJuego.*
 
-object barraVida {
-  var personaje=null
+class BarraVida {
+  var property personaje
 
-  method position()= game.at(2,0)
-  method personaje(personaje_){
-    personaje=personaje_
-  }
-
-  method image(){
-    return (personaje.vida() / 20).stringValue() + "_DeVida.png"
-  }
-}
-object etiquetaVida {
-  var personaje=null
-  method personaje(personaje_){
-    personaje=personaje_
-  }
-  method position()= game.at(0,0)
-  method text()= "Vida:" + personaje.vida()
-  method textColor() = "FFFFFFFF"
+  method position() = game.at(2,0)
+  method image() = (personaje.vida() / 20).stringValue() + "_DeVida.png"
 }
 
 object barraDeBalas {
     method position() = game.at(0, 6) 
     method image() = "cartelDeBalas.png"
 }
-object etiquetaDeBalas {
-  var personaje = null 
-    method personaje(personaje_) { 
-      personaje = personaje_ 
-    }
-  method position() = game.at(1, 6)   
-  method text() = "" + personaje.balas()
-  method textColor() = "FFFFFFFF"
-}
 
 object barraProgreso {
     method position() = game.at(game.width() -6, 0)
     method image() = "BarraProgreso_" + etapaDelJuego.progresoActual() + ".png"
+}
+
+class Etiqueta {
+  var property personaje
+  method position()
+  method text() = self.informacionDeseada()
+  method textColor() = "FFFFFFFF"
+
+  method informacionDeseada()
+}
+class EtiquetaVida inherits Etiqueta() {
+  override method position()= game.origin()
+  override method informacionDeseada() = "Vida:" + personaje.vida()
+}
+class EtiquetaBalas inherits Etiqueta() {
+  override method position() = game.at(1, 6)
+  override method informacionDeseada() = "" + personaje.balas()
 }
 
 class DefensaArriba {//El aumento de defensa aparece arriba de los afectados
@@ -47,7 +41,7 @@ class DefensaArriba {//El aumento de defensa aparece arriba de los afectados
   method image() = "defensaArriba.png"
   method chocarConPersonaje(personaje) {}
   method teHirieron() {}
-  method inmovilizarPor(cantidad) {}
+  method inmovilizar() {}
 }
 class TelarañaArriba inherits DefensaArriba { //La telaraña aparece arriba de los afectados
   override method image() = "telarana_arriba.png"
@@ -57,7 +51,7 @@ object explosion {
   var property position = game.origin()
   method image() = "explosion_pequeña.png"
   method teHirieron() {}
-  method inmovilizarPor(cantidad) {}
+  method inmovilizar() {}
   method esfumate() {
     game.schedule(1000, { game.removeVisual(self) })
   }
@@ -81,27 +75,4 @@ object cartelVictoria{
 object cartelPausa {  
   method image() = "cartelPausa.png"    
   method position() = game.at(4,1)
-}
-object iluminacion {  
-  var property frameActual = 0
-  method image() = "Iluminacion_" + frameActual + ".png"
-  method position() = game.origin()
-  const animacion = game.tick(500, { self.avanzaFrame() }, false)
-  method avanzaFrame() {
-      if (frameActual == 3) {
-          animacion.stop()
-          game.removeVisual(self)
-          etapaDelJuego.activarCambioDePersonaje()
-      }
-      frameActual += 1
-  }
-  method ilumina() {
-    game.addVisual(self)
-    self.frameActual(0)
-    self.empezaAnimacion()
-  }
-  method empezaAnimacion() {
-    animacion.start()
-    etapaDelJuego.desactivarCambioDePersonaje()
-  }
 }

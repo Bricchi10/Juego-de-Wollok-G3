@@ -3,6 +3,7 @@ import spawners.*
 import proyectiles.*
 import direcciones.*
 import etapaDelJuego.*
+import animaciones.*
 //Superclase Personaje
 class Personaje {
   var property position = game.at(1,1)
@@ -204,7 +205,7 @@ object goku {
   method spriteVictoria() = "gokuVictoria.png"
   method sonidoCarga() = "semillaErmitaño.mp3"
   method imagenCarga() = "semillaErmitaño.png"
-  method proyectilAsignado() = energia
+  method proyectilAsignado() = new Energia()
   method sonidoDisparo() = "ki_blast.wav"
   method siguientePersonaje() = terminator
   method cooldownDisparos() = 600

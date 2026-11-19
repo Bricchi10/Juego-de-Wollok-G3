@@ -336,29 +336,3 @@ class RobotInvocador inherits Enemigo(vida = 300, image = "robotInvocadorPasivo.
         spawnerRobots.agregar(esbirro)
     }
 }
-//Portal de robots
-class Portal {
-    method vida() = 999 //para que entienda el mensaje vida cuando una bala le pegue
-    const property robotASpawnear 
-    const property position = robotASpawnear.position()
-    var frameActual = 1
-    const animacion = game.tick(100, { self.avanzaFrame() }, false)
-    method image() = "portalRobots_" + frameActual + ".png"
-    method teHirio(proyectil) {}
-    method empezaAnimacion() {
-        animacion.start()
-    }
-    method avanzaFrame() {
-        if (frameActual == 6) {
-            spawnerRobots.agregar(robotASpawnear)
-        }
-        if (frameActual == 12) {
-            animacion.stop()
-            game.removeVisual(self)
-            spawnerRobots.eliminarPortal(self)
-        }
-        frameActual += 1
-    }
-
-    method inmovilizar() {}
-}
